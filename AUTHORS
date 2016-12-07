@@ -1,0 +1,22 @@
+milonga was written from scratch by
+  jeremy theler <jeremy@talador.com.ar>
+
+milonga is a plugin for the wasora code
+wasora was originally written from scratch by
+  jeremy theler <jeremy@talador.com.ar>
+
+with contributions by
+  esteban pellegrino <epellegrino@tecna.com>
+
+
+other pieces of code wasora depend on:
+  GNU Scientific Library <http://www.gnu.org/s/gsl/>
+  thirdparty/kdtree.c by John Tsiombikas <nuclear@member.fsf.org>
+  thirdparty/str_replace.c by chantra <chantra__A__debuntu__D__org>
+
+each of these files was released under a free software license,
+see the source code of each one for further details
+
+milonga uses PETSc and SLEPc to solve the sparse eigenvalue problem
+and gmsh to generate the unstructured meshes of the problem it solves
+see the corresponding documentation for further details

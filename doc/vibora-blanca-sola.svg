@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   version="1.0"
+   width="520"
+   height="150"
+   viewBox="0 0 416 120"
+   preserveAspectRatio="xMidYMid meet"
+   id="svg2"
+   inkscape:version="0.48.1 r9760"
+   sodipodi:docname="vibora-blanca.svg">
+  <defs
+     id="defs12" />
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="1436"
+     inkscape:window-height="828"
+     id="namedview10"
+     showgrid="false"
+     inkscape:zoom="1.3799111"
+     inkscape:cx="277.87607"
+     inkscape:cy="47.094438"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg2" />
+  <metadata
+     id="metadata4">
+Created by potrace 1.8, written by Peter Selinger 2001-2007
+<rdf:RDF>
+  <cc:Work
+     rdf:about="">
+    <dc:format>image/svg+xml</dc:format>
+    <dc:type
+       rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+    <dc:title></dc:title>
+  </cc:Work>
+</rdf:RDF>
+</metadata>
+  <g
+     transform="matrix(0.096495,0,0,-0.096495,-31.306366,147.10889)"
+     id="g6"
+     style="fill:none;stroke:#000000;stroke-width:20.72646251;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none">
+    <path
+       d="m 1665,1440 c -92.752,-38.2485 -196,-96 -247,-172 -60,-87 -100,-242 -114,-437 -7,-95 -21,-130 -68,-173 C 1153,581 1026,537 836,520 541,492 466,481 453,464 c -18,-25 -16,-42 7,-54 33,-18 298,-14 715,11 231,13 448,11 551,-5 213,-34 255,-38 443,-36 361,5 425,4 666,-4 132,-4 499,-9 815,-11 316,-2 631.4135,-5.46896 723.4135,-9.46896 153,-7 168,-6 174,10 5,11 -9.5422,35.90445 -23,47 -24.3997,20.11689 -77.4949,23.67859 -91.6009,24.68958 -145.8301,10.45182 -247.3991,10.31042 -247.3991,10.31042 C 4015.4135,449.53104 3807,453 3700,454 c -198,2 -289,15 -365,52 -55,27 -84,82 -255,497 -23,55 -47,93 -83,131 -93,96 -169,120 -335,104 -172,-16 -272,10 -581,150 0,0 -92.427,51.4381 -143,65 -41.3845,11.0979 -85.116,14.1374 -127.9313,12.4967 C 1761.0073,1463.6166 1710.3896,1458.7175 1665,1440 z"
+       id="path8"
+       style="fill:none;stroke:#000000;stroke-width:20.72646251;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="accccccccccsccascccccccaaa" />
+  </g>
+  <path
+     sodipodi:type="arc"
+     style="fill:none;stroke:#000000;stroke-width:1;stroke-linecap:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0"
+     id="path3795"
+     sodipodi:cx="492.5726"
+     sodipodi:cy="134.467"
+     sodipodi:rx="0.25621462"
+     sodipodi:ry="0.22418779"
+     d="m 492.82882,134.467 a 0.25621462,0.22418779 0 1 1 -0.51243,0 0.25621462,0.22418779 0 1 1 0.51243,0 z"
+     transform="matrix(0.8506205,0,0,0.8506205,-19.671905,-6.1559642)" />
+</svg>

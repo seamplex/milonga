@@ -1,0 +1,14 @@
+See <https://bitbucket.org/wasora/milonga/issues?status=new&status=open>
+
+- user-provided linear solver
+- cleanup memory
+- detect changes in the mesh
+- set initial guess as the solution of the last step
+- use gmsh's API
+- parallelization
+- transient cases: multipoint and/or spatial kinetics
+- use and/or interface with existing free projects:
+    + PyNE
+    + HDF5
+    + OpenMC
+    + OpenMOC
