@@ -1,7 +1,7 @@
 /*------------ -------------- -------- --- ----- ---   --       -            -
  *  milonga's version banner
  *
- *  Copyright (C) 2010--2015 jeremy theler
+ *  Copyright (C) 2010--2016 jeremy theler
  *
  *  This file is part of milonga.
  *
@@ -58,7 +58,7 @@ const char milongausage[] = "\
     MILONGA_SOLVER SPECTRUM smallest_eigenvalue ST_TYPE shift\n";
 
 const char milongacopyright[] = "\
- milonga is copyright (c) 2010-2015 jeremy theler\n\
+ milonga is copyright (c) 2010-2016 jeremy theler\n\
  licensed under GNU GPL version 3 or later.\n\
  milonga is free software: you are free to change and redistribute it.\n\
  There is NO WARRANTY, to the extent permitted by law.";
@@ -87,17 +87,14 @@ const char *plugin_longversion(void) {
   }
   
   sprintf(milongalongversion, "\n\
- rev hash %s\n\
- last commit on %s (rev %d)\n\
+ last commit on %s\n\
  compiled on %s by %s@%s (%s)\n\
  with %s using %s linked against\n\
   %s\n\
   %s %s\n\
  running on %s %s %s %s\n\
  %d %s\n",
-   PLUGIN_VCS_REVID,
    PLUGIN_VCS_DATE,
-   PLUGIN_VCS_REVNO,
    COMPILATION_DATE,
    COMPILATION_USERNAME,
    COMPILATION_HOSTNAME,
@@ -128,13 +125,13 @@ const char *plugin_copyright(void) {
 
 const char *plugin_version(void) {
 #ifdef PLUGIN_VCS_BRANCH
-  sprintf(milongashortversion, "%s.%s %s (%s %s)", PLUGIN_VCS_MAJOR, PLUGIN_VCS_MINOR,
-                                                strcmp(PLUGIN_VCS_BRANCH, "default")?PLUGIN_VCS_BRANCH:"",
-                                                PLUGIN_VCS_SHORTID, PLUGIN_VCS_DATE);  
+  sprintf(milongashortversion, "%s%s %s", PLUGIN_VCS_VERSION,
+                                       (PLUGIN_VCS_CLEAN==0)?"":"+Δ",
+                                       strcmp(PLUGIN_VCS_BRANCH, "master")?PLUGIN_VCS_BRANCH:"");
 #else
   sprintf(milongashortversion, "%s", PACKAGE_VERSION);
-#endif
-  
+#endif  
+    
   return milongashortversion;
 }
 

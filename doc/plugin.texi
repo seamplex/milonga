@@ -1,4 +1,0 @@
-@set PLUGIN  milonga
-@set AUTHOR  jeremy theler
-@set EMAIL   jeremy@@talador.com.ar
-@set YEAR    

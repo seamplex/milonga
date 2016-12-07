@@ -25,7 +25,6 @@
 
 
 #include <wasora.h>
-#include "mesh/mesh.h"
 
 #include <petscsys.h>
 #include <petscpc.h>

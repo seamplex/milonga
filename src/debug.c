@@ -610,11 +610,11 @@ int milonga_debug_close(debug_t *debug) {
   
     petsc_call(PetscViewerASCIIPrintf(debug->viewer, "[milonga"));
 #ifdef PLUGIN_VCS_BRANCH
-    petsc_call(PetscViewerASCIIPrintf(debug->viewer, " %s.%d", PLUGIN_VCS_MAJOR, PLUGIN_VCS_REVNO));
+    petsc_call(PetscViewerASCIIPrintf(debug->viewer, " %s", PLUGIN_VCS_VERSION));
 #else
     petsc_call(PetscViewerASCIIPrintf(debug->viewer, " %s", PACKAGE_VERSION));
 #endif
-    petsc_call(PetscViewerASCIIPrintf(debug->viewer, "](http://www.talador.com.ar/jeremy/wasora/milonga)\n\n"));
+    petsc_call(PetscViewerASCIIPrintf(debug->viewer, "](http://www.seamplex.com/milonga)\n\n"));
 
   /*
     petsc_call(PetscViewerASCIIPrintf(debug->viewer, "\
