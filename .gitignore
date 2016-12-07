@@ -75,6 +75,8 @@ examples/*.vtk
 examples/*-base.msh
 examples/*_out.msh
 examples/square-*.msh
+examples/2dpwr.msh
+examples/2dpwr-*.msh
 examples/bunny.geo
 examples/bunny_orig.msh
 examples/bunnyscale.mil

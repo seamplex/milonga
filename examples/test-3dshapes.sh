@@ -7,8 +7,10 @@ checkgmsh
 
 for i in cube cylinder sphere bunny; do
  runmilonga 3dshape.mil $i > $i.dat
-cat << EOF > $i-base.msh
-Merge "${i}_out.msh";
+done
+
+cat << EOF > bunny-base.msh
+Merge "bunny_out.msh";
 General.Clip0A = 0;
 General.Clip0B = +1;
 General.ClipWholeElements = 1;
@@ -23,7 +25,6 @@ Mesh.SurfaceEdges = 0;
 Mesh.VolumeEdges = 0;
 EOF
 
- callgmsh $i-base.msh
-done
+callgmsh bunny-base.msh
 
 exit 0
