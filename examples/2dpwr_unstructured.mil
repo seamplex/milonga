@@ -1,0 +1,15 @@
+# unstructured grid generation and definitions for the 2D PWR problem
+
+M4 INPUT_FILE_PATH 2dpwr.geo.m4 OUTPUT_FILE_PATH 2dpwr.geo MACRO mlc lc
+SHELL "gmsh -2 -v 0 2dpwr.geo"
+MESH NAME unstructured FILE_PATH 2dpwr.msh
+
+# define the formulation, scheme, dimensions and energy groups
+MILONGA_PROBLEM FORMULATION diffusion SCHEME $2 DIMENSIONS 2 GROUPS 2 
+
+INCLUDE 2dpwr_materials.mil
+
+# define boundary conditions as requested by the problem, applied
+# to appropriate physical entities defined in the geometry file
+PHYSICAL_ENTITY NAME external  BC vacuum  0.4692
+PHYSICAL_ENTITY NAME mirror    BC mirror

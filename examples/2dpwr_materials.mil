@@ -1,0 +1,20 @@
+# material definition for the 2D PWR benchmark
+
+# define materials and cross sections according to the two-group constants
+# each material corresponds to a physical entity in the geometry file
+Bg2 = 0.8e-4  # axial geometric buckling in the z direction
+MATERIAL fuel1 {
+  D_1 1.5    SigmaA_1 0.010+D_1(x,y)*Bg2    SigmaS_1.2 0.02
+  D_2 0.4    SigmaA_2 0.080+D_2(x,y)*Bg2    nuSigmaF_2  0.135   eSigmaF_2 nuSigmaF_2(x,y) }
+
+MATERIAL fuel2 {
+  D_1 1.5    SigmaA_1 0.010+D_1(x,y)*Bg2    SigmaS_1.2 0.02
+  D_2 0.4    SigmaA_2 0.085+D_2(x,y)*Bg2    nuSigmaF_2  0.135   eSigmaF_2 nuSigmaF_2(x,y) }
+
+MATERIAL fuel2+rod {
+  D_1 1.5    SigmaA_1 0.010+D_1(x,y)*Bg2    SigmaS_1.2 0.02
+  D_2 0.4    SigmaA_2 0.130+D_2(x,y)*Bg2    nuSigmaF_2  0.135   eSigmaF_2 nuSigmaF_2(x,y) }
+
+MATERIAL reflector {
+  D_1 2.0    SigmaA_1 0.000+D_1(x,y)*Bg2    SigmaS_1.2 0.04
+  D_2 0.3    SigmaA_2 0.010+D_2(x,y)*Bg2 }

@@ -1,0 +1,29 @@
+# solves a one-dimensional slab either with a
+# structured or unstrucutred mesh with a single file
+#
+# run as
+# $ milonga slab.mil { structured | unstructured } [ --volumes | --elements ]
+#
+
+# we define two meshes
+MESH NAME unstructured FILE_PATH slab.msh DIMENSIONS 1
+
+a = 2 * 10.371065 # critical size of the problem UD20-1-0-SL (number 22 report Los Alamos)
+MESH NAME structured   STRUCTURED         DIMENSIONS 1 NCELLS_X 20 LENGTH_X a
+
+DEFAULT_ARGUMENT_VALUE 1 unstructured
+MILONGA_PROBLEM MESH $1  # which mesh we use is selected from the commandline
+
+MATERIAL fuel SigmaT 0.54628  SigmaS 0.464338  nuSigmaF 1.70*0.054628 D 1/(3*SigmaT(x))
+
+
+PHYSICAL_ENTITY NAME left  BC null
+PHYSICAL_ENTITY NAME right BC null
+
+MILONGA_STEP
+
+kanalytical = nuSigmaF(0)/((SigmaT(0)-SigmaS(0))+D(0)*(pi/a)^2)
+PRINT_FUNCTION phi1 HEADER
+PRINT TEXT "\# keff       = " %.8f keff
+PRINT TEXT "\# analytical = " %.8f kanalytical
+PRINT TEXT "\# rel error = " %+.2e (keff-kanalytical)/keff

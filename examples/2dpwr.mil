@@ -1,0 +1,82 @@
+#                       BENCHMARK PROBLEM
+#          
+# Identification: 11-A2          Source Situation ID.11
+# Date Submitted: June 1976      By: R. R. Lee (CE)
+#                                    D. A. Menely (Ontario Hydro)
+#                                    B. Micheelsen (Riso-Denmark)
+#                                    D. R. Vondy (ORNL)
+#                                    M. R. Wagner (KWU)
+#                                    W. Werner (GRS-Munich)
+#
+# Date Accepted:  June 1977      By: H. L. Dodds, Jr. (U. of Tenn.)
+#                                    M. V. Gregory (SRL)
+#
+# Descriptive Title: Two-dimensional LWR Problem,
+#                    also 2D IAEA Benchmark Problem
+#
+# Reduction of Source Situation
+#           1. Two-groupo diffusion theory
+#           2. Two-dimensional (x,y)-geometry
+#
+
+
+# -----8<----- milonga's solution begins here -----8<-----
+# this input file quickly solves the benchmark problem
+# only the keff and the flux and power distribution are computed
+# search online for either 
+#   - The milonga Real Book
+#   - Unstructured Grids and the Multrigroup Neutron Difussion Equation
+#   - Difusion de neutrones en mallas no estructuradas: comparacion entre volumenes y elementos finitos
+# for a complete solution to the problem.
+
+# defaults
+DEFAULT_ARGUMENT_VALUE 1 structured
+DEFAULT_ARGUMENT_VALUE 2 volumes
+DEFAULT_ARGUMENT_VALUE 3 3
+
+# the characteristic length of the mesh is read from the commandline but defaults
+# to three cells per assembly
+lc = 10/$3
+
+MILONGA_SOLVER EPS_TYPE krylovschur
+
+# include some files that we need for the grid
+INCLUDE 2dpwr_$1.mil 
+
+# set the power setpoint equal to the volume of the core
+# (and set eSigmaF_2 = nuSigmaF_2 as above)
+power = 17700
+
+# finally ask milonga to solve the eigenvalue problem
+MILONGA_STEP
+
+# report the keff
+PRINT SEP " " TEXT "keff = " %.10f keff  " ( $1 $2, lc = " %g lc ", " unknowns TEXT "x" unknowns ", " %.2f time_cpu_ini time_cpu_build time_cpu_solve " secs )"
+
+# give some information in a markdown-formatted text file
+# convert it to other useful formats with pandoc:
+# $ pandoc 2dpwr.txt -o 2dpwr.pdf
+# $ pandoc 2dpwr.txt -o 2dpwr.html
+MILONGA_DEBUG FILE_PATH 2dpwr-$1-$2-$3.txt
+
+# gmsh & vtk postprocessing (in background)
+MESH_POST FILE_PATH 2dpwr-$1-$2-$3.msh phi1 phi2 pow
+MESH_POST FILE_PATH 2dpwr-$1-$2-$3.vtk phi1 phi2 pow
+
+# SHELL "gmsh 2dpwr-$1-$2-$3.msh &"
+
+# and gnuplot with the power
+PRINT_FUNCTION FILE_PATH 2dpwr-$1-$2-$3.dat pow phi2 phi1
+# SHELL "if [ ! -z `which gnuplot` ]; then gnuplot -p -e \"splot '2dpwr-$1-$2-$3.dat' u 1:2:3 palette\"; fi &"
+
+# dump the matrices in sng format, convert them to png with
+# 
+# $ sng *.sng
+#MILONGA_DEBUG FILE_PATH 2dpwr-$1-$2-$3 MATRICES_SNG MATRICES_SNG_STRUCT
+
+VAR phi_max x_max y_max
+MESH_FIND_MAX FUNCTION phi2 MAX phi_max X_MAX x_max Y_MAX y_max
+PRINT SEP " " TEXT "        max thermal flux " %.1f phi_max TEXT "located at ( x =" %.2f x_max TEXT ", y =" y_max TEXT ")"
+
+# -----8<----- milonga's solution ends here -----8<-----
+

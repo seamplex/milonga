@@ -1,0 +1,36 @@
+# solves a one-dimensional slab with uniform XS
+# generating an uniform structured grid
+#
+# run as
+#  $ milonga slab-struct.mil [ --volumes | --elements ]
+#
+
+# define an uniform one-dimensional mesh
+a = 100
+MESH STRUCTURED DIMENSIONS 1 NCELLS_X 20 LENGTH_X a
+
+# define a material named fuel with the provided XS
+MATERIAL fuel D 1 nuSigmaF 2e-3 SigmaA 1e-3
+
+# define a physical entity with the material fuel
+# if not explicitly specified with X_MIN & X_MAX,
+# the entity spans the whole available space
+PHYSICAL_ENTITY MATERIAL fuel
+
+# set null flux at both boundaries so we can
+# compare the numerical keff with the analytical one
+PHYSICAL_ENTITY NAME left  BC null
+PHYSICAL_ENTITY NAME right BC null
+
+# advance one milonga step (i.e, solve the problem)
+MILONGA_STEP
+
+# compute the analytical keff, noting that the XS can be
+# used as plain functions of x in algebraic expressiosn
+kanalytical = nuSigmaF(0)/(SigmaA(0)+D(0)*(pi/a)^2)
+
+# write the results into the standard output
+PRINT_FUNCTION phi1 HEADER
+PRINT TEXT "\# keff       = " %.8f keff
+PRINT TEXT "\# analytical = " %.8f kanalytical
+PRINT TEXT "\# rel error = " %+.2e (keff-kanalytical)/keff

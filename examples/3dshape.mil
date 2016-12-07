@@ -1,0 +1,49 @@
+# solves a three-dimensional shape with uniform XS
+# the geometry should be given in $1.geo
+# bulk material phyisical group should be named "fuel" and
+# external surface phyisical group should be named "external"
+# post-processing views are written as $1.vtk and $1.msh
+#
+# run as
+#  $ milonga 3dshape.mil [ cube | cylinder | shpere | bunny ]
+#                        [ --diffusion | --s2 | --s4 ]
+#                        [ --volumes | --elements ]
+#
+
+# if the mesh does not already exists, call gmsh on the $1.geo file
+SHELL "if [ ! -e $1.msh ]; then gmsh -v 0 -3 $1.geo; fi"
+MESH FILE_PATH $1.msh DIMENSIONS 3
+
+# these are the default values, they are overwritten by the commandline arguments
+MILONGA_PROBLEM SCHEME elements FORMULATION diffusion
+
+# some settings to improve cpu & memory usage
+MILONGA_SOLVER EPS_TYPE jd ST_TYPE precond KSP_TYPE bcgs PC_TYPE asm
+
+# table 12 in page 18 of Los Alamos Report LA-13511
+# analytical benchmark test set for criticality code verification
+MATERIAL U235a SigmaT 0.32640 SigmaS 0.248064 SigmaA 0.013056 nuSigmaF 2.7*0.065280
+
+# link physical entities in the mesh to materials and boundary conditions
+PHYSICAL_ENTITY NAME fuel     MATERIAL U235a
+PHYSICAL_ENTITY NAME external BC vacuum
+
+# do the magic!
+MILONGA_STEP
+
+# write some results into to the standard output
+PRINT_FUNCTION phi1 HEADER
+PRINT TEXT "\# keff     = " %.8f keff SEP " " TEXT "(" %+.1f 1e5*(1-1/keff) TEXT "pcm )"
+PRINT TEXT "\# nodes    = " %.0f nodes
+PRINT TEXT "\# elements = " %.0f elements
+PRINT TEXT "\# CPU usage: "
+PRINT TEXT "\#   init   = " %.3f time_cpu_ini   TEXT "seconds"
+PRINT TEXT "\#   build  = " %.3f time_cpu_build TEXT "seconds"
+PRINT TEXT "\#   solve  = " %.3f time_cpu_solve TEXT "seconds"
+PRINT TEXT "\#   total  = " %.3f time_cpu_total TEXT "seconds"
+
+# MILONGA_DEBUG MATRICES_X FILE_PATH 3dshape MATRICES_PETSC_OCTAVE
+
+# files for gmsh and vtk post-processing
+MESH_POST FILE_PATH $1_out.msh phi1
+FLUX_POST FILE_PATH $1.vtk
