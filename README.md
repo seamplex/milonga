@@ -1,5 +1,8 @@
-milonga: a free nuclear reactor analysis code
-=============================================
+% milonga: a free nuclear reactor analysis code
+
+![milonga](doc/milonga.svg){.img-responsive}\ 
+
+
 
 [milonga](http://www.seamplex.com/milonga/) is a free core-level neutronic code that solves the steady-state multigroup neutron transport equation (either using the diffusion approximation or the discrete ordinates $S_N$ method) over unstructured grids (although simple structured grids can also be used) using either a finite-volumes or a finite-elements discretization scheme. It works on top of the [wasora](http://www.seamplex.com/wasora) framework, which provides means to parse and understand a high-level plain-text input file containing algebraic expressions, data for function interpolation, differential equations and output instructions amongst other facilities. Therefore, any mathematical computation which can be done by wasora---i.e. parametric calculations, multidimensional optimization, function interpolation and integration, etc.---can be combined with the facilities that milonga provides to solve the neutron diffusion equation.
 
@@ -46,118 +49,70 @@ Milonga provides also a second glue layer that links the output of the linear/ei
 The subdirectory `examples` contains a test suite that may be used as examples of usage.  
 See <http://www.seamplex.com/milonga/realbook> for examples of actual applications.
 
-Quick download, compile & check
--------------------------------
+# Quick start
 
-If you are impatient to run milonga (or have failed to follow the instructions in [INSTALL](INSTALL.md)), open a terminal in any GNU/Linux box (may be a VirtualBox box) and execute these commands (you can copy & paste them):
+If you are impatient to run milonga, open a terminal in any GNU/Linux box (may be a VirtualBox box) and run:
 
 ```
-cd $HOME
-mkdir libs
-cd libs
-wget -c http://ftp.mcs.anl.gov/pub/petsc/release-snapshots/petsc-lite-3.7.1.tar.gz
-tar xvzf petsc-lite-3.7.1.tar.gz 
-cd petsc-3.7.1/
-export PETSC_DIR=$PWD
-./configure --download-fblaslapack --download-mpich --with-debugging=0
-export PETSC_ARCH=arch-linux2-c-opt
-make
-make test
-cd ..
-wget -c http://slepc.upv.es/download/download.php?filename=slepc-3.7.1.tar.gz
-mv download.php\?filename=slepc-3.7.1.tar.gz slepc-3.7.1.tar.gz
-tar xvzf slepc-3.7.1.tar.gz
-cd slepc-3.7.1/
-export SLEPC_DIR=$PWD
-./configure
-make
-make test
-cd $HOME
-mkdir wasora-suite
-cd wasora-suite
-hg clone https://bitbucket.org/wasora/wasora
-cd wasora
-./autogen.sh
-./configure --enable-download-gsl
-make
-make check
-cd ..
-hg clone https://bitbucket.org/wasora/milonga
-cd milonga
-./autogen.sh
-./configure
-make SHELL=/bin/bash
-make SHELL=/bin/bash check
-cd $HOME
-mkdir bin
-ln -s wasora-suite/milonga/milonga bin/milonga
-cat << EOF >> .bashrc
-# added by milonga
-export PATH=\$HOME/bin:\$PATH
-export PETSC_ARCH=$PETSC_ARCH
-export PETSC_DIR=$PETSC_DIR
-export SLEPC_DIR=$SLEPC_DIR
-EOF
+curl https://www.seamplex.com/milonga/get.sh | sh
 ```
 
-If the above is just non-sense to you or you encounter problems with the commands (probably because you are lacking some package), either:
+Make sure you have `curl` installed and if you are behind a proxy, that both `http_proxy` and `https_proxy` are properly set. If you get any error, either
 
- a. See the detailed explanation in [INSTALL](INSTALL.md)
- b. Ask for help in the mailing list at <wasora@seamplex.com>
+ a. See the detailed explanation in [INSTALL](INSTALL.md)  
+ b. Ask for help in the mailing list at <https://groups.google.com/a/seamplex.com/forum/#!forum/wasora>
+
+If these instructions are non-sense to you, go directly to point b.
 
 
-Running milonga
----------------
 
-As stated above, milonga works on top of the framework provided by wasora. Actually, milonga is a plugin for wasora that can be dynamically loaded at run-time (the set of wasora plus one or more of its plugins is referred to as the _wasora suite_). Nevertheless, milonga can be compiled and executed as a stand-alone binary. In any case, milonga follows the same design principles built into wasora. See the wasora [home page](http://www.seamplex.com/wasora) and [source repository](https://bitbucket.org/wasora/milonga) for further details. 
+
+# Running milonga
+
+As stated above, milonga works on top of the framework provided by wasora. Actually, milonga is a plugin for wasora that can be dynamically loaded at run-time (the set of wasora plus one or more of its plugins is referred to as the _wasora suite_). Nevertheless, milonga can be compiled and executed as a stand-alone binary. In any case, milonga follows the same design principles built into wasora. See the wasora [home page](http://www.seamplex.com/wasora) and [source repository](https://bitbucket.org/seamplex/milonga) for further details. 
 
 Following a [design decision](http://talador.com.ar/jeremy/wasora/milonga/doc/WA-MI-AR-14-11D3-B.pdf), wasora (and thus milonga) reads a plain-text file referred to as the _input file_ that contains a set of alphanumeric keywords with their corresponding arguments that define a certain mathematical problem that is to be solved. See the file `examples/parser.was` that explains how wasora parses its input files.
 
-If you obtained the source tree---either by downloading the tarball or by cloning the [mercurial repository](https://bitbucket.org/wasora/wasora/milonga)---milonga has to be compiled to obtain a binary executable (see the file `INSTALL` for details). If you downloaded a binary tarball for your architecture, the executable should be located in the root directory of the distribution. This executable can be either installed in a system-wide location (for example in `/usr/bin`), into a directory contained in the user's `$PATH` environment variable (for example in `$HOME/bin`) or even in present working directory (i.e. where the input file is). The appropriate decision is up to the user. In any case, wasora expects the name of the input file (or a path if it is not located in the current directory, although this situation may mangle the access to other needed files) as the first argument. Assuming wasora is installed in a directory listed in the `$PATH` variable and that the input file is named `input.mil`, then the proper execution instruction is
+If you obtained the source tree---either by downloading the tarball or by cloning the [mercurial repository](https://bitbucket.org/seamplex/milonga)---milonga has to be compiled to obtain a binary executable (see the file `INSTALL` for details). If you downloaded a binary tarball for your architecture, the executable should be located in the root directory of the distribution. This executable can be either installed in a system-wide location (for example in `/usr/bin`), into a directory contained in the user's `$PATH` environment variable (for example in `$HOME/bin`) or even in present working directory (i.e. where the input file is). The appropriate decision is up to the user. In any case, wasora expects the name of the input file (or a path if it is not located in the current directory, although this situation may mangle the access to other needed files) as the first argument. Assuming wasora is installed in a directory listed in the `$PATH` variable and that the input file is named `input.mil`, then the proper execution instruction is
 
-    $ milonga input.mil
-
-See the `examples/parser.was` file, the [Examples & test suite] and [The wasora Real Book] sections below for examples of usage of valid input files.
+```
+$ milonga input.mil
+```
 
 There exist some command line options---that may be consulted using the `--help` option---that are detailed discussed in the complete documentation. In particular, the `--version` option shows information about the milonga version and the libraries it was linked against:
 
 
 ~~~~
 $ milonga --version
-milonga 0.4.14  (10996c271131 2015-11-18 08:02 -0300)
+milonga v0.5.3-g67880a5
 free nuclear reactor core analysis code
 
- rev hash 10996c271131758544a4b02123420fdb51ed1ff2
- last commit on 2015-11-18 08:02 -0300 (rev 235)
- compiled on 2015-11-19 11:35:38 by gtheler@frink (linux-gnu x86_64)
+ last commit on Wed Dec 7 11:35:15 2016 -0300
+ compiled on 2016-12-07 12:19:04 by gtheler@tom ( )
  with gcc (Debian 4.9.2-10) 4.9.2 using -O2 linked against
-  SLEPc Release Version 3.6.2, Nov 03, 2015
-  Petsc Release Version 3.6.2, Oct, 02, 2015  arch-linux2-c-opt
- running on Linux 3.16.0-4-amd64 #1 SMP Debian 3.16.7-ckt11-1+deb8u6 (2015-11-09) x86_64
- 8  Intel(R) Core(TM) i7-3770K CPU @ 3.50GHz
+  SLEPc Release Version 3.7.3, Sep 29, 2016
+  Petsc Release Version 3.7.4, Oct, 02, 2016  arch-linux2-c-opt
+ running on Linux 3.16.0-4-amd64 #1 SMP Debian 3.16.36-1+deb8u2 (2016-10-19) x86_64
+ 8  Intel(R) Core(TM) i7-6700 CPU @ 3.40GHz
 
 
- milonga is copyright (c) 2010-2015 jeremy theler
+ milonga is copyright (c) 2010-2016 jeremy theler
  licensed under GNU GPL version 3 or later.
  milonga is free software: you are free to change and redistribute it.
  There is NO WARRANTY, to the extent permitted by law.
 
 
----------------             ----------          ---------
-wasora 0.4.19  (040eac0f20eb 2015-11-14 11:46 -0300)
-wasora's an advanced suite for optimization & reactor analysis
+------------            ------------          -------      -----
+wasora v0.5.23-g0da4f5b 
+wasora’s an advanced suite for optimization & reactor analysis
 
- rev hash 040eac0f20ebbac329622568089b98582812bbd2
- last commit on 2015-11-14 11:46 -0300 (rev 173)
-
- compiled on 2015-11-17 08:48:31 by gtheler@frink (linux-gnu x86_64)
- with gcc (Debian 4.9.2-10) 4.9.2 using -O2 and linked against
+ last commit on Wed Dec 7 11:51:12 2016 -0300
+ compiled on 2016-12-07 12:19:04 by gtheler@tom ( )
   GNU Scientific Library version 1.16
-  GNU Readline version 6.3
   SUNDIALs Library version 2.5.0
+  GNU Readline version 6.3
 
-
- wasora is copyright (C) 2009-2015 jeremy theler
+ wasora is copyright (C) 2009-2016 jeremy theler
  licensed under GNU GPL version 3 or later.
  wasora is free software: you are free to change and redistribute it.
  There is NO WARRANTY, to the extent permitted by law.
@@ -166,31 +121,33 @@ $
 ~~~~
     
 
-Examples & test suite
----------------------
+# Examples & test suite
 
 After the compilation of the code (that follows the standard `./configure && make` procedure, see `INSTALL` for details), one recommended step is to run the test suite with
 
-    $ make check
+```
+$ make check
+```
 
-It consists of ten cases that work both as examples of usage and as a suite of tests that check that milonga implements correctly the functionalities that are expected. Some cases have analytical solution and some not. Some cases used an already-generated unstructured mesh and some others need [Gmsh](http://geuz.org/gmsh/) to be installed. Some cases use [gnuplot](http://www.gnuplot.info/) to plot results. [ParaView](http://www.paraview.org/) can be used to post-process the last case. For some cases, milonga generates a markdown-formatted text file containing debugging and benchmarking information that can be converted to PDF and/or HTML with [pandoc](http://johnmacfarlane.net/pandoc/). In [Debian](http://www.debian.org)-based distributions, they can all be installed with:
+It consists of some cases that work both as examples of usage and as a suite of tests that check that milonga implements correctly the functionalities that are expected. Some cases have analytical solution and some not. Some cases used an already-generated unstructured mesh and some others need [Gmsh](http://geuz.org/gmsh/) to be installed. Some cases use [gnuplot](http://www.gnuplot.info/) to plot results. [ParaView](http://www.paraview.org/) can be used to post-process the last case. For some cases, milonga generates a markdown-formatted text file containing debugging and benchmarking information that can be converted to PDF and/or HTML with [pandoc](http://johnmacfarlane.net/pandoc/). In [Debian](http://www.debian.org)-based distributions, they can all be installed with:
 
-    # apt-get install gmsh gnuplot paraview pandoc
-
+```
+# apt-get install gmsh gnuplot paraview pandoc
+```
 
 
 The `make check` command may not show the actual output of the examples but the overall result (i.e. whether the test passed, the test failed or the test was skipped). Expect your screen to be filled up with plots, post-processing views and browsers showing debugging and benchmarking information. Each individual test may be repeated by executing the `test-*.sh` scripts located in the `examples` subdirectory.
 
 
-Further information
--------------------
+# Further information
+
 
 See the file `INSTALL` for compilation and installation instructions.  
 See the directory `examples` for the test suite and other examples.  
 See the contents of directory `doc` for full documentation.  
 
 Home page: <http://www.seamplex.com/milonga>  
-Repository: <http://bitbucket.org/wasora/milonga>
+Repository: <http://bitbucket.org/seamplex/milonga>
 Mailing list and bug reports: <wasora@seamplex.com>  
 
 
