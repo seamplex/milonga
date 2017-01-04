@@ -1,12 +1,12 @@
 % Milonga reference sheet
 % Jeremy Theler
 
-This reference sheet is for [Milonga](index.html) v0.5.5-g7b0313a
+This reference sheet is for [Milonga](index.html) v0.5.6-g3b0ca87
 . 
 
 ~~~
 $ milonga
-milonga v0.5.3-g67880a5+Δ 
+milonga v0.5.6-g3b0ca87+Δ 
 free nuclear reactor core analysis code
 $
 ~~~
@@ -67,13 +67,13 @@ MILONGA_SOLVER [ ROUTINE <loadable_routine> ] [ SPECTRUM { largest_eigenvalue | 
 
 
 
-List of `EPS_TYPE`s http://www.grycap.upv.es/slepc/documentation/current/docs/manualpages/EPS/EPSType.html
+List of `EPS_TYPE`s <http://www.grycap.upv.es/slepc/documentation/current/docs/manualpages/EPS/EPSType.html>
          
-List of `ST_TYPE`s http://www.grycap.upv.es/slepc/documentation/current/docs/manualpages/ST/STType.html
+List of `ST_TYPE`s <http://www.grycap.upv.es/slepc/documentation/current/docs/manualpages/ST/STType.html>
          
-List of `KSP_TYPE`s http://www.mcs.anl.gov/petsc/petsc-current/docs/manualpages/KSP/KSPType.html
+List of `KSP_TYPE`s <http://www.mcs.anl.gov/petsc/petsc-current/docs/manualpages/KSP/KSPType.html>
          
-List of `PC_TYPE`s http://www.mcs.anl.gov/petsc/petsc-current/docs/manualpages/PC/PCType.html
+List of `PC_TYPE`s <http://www.mcs.anl.gov/petsc/petsc-current/docs/manualpages/PC/PCType.html>
          
 
 ##  `MILONGA_STEP`

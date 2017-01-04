@@ -15,7 +15,7 @@ SHELL "if [ ! -e $1.msh ]; then gmsh -v 0 -3 $1.geo; fi"
 MESH FILE_PATH $1.msh DIMENSIONS 3
 
 # these are the default values, they are overwritten by the commandline arguments
-MILONGA_PROBLEM SCHEME elements FORMULATION diffusion
+MILONGA_PROBLEM SCHEME elements FORMULATION s2  # this is overriden by the commandline
 
 # some settings to improve cpu & memory usage
 MILONGA_SOLVER EPS_TYPE jd ST_TYPE precond KSP_TYPE bcgs PC_TYPE asm

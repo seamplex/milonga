@@ -56,25 +56,25 @@ int plugin_parse_line(char *line) {
           wasora_call(wasora_parser_keywords_ints(keywords, values, (int *)&milonga.spectrum));
           
 ///kw+MILONGA_SOLVER+usage [ EPS_TYPE { krylovschur | gd | jd | power | arnoldi | subspace | ... } ]
-///kw+MILONGA_SOLVER+detail List of `EPS_TYPE`s http://www.grycap.upv.es/slepc/documentation/current/docs/manualpages/EPS/EPSType.html
+///kw+MILONGA_SOLVER+detail List of `EPS_TYPE`s <http://www.grycap.upv.es/slepc/documentation/current/docs/manualpages/EPS/EPSType.html>
 ///kw+MILONGA_SOLVER+detail          
         } else if (strcasecmp(token, "EPS_TYPE") == 0) {
           wasora_call(wasora_parser_string(&milonga.eps_type));
 
 ///kw+MILONGA_SOLVER+usage [ ST_TYPE { sinvert | shift | cayley | precond } ]
-///kw+MILONGA_SOLVER+detail List of `ST_TYPE`s http://www.grycap.upv.es/slepc/documentation/current/docs/manualpages/ST/STType.html
+///kw+MILONGA_SOLVER+detail List of `ST_TYPE`s <http://www.grycap.upv.es/slepc/documentation/current/docs/manualpages/ST/STType.html>
 ///kw+MILONGA_SOLVER+detail          
         } else if (strcasecmp(token, "ST_TYPE") == 0) {
           wasora_call(wasora_parser_string(&milonga.st_type));
 
 ///kw+MILONGA_SOLVER+usage [ KSP_TYPE { gmres | bcgs | bicg | richardson | chebyshev | ... } ]
-///kw+MILONGA_SOLVER+detail List of `KSP_TYPE`s http://www.mcs.anl.gov/petsc/petsc-current/docs/manualpages/KSP/KSPType.html
+///kw+MILONGA_SOLVER+detail List of `KSP_TYPE`s <http://www.mcs.anl.gov/petsc/petsc-current/docs/manualpages/KSP/KSPType.html>
 ///kw+MILONGA_SOLVER+detail          
         } else if (strcasecmp(token, "KSP_TYPE") == 0) {
           wasora_call(wasora_parser_string(&milonga.ksp_type));
 
 ///kw+MILONGA_SOLVER+usage [ PC_TYPE { lu | none | sor | bjacobi | cholesky | ... } ]
-///kw+MILONGA_SOLVER+detail List of `PC_TYPE`s http://www.mcs.anl.gov/petsc/petsc-current/docs/manualpages/PC/PCType.html
+///kw+MILONGA_SOLVER+detail List of `PC_TYPE`s <http://www.mcs.anl.gov/petsc/petsc-current/docs/manualpages/PC/PCType.html>
 ///kw+MILONGA_SOLVER+detail          
         } else if (strcasecmp(token, "PC_TYPE") == 0) {
           wasora_call(wasora_parser_string(&milonga.pc_type));

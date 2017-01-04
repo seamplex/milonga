@@ -11,14 +11,13 @@ Its main features are:
  * free & open source software (released under the terms of the [GNU GPL version 3](http://www.gnu.org/copyleft/gpl.html))
  * solves the steady-state few-group neutron transport equation over a [Gmsh](http://geuz.org/gmsh/)-generated unstructured grid in one, two or three spatial dimensions
  * may solve either the discrete ordinates or the diffusion formulation of the transport equation
- * the method of collision probabilities is being developed by [rvignolo](https://bitbucket.org/rvignolo/milonga)
  * may use either a finite-volumes or a finite-elements spatial discretization scheme to obtain a matrix-casted eigenvalue problem
  * solves any combination of multiplicative and non-multiplicative media with and without independent source
  * can solve for either the direct or the adjoint flux (TODO! only direct flux is computed right now)
  * structured grids may be generated for simple problems within milonga without needing an external mesher (discouraged)
  * macroscopic cross sections are given as algebraic expressions of $x$, $y$ and $z$ in a per-material basis
  * algebraic expressions may involve interpolated point-wised user-defined functions of one or more variable, so cross sections may depend on intermediate spatial distributions (e.g. temperatures)
- * algebraic expressions may involve standard functions (sin, cos, exp, log, etc.) and functionals (integral, derivative, root, etc.)
+ * algebraic expressions may involve standard functions ($\sin$, $\cos$, $\exp$, $\log$, etc.) and functionals (integrals, derivatives, roots, etc.)
  * computed results (i.e. $k_\text{eff}$, fluxes, power) are given as scalar variables and functions of $x$, $y$ and $z$ which may be further used in algebraic expressions
  * program output is 100% user-defined (in fact the program is silent if no explicit `PRINT`s are given)
  * milonga may be coupled to other calculation codes using files, shared-memory objects or python bindings
@@ -45,9 +44,8 @@ These matrices are expected to be sparse, as they are the result of the discreti
 
 Milonga provides also a second glue layer that links the output of the linear/eigen-solver to the input of a post-processing tool (i.e [Gmsh](http://geuz.org/gmsh/) or [ParaView](http://www.paraview.org/)). The effective multiplication factor $k_\text{eff}$ is stored as a wasora variable, and the fluxes and power distribution as point-wise defined multidimensional functions, which can then be added, subtracted, integrated, differentiated, etc. Parametric and optimization runs may be also performed.
  
+![milonga](doc/hat2.png){.img-responsive}\ 
 
-The subdirectory `examples` contains a test suite that may be used as examples of usage.  
-See <http://www.seamplex.com/milonga/realbook> for examples of actual applications.
 
 # Quick start
 
@@ -64,62 +62,6 @@ Make sure you have `curl` installed and if you are behind a proxy, that both `ht
 
 If these instructions are non-sense to you, go directly to point b.
 
-
-
-
-# Running milonga
-
-As stated above, milonga works on top of the framework provided by wasora. Actually, milonga is a plugin for wasora that can be dynamically loaded at run-time (the set of wasora plus one or more of its plugins is referred to as the _wasora suite_). Nevertheless, milonga can be compiled and executed as a stand-alone binary. In any case, milonga follows the same design principles built into wasora. See the wasora [home page](http://www.seamplex.com/wasora) and [source repository](https://bitbucket.org/seamplex/milonga) for further details. 
-
-Following a [design decision](http://talador.com.ar/jeremy/wasora/milonga/doc/WA-MI-AR-14-11D3-B.pdf), wasora (and thus milonga) reads a plain-text file referred to as the _input file_ that contains a set of alphanumeric keywords with their corresponding arguments that define a certain mathematical problem that is to be solved. See the file `examples/parser.was` that explains how wasora parses its input files.
-
-If you obtained the source tree---either by downloading the tarball or by cloning the [mercurial repository](https://bitbucket.org/seamplex/milonga)---milonga has to be compiled to obtain a binary executable (see the file `INSTALL` for details). If you downloaded a binary tarball for your architecture, the executable should be located in the root directory of the distribution. This executable can be either installed in a system-wide location (for example in `/usr/bin`), into a directory contained in the user's `$PATH` environment variable (for example in `$HOME/bin`) or even in present working directory (i.e. where the input file is). The appropriate decision is up to the user. In any case, wasora expects the name of the input file (or a path if it is not located in the current directory, although this situation may mangle the access to other needed files) as the first argument. Assuming wasora is installed in a directory listed in the `$PATH` variable and that the input file is named `input.mil`, then the proper execution instruction is
-
-```
-$ milonga input.mil
-```
-
-There exist some command line options---that may be consulted using the `--help` option---that are detailed discussed in the complete documentation. In particular, the `--version` option shows information about the milonga version and the libraries it was linked against:
-
-
-~~~~
-$ milonga --version
-milonga v0.5.3-g67880a5
-free nuclear reactor core analysis code
-
- last commit on Wed Dec 7 11:35:15 2016 -0300
- compiled on 2016-12-07 12:19:04 by gtheler@tom ( )
- with gcc (Debian 4.9.2-10) 4.9.2 using -O2 linked against
-  SLEPc Release Version 3.7.3, Sep 29, 2016
-  Petsc Release Version 3.7.4, Oct, 02, 2016  arch-linux2-c-opt
- running on Linux 3.16.0-4-amd64 #1 SMP Debian 3.16.36-1+deb8u2 (2016-10-19) x86_64
- 8  Intel(R) Core(TM) i7-6700 CPU @ 3.40GHz
-
-
- milonga is copyright (c) 2010-2016 jeremy theler
- licensed under GNU GPL version 3 or later.
- milonga is free software: you are free to change and redistribute it.
- There is NO WARRANTY, to the extent permitted by law.
-
-
-------------            ------------          -------      -----
-wasora v0.5.23-g0da4f5b 
-wasora’s an advanced suite for optimization & reactor analysis
-
- last commit on Wed Dec 7 11:51:12 2016 -0300
- compiled on 2016-12-07 12:19:04 by gtheler@tom ( )
-  GNU Scientific Library version 1.16
-  SUNDIALs Library version 2.5.0
-  GNU Readline version 6.3
-
- wasora is copyright (C) 2009-2016 jeremy theler
- licensed under GNU GPL version 3 or later.
- wasora is free software: you are free to change and redistribute it.
- There is NO WARRANTY, to the extent permitted by law.
-
-$
-~~~~
-    
 
 # Examples & test suite
 
@@ -139,6 +81,204 @@ It consists of some cases that work both as examples of usage and as a suite of 
 The `make check` command may not show the actual output of the examples but the overall result (i.e. whether the test passed, the test failed or the test was skipped). Expect your screen to be filled up with plots, post-processing views and browsers showing debugging and benchmarking information. Each individual test may be repeated by executing the `test-*.sh` scripts located in the `examples` subdirectory.
 
 
+## Slab
+
+```wasora
+# solves a one-dimensional slab either with a
+# structured or unstrucutred mesh with a single file
+#
+# run as
+# $ milonga slab.mil { structured | unstructured } [ --volumes | --elements ]
+#
+
+# we define two meshes
+MESH NAME unstructured FILE_PATH slab.msh DIMENSIONS 1
+
+a = 2 * 10.371065 # critical size of the problem UD20-1-0-SL (number 22 report Los Alamos)
+MESH NAME structured   STRUCTURED         DIMENSIONS 1 NCELLS_X 20 LENGTH_X a
+
+DEFAULT_ARGUMENT_VALUE 1 unstructured
+MILONGA_PROBLEM MESH $1  # which mesh we use is selected from the commandline
+
+MATERIAL fuel SigmaT 0.54628  SigmaS 0.464338  nuSigmaF 1.70*0.054628 D 1/(3*SigmaT(x))
+
+
+PHYSICAL_ENTITY NAME left  BC null
+PHYSICAL_ENTITY NAME right BC null
+
+MILONGA_STEP
+```
+
+```
+milonga slab.mil
+```
+
+![Flux in a one-dimensional slab](doc/slab.png){.img-responsive}
+
+
+## Two-dimensional PWR IAEA benchmark
+
+See `examples/2dpwr*.mil` for the actual input files.
+
+```
+gtheler@tom:~/wasora-suite/milonga/examples$ ./test-2dpwr.sh 
+keff =  1.0293114574  ( structured volumes, lc =  3.33333 ,  5202 x 5202 ,  0.00 0.01 0.07  secs ) 
+        max thermal flux  17.9 located at ( x = 135.00 , y = 55.00 ) 
+keff =  1.0296896615  ( structured elements, lc =  3.33333 ,  5408 x 5408 ,  0.00 0.04 0.10  secs ) 
+        max thermal flux  19.7 located at ( x = 56.67 , y = 136.67 ) 
+keff =  1.0297517716  ( unstructured volumes, lc =  3.33333 ,  5994 x 5994 ,  0.00 0.01 0.19  secs ) 
+        max thermal flux  17.8 located at ( x = 132.71 , y = 55.96 ) 
+keff =  1.0296828170  ( unstructured elements, lc =  3.33333 ,  6204 x 6204 ,  0.00 0.05 0.24  secs ) 
+        max thermal flux  19.7 located at ( x = 56.22 , y = 136.00 ) 
+gtheler@tom:~/wasora-suite/milonga/examples$
+```
+    
+![The 2D IAEA PWR benchmark solved with milonga](doc/2dpwr.png){.img-responsive}
+
+
+<div class="row">
+ <div class="col-md-6">
+![Fast flux, unstructured grid, finite volumes](doc/2dpwr-phi1.png){.img-responsive}
+ </div>
+ <div class="col-md-6">
+![Thermal flux, unstructured grid, finite volumes](doc/2dpwr-phi2.png){.img-responsive}
+ </div>
+</div>
+
+## The Stanford Bunny
+
+```wasora
+# solves a three-dimensional shape with uniform XS
+# the geometry should be given in $1.geo
+# bulk material phyisical group should be named "fuel" and
+# external surface phyisical group should be named "external"
+# post-processing views are written as $1.vtk and $1.msh
+#
+# run as
+#  $ milonga 3dshape.mil [ cube | cylinder | shpere | bunny ]
+#                        [ --diffusion | --s2 | --s4 ]
+#                        [ --volumes | --elements ]
+#
+
+# if the mesh does not already exists, call gmsh on the $1.geo file
+SHELL "if [ ! -e $1.msh ]; then gmsh -v 0 -3 $1.geo; fi"
+MESH FILE_PATH $1.msh DIMENSIONS 3
+
+# these are the default values, they are overwritten by the commandline arguments
+MILONGA_PROBLEM SCHEME elements FORMULATION s2
+
+# some settings to improve cpu & memory usage
+MILONGA_SOLVER EPS_TYPE jd ST_TYPE precond KSP_TYPE bcgs PC_TYPE asm
+
+# table 12 in page 18 of Los Alamos Report LA-13511
+# analytical benchmark test set for criticality code verification
+MATERIAL U235a SigmaT 0.32640 SigmaS 0.248064 SigmaA 0.013056 nuSigmaF 2.7*0.065280
+
+# link physical entities in the mesh to materials and boundary conditions
+PHYSICAL_ENTITY NAME fuel     MATERIAL U235a
+PHYSICAL_ENTITY NAME external BC vacuum
+
+# do the magic!
+MILONGA_STEP
+
+# write some results into to the standard output
+PRINT_FUNCTION phi1 HEADER
+PRINT TEXT "\# keff     = " %.8f keff SEP " " TEXT "(" %+.1f 1e5*(1-1/keff) TEXT "pcm )"
+PRINT TEXT "\# nodes    = " %.0f nodes
+PRINT TEXT "\# elements = " %.0f elements
+PRINT TEXT "\# CPU usage: "
+PRINT TEXT "\#   init   = " %.3f time_cpu_ini   TEXT "seconds"
+PRINT TEXT "\#   build  = " %.3f time_cpu_build TEXT "seconds"
+PRINT TEXT "\#   solve  = " %.3f time_cpu_solve TEXT "seconds"
+PRINT TEXT "\#   total  = " %.3f time_cpu_total TEXT "seconds"
+
+# MILONGA_DEBUG MATRICES_X FILE_PATH 3dshape MATRICES_PETSC_OCTAVE
+
+# files for gmsh and vtk post-processing
+MESH_POST FILE_PATH $1_out.msh phi1
+FLUX_POST FILE_PATH $1.vtk
+```
+
+```
+$ milonga 3dshape.mil bunny
+[...]
+2.494790e+00    -9.692680e-01   7.595410e+00    2.275265e+00
+-3.223120e+00   -2.619830e+00   5.786140e+00    1.707387e+00
+# keff     =  0.92145559 ( -8523.9 pcm ) 
+# nodes    =    3423
+# elements =    18496
+# CPU usage: 
+#   init   =    0.001   seconds
+#   build  =    1.608   seconds
+#   solve  =    0.621   seconds
+#   total  =    2.231   seconds
+```
+
+![The S$_2$ Stanford Bunny, scalar flux $\phi$](doc/bunny-phi.png){.img-responsive}
+
+
+
+<div class="row">
+ <div class="col-md-3 col-xs-6">
+![Angular flux $\psi_1$](doc/bunny-psi1-thumb.png){.img-responsive}
+ </div>
+ <div class="col-md-3 col-xs-6">
+![Angular flux $\psi_2$](doc/bunny-psi2-thumb.png){.img-responsive}
+ </div>
+ <div class="col-md-3 col-xs-6">
+![Angular flux $\psi_3$](doc/bunny-psi3-thumb.png){.img-responsive}
+ </div>
+ <div class="col-md-3 col-xs-6">
+![Angular flux $\psi_4$](doc/bunny-psi4-thumb.png){.img-responsive}
+ </div>
+</div>
+<div class="row">
+ <div class="col-md-3 col-xs-6">
+![Angular flux $\psi_5$](doc/bunny-psi5-thumb.png){.img-responsive}
+ </div>
+ <div class="col-md-3 col-xs-6">
+![Angular flux $\psi_6$](doc/bunny-psi6-thumb.png){.img-responsive}
+ </div>
+ <div class="col-md-3 col-xs-6">
+![Angular flux $\psi_7$](doc/bunny-psi7-thumb.png){.img-responsive}
+ </div>
+ <div class="col-md-3 col-xs-6">
+![Angular flux $\psi_8$](doc/bunny-psi8-thumb.png){.img-responsive}
+ </div>
+</div>
+
+The angular fluxes $\psi_g$ for $g=1,\dots,8$ from the S$_2$ formulation.
+
+# Licensing
+
+Milonga is distributed under the terms of the [GNU General Public License](http://www.gnu.org/copyleft/gpl.html) version 3 or (at your option) any later version.
+
+Milonga is [free software](https://www.gnu.org/philosophy/free-sw.html)---both as in [free speech and as in free beer](https://en.wikipedia.org/wiki/Gratis_versus_libre), although the first meaning is far more important than the second one---and is distributed under the terms of the [GNU General Public License](http://www.gnu.org/copyleft/gpl.html) version\ 3 or (at your option) any later version. In words of the [Free Software Foundation](http://www.fsf.org/),
+
+> Nobody should be restricted by the software they use. There are four freedoms that every user should have:
+>
+>  0. the freedom to use the software for any purpose,
+>  1. the freedom to change the software to suit your needs,
+>  2. the freedom to share the software with your friends and neighbors, and
+>  3. the freedom to share the changes you make.
+> When a program offers users all of these freedoms, we call it free software.
+> 
+> Developers who write software can release it under the terms of the GNU GPL. When they do, it will be free software and stay free software, no matter who changes or distributes the program. We call this [copyleft](https://en.wikipedia.org/wiki/Copyleft): the software is copyrighted, but instead of using those rights to restrict users like proprietary software does, we use them to ensure that every user has freedom.
+
+Not only does milonga (and [wasora](https://www.seamplex.com/wasora)) provide all the four basic freedoms to the software user, but it also encourages her to study, understand, analyze and hack it. And of course, to share the associated discoveries, suggestions, improvements and fixed bugs under the terms of the GNU GPL---especially with wasora’s original author. To sum up:
+
+> Milonga is free software: you can redistribute it and/or modify
+> it under the terms of the GNU General Public License as published by
+> the Free Software Foundation, either version~3 of the License, or
+> (at your option) any later version.
+> 
+> Milonga is distributed in the hope that it will be useful,
+> but WITHOUT ANY WARRANTY; without even the implied warranty of
+> MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+> GNU General Public License for more details.
+
+
+
 # Further information
 
 
@@ -151,8 +291,8 @@ Repository: <http://bitbucket.org/seamplex/milonga>
 Mailing list and bug reports: <wasora@seamplex.com>  
 
 
-milonga is copyright (C) 2009--2016 jeremy theler  
+milonga is copyright ©2010--2017 jeremy theler  
 milonga is licensed under [GNU GPL version 3](http://www.gnu.org/copyleft/gpl.html) or (at your option) any later version.  
-milonga is free software: you are free to change and redistribute it.  
+milonga is  [free software](https://www.gnu.org/philosophy/free-sw.html): you are free to change and redistribute it.  
 There is NO WARRANTY, to the extent permitted by law.  
 See the file `COPYING` for copying conditions.  

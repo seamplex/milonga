@@ -10,7 +10,7 @@ esyscmd([!milonga!])dnl
 $
 ~~~
 
-Note that Milonga works on top of [wasora](/wasora), so you should also check the [wasora reference sheet](/wasora/reference.html) also---not to mention the [wasora RealBook](/wasora/realbook).
+Note that Milonga works on top of [wasora](/wasora), so you should also check the [wasora reference sheet](/wasora/reference.html) also, especially the [mesh-related keywords](/wasora/reference.html[!#!]mesh-related-keywords)---not to mention the [wasora RealBook](/wasora/realbook).
 
 # Keywords
 
