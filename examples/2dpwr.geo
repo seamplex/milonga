@@ -142,7 +142,7 @@ Plane Surface(66) = {65};
 // surfaces (to be translated to materials in milonga)
 Physical Surface("fuel1") = {54};
 Physical Surface("fuel2") = {56};
-Physical Surface("fuel2+rod") = {60, 58, 64, 62};
+Physical Surface("fuel2rod") = {60, 58, 64, 62};
 Physical Surface("reflector") = {66};
 
 // lines (to be translated to boundary conditions in milonga)

@@ -11,7 +11,7 @@ MATERIAL fuel2 {
   D_1 1.5    SigmaA_1 0.010+D_1(x,y)*Bg2    SigmaS_1.2 0.02
   D_2 0.4    SigmaA_2 0.085+D_2(x,y)*Bg2    nuSigmaF_2  0.135   eSigmaF_2 nuSigmaF_2(x,y) }
 
-MATERIAL fuel2+rod {
+MATERIAL fuel2rod {
   D_1 1.5    SigmaA_1 0.010+D_1(x,y)*Bg2    SigmaS_1.2 0.02
   D_2 0.4    SigmaA_2 0.130+D_2(x,y)*Bg2    nuSigmaF_2  0.135   eSigmaF_2 nuSigmaF_2(x,y) }
 
