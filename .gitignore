@@ -83,7 +83,8 @@ examples/bunnyscale.mil
 examples/bunny.stp
 examples/bunny.pvsm
 
-
+examples/meta*.msh
+examples/col_*.msh
 
 
 
