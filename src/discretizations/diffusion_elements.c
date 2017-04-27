@@ -546,9 +546,10 @@ int diffusion_elements_normalize_flux(void) {
 }
 
 #undef  __FUNCT__
-#define __FUNCT__ "diffusion_elements_results_fill_pwoer"
+#define __FUNCT__ "diffusion_elements_results_fill_power"
 int diffusion_elements_results_fill_power(void) {
   int g, k;
+  double den;
   double pow;
   xs_t *xs;
   element_t *element = NULL;
@@ -556,22 +557,27 @@ int diffusion_elements_results_fill_power(void) {
 
 
   for (k = 0; k < milonga.mesh->n_nodes; k++) {
+    den = 0;
     LL_FOREACH(milonga.mesh->node[k].associated_elements, associated_element) {
       element = associated_element->element;
-    }
-    if (element != NULL && element->physical_entity != NULL && element->physical_entity->material != NULL) {
-      xs = (xs_t *)element->physical_entity->material->ext;
-      if (xs != NULL && xs->eSigmaF != NULL) {
-        wasora_var(wasora_mesh.vars.x) = milonga.mesh->node[k].x[0];
-        wasora_var(wasora_mesh.vars.y) = milonga.mesh->node[k].x[1];
-        wasora_var(wasora_mesh.vars.z) = milonga.mesh->node[k].x[2];
+      pow = 0;
+      if (element != NULL && element->physical_entity != NULL && element->physical_entity->material != NULL) {
+        den += element->type->element_volume(element);
+        xs = (xs_t *)element->physical_entity->material->ext;
+        if (xs != NULL && xs->eSigmaF != NULL) {
+          wasora_var(wasora_mesh.vars.x) = milonga.mesh->node[k].x[0];
+          wasora_var(wasora_mesh.vars.y) = milonga.mesh->node[k].x[1];
+          wasora_var(wasora_mesh.vars.z) = milonga.mesh->node[k].x[2];
 
-        pow = 0;
-        for (g = 0; g < milonga.groups; g++) {
-          pow += wasora_evaluate_expression(xs->eSigmaF[g]) * milonga.functions.phi[g]->data_value[k];
+          for (g = 0; g < milonga.groups; g++) {
+            pow += wasora_evaluate_expression(xs->eSigmaF[g]) * milonga.functions.phi[g]->data_value[k];
+          }
         }
-        milonga.functions.pow->data_value[k] = pow;
+        milonga.functions.pow->data_value[k] += element->type->element_volume(element) * pow;
       }
+    }
+    if (den != 0) {
+      milonga.functions.pow->data_value[k] /= den;
     }
   }
 
