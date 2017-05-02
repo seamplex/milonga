@@ -56,9 +56,10 @@ int diffusion_volumes_problem_init(void) {
 
 
   milonga.spatial_unknowns = milonga.mesh->n_cells;
-  milonga_allocate_global_objects(milonga.spatial_unknowns * milonga.groups,
-                                  milonga.mesh->max_faces_per_element + milonga.groups,
-                                  milonga.groups);
+  milonga_allocate_global_matrices(milonga.spatial_unknowns * milonga.groups,
+                                   milonga.mesh->max_faces_per_element + milonga.groups,
+                                   milonga.groups);
+  milonga_allocate_global_vectors(milonga.spatial_unknowns * milonga.groups);
   
   wasora_var(wasora_mesh.vars.cells) = (double)milonga.mesh->n_cells;
   wasora_var(wasora_mesh.vars.nodes) = (double)milonga.mesh->n_nodes;

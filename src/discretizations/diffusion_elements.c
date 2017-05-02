@@ -65,9 +65,10 @@ int diffusion_elements_problem_init(void) {
   int g;
 
   milonga.spatial_unknowns = milonga.mesh->n_nodes;
-  milonga_allocate_global_objects(milonga.spatial_unknowns * milonga.groups,
-                                  milonga.mesh->max_first_neighbor_nodes * milonga.groups,
-                                  milonga.mesh->max_first_neighbor_nodes * milonga.groups);
+  milonga_allocate_global_matrices(milonga.spatial_unknowns * milonga.groups,
+                                   milonga.mesh->max_first_neighbor_nodes * milonga.groups,
+                                   milonga.mesh->max_first_neighbor_nodes * milonga.groups);
+  milonga_allocate_global_vectors(milonga.spatial_unknowns * milonga.groups);
 
   wasora_var(wasora_mesh.vars.cells) = (double)milonga.mesh->n_cells;
   wasora_var(wasora_mesh.vars.nodes) = (double)milonga.mesh->n_nodes;

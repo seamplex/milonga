@@ -83,12 +83,10 @@ int milonga_instruction_step(void *arg) {
     petsc_call(PetscLogEventBegin(milonga.petsc_event_build, 0, 0, 0, 0));
     time_checkpoint(build_begin);
 
-    // esto es para problemas con static_steps != 0
+    // esto es para problemas con static_steps != 0, si hacemos matsetzero usamos mucha memoria
     if (wasora.special_vars.step_static != 0) {
-      // OJO! esto gasta mucha memoria porque pone en cero todo
-      // lo que esta prealocado aunque no se use!
-//    petsc_call(MatZeroEntries(milonga.R));
-//    petsc_call(MatZeroEntries(milonga.F));    
+      petsc_call(milonga_free_global_matrices());
+      petsc_call(milonga_allocate_global_matrices(milonga.spatial_unknowns * milonga.groups, 0, 0));
     }
     wasora_call(milonga.matrices_build());
     

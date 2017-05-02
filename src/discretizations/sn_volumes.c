@@ -55,9 +55,11 @@ int sn_volumes_problem_init(void) {
   }
 
   milonga.spatial_unknowns = milonga.mesh->n_cells;
-  milonga_allocate_global_objects(milonga.spatial_unknowns * milonga.directions * milonga.groups,
-                                  milonga.mesh->max_faces_per_element + milonga.directions * milonga.groups,
-                                  milonga.directions * milonga.groups);
+  milonga_allocate_global_matrices(milonga.spatial_unknowns * milonga.directions * milonga.groups,
+                                   milonga.mesh->max_faces_per_element + milonga.directions * milonga.groups,
+                                   milonga.directions * milonga.groups);
+  milonga_allocate_global_vectors(milonga.spatial_unknowns * milonga.groups);
+  
   
   // inicializamos los pesos de las ordenadas discretas
   wasora_call(sn_init_weights());

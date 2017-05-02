@@ -443,7 +443,8 @@ int plugin_init_before_run(void) {
   if (milonga.problem_free != NULL) {
     wasora_call(milonga.problem_free());
   }
-  wasora_call(milonga_free_global_objects());
+  wasora_call(milonga_free_global_matrices());
+  wasora_call(milonga_free_global_vectors());
   milonga.initialized = 0;
 
   return WASORA_RUNTIME_OK;
@@ -463,7 +464,8 @@ int plugin_finalize(void) {
     PetscViewerDestroy(&debug->viewer);
   }
   
-  wasora_call(milonga_free_global_objects());
+  wasora_call(milonga_free_global_matrices());
+  wasora_call(milonga_free_global_vectors());
   petsc_call(SlepcFinalize());  
   
   return WASORA_RUNTIME_OK;

@@ -90,9 +90,11 @@ int sn_elements_problem_init(void) {
   PetscFunctionBegin;
 
   milonga.spatial_unknowns = milonga.mesh->n_nodes;
-  milonga_allocate_global_objects(milonga.spatial_unknowns * milonga.directions * milonga.groups,
-                                  milonga.mesh->max_first_neighbor_nodes * milonga.directions * milonga.groups,
-                                  milonga.mesh->max_first_neighbor_nodes * milonga.directions * milonga.groups);
+  milonga_allocate_global_matrices(milonga.spatial_unknowns * milonga.directions * milonga.groups,
+                                   milonga.mesh->max_first_neighbor_nodes * milonga.directions * milonga.groups,
+                                   milonga.mesh->max_first_neighbor_nodes * milonga.directions * milonga.groups);
+  milonga_allocate_global_vectors(milonga.spatial_unknowns * milonga.groups);
+  
 
   // inicializamos los pesos de las ordenadas discretas
   wasora_call(sn_init_weights());

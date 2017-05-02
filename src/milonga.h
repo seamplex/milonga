@@ -77,6 +77,8 @@ struct {
   int dimensions;
   int SN;               // orden de la formulacion de transporte (SN)
   int directions;       // cantidad de direcciones 
+  int widthR;
+  int widthF;
   
   int implicit_bc_none; // flag que si es true hay que poner CC explicita a cada superficie externa
 
@@ -301,8 +303,10 @@ extern int milonga_parse_line(char *);
 extern int milonga_define_result_functions(void);
 
 // allocate.c
-extern int milonga_allocate_global_objects(int, int, int);
-extern int milonga_free_global_objects(void);
+extern int milonga_allocate_global_matrices(int, int, int);
+extern int milonga_allocate_global_vectors(int);
+extern int milonga_free_global_matrices(void);
+extern int milonga_free_global_vectors(void);
 
 // entry.c
 extern int milonga_set_entry_points(void);
