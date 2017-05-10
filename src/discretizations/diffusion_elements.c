@@ -68,7 +68,7 @@ int diffusion_elements_problem_init(void) {
   milonga_allocate_global_matrices(milonga.spatial_unknowns * milonga.groups,
                                    milonga.mesh->max_first_neighbor_nodes * milonga.groups,
                                    milonga.mesh->max_first_neighbor_nodes * milonga.groups);
-  milonga_allocate_global_vectors(milonga.spatial_unknowns * milonga.groups);
+  milonga_allocate_global_vectors();
 
   wasora_var(wasora_mesh.vars.cells) = (double)milonga.mesh->n_cells;
   wasora_var(wasora_mesh.vars.nodes) = (double)milonga.mesh->n_nodes;
@@ -195,11 +195,11 @@ int diffusion_elements_matrices_build(void) {
       // una vez que ensamblamos las matrizotas
       
       if (milonga.mesh->element[i].physical_entity != NULL) {
-        if (milonga.mesh->element[i].physical_entity->bc_type_int == BC_MIRROR) {
+        if (milonga.mesh->element[i].physical_entity->bc_type_phys == BC_MIRROR) {
           // TODO: que se puedan poner corrientes no nulas (no debe haber o fision o fuentes)
           ; // no hay que hacer naranja!
-        } else if (milonga.mesh->element[i].physical_entity->bc_type_int == BC_VACUUM ||
-                   milonga.mesh->element[i].physical_entity->bc_type_int == BC_UNDEFINED) {
+        } else if (milonga.mesh->element[i].physical_entity->bc_type_phys == BC_VACUUM ||
+                   milonga.mesh->element[i].physical_entity->bc_type_phys == BC_UNDEFINED) {
           wasora_call(diffusion_elements_build_robin_objects(&milonga.mesh->element[i], milonga.mesh->element[i].physical_entity->bc_args));
         }
       }
@@ -456,7 +456,7 @@ int diffusion_elements_set_essential_bc(void) {
 
   for (i = 0; i < milonga.mesh->n_elements; i++) {
     if (milonga.mesh->element[i].type != NULL && milonga.mesh->element[i].type->dim == milonga.mesh->bulk_dimensions-1) {
-      if (milonga.mesh->element[i].physical_entity == NULL || milonga.mesh->element[i].physical_entity->bc_type_int == BC_NULL) {
+      if (milonga.mesh->element[i].physical_entity == NULL || milonga.mesh->element[i].physical_entity->bc_type_phys == BC_NULL) {
         for (j = 0; j < milonga.mesh->element[i].type->nodes; j++) {
           if (milonga.has_fission) {
             MatZeroRows(milonga.F, milonga.groups, milonga.mesh->element[i].node[j]->index, 0.0, PETSC_NULL, PETSC_NULL);

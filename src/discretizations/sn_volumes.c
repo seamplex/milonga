@@ -58,7 +58,7 @@ int sn_volumes_problem_init(void) {
   milonga_allocate_global_matrices(milonga.spatial_unknowns * milonga.directions * milonga.groups,
                                    milonga.mesh->max_faces_per_element + milonga.directions * milonga.groups,
                                    milonga.directions * milonga.groups);
-  milonga_allocate_global_vectors(milonga.spatial_unknowns * milonga.groups);
+  milonga_allocate_global_vectors();
   
   
   // inicializamos los pesos de las ordenadas discretas
@@ -225,16 +225,16 @@ int sn_volumes_matrices_build(void) {
               if (milonga.mesh->structured == 0) {
                 if (cell->neighbor[j].element == NULL ||
                     cell->neighbor[j].element->physical_entity == NULL ||
-                    cell->neighbor[j].element->physical_entity->bc_type_int == BC_VACUUM ||
-                    cell->neighbor[j].element->physical_entity->bc_type_int == BC_NULL) {
+                    cell->neighbor[j].element->physical_entity->bc_type_phys == BC_VACUUM ||
+                    cell->neighbor[j].element->physical_entity->bc_type_phys == BC_NULL) {
                   bc_type = BC_VACUUM;
-                } else if (cell->neighbor[j].element->physical_entity->bc_type_int == BC_MIRROR) {
+                } else if (cell->neighbor[j].element->physical_entity->bc_type_phys == BC_MIRROR) {
                   bc_type = BC_MIRROR;
                 }
               } else {
                 LL_FOREACH(wasora_mesh.physical_entities, physical_entity) {
                   if ((physical_entity->struct_bc_direction-1) == j) {
-                    bc_type = physical_entity->bc_type_int;
+                    bc_type = physical_entity->bc_type_phys;
                   }
                 }
               }

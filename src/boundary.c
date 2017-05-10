@@ -42,21 +42,21 @@ int milonga_read_boundaries(void) {
       }
     
       if (strcasecmp(string, "null") == 0 || strcasecmp(string, "dirichlet") == 0) {
-        physical_entity->bc_type_int = BC_NULL;
+        physical_entity->bc_type_phys = BC_NULL;
 
       } else if (strcasecmp(string, "vacuum") == 0 || strcasecmp(string, "robin") == 0) {
-        physical_entity->bc_type_int = BC_VACUUM;
+        physical_entity->bc_type_phys = BC_VACUUM;
 
       } else if (strcasecmp(string, "mirror") == 0 || strcasecmp(string, "neumann") == 0) {
-        physical_entity->bc_type_int = BC_MIRROR;
+        physical_entity->bc_type_phys = BC_MIRROR;
 
       } else {
-        if (physical_entity->bc_type_int == BC_UNDEFINED) {
+        if (physical_entity->bc_type_phys == BC_UNDEFINED) {
           if (milonga.implicit_bc_none) {
             wasora_push_error_message("unknown boundary condition '%s' for physical entity '%s' (IMPLICIT_BC is set to NONE)", physical_entity->bc_type_string, physical_entity->name);
             return WASORA_RUNTIME_ERROR;
           } else {
-            physical_entity->bc_type_int = BC_VACUUM;   // default is vacuum
+            physical_entity->bc_type_phys = BC_VACUUM;   // default is vacuum
           }
         }
       }

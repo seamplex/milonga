@@ -84,9 +84,9 @@ int milonga_instruction_step(void *arg) {
     time_checkpoint(build_begin);
 
     // esto es para problemas con static_steps != 0, si hacemos matsetzero usamos mucha memoria
-    if (wasora.special_vars.step_static != 0) {
+    if (wasora_var_value(wasora.special_vars.step_static) != 1) {
       petsc_call(milonga_free_global_matrices());
-      petsc_call(milonga_allocate_global_matrices(milonga.spatial_unknowns * milonga.groups, 0, 0));
+      petsc_call(milonga_allocate_global_matrices(0, 0, 0));
     }
     wasora_call(milonga.matrices_build());
     

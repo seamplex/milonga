@@ -59,7 +59,7 @@ int diffusion_volumes_problem_init(void) {
   milonga_allocate_global_matrices(milonga.spatial_unknowns * milonga.groups,
                                    milonga.mesh->max_faces_per_element + milonga.groups,
                                    milonga.groups);
-  milonga_allocate_global_vectors(milonga.spatial_unknowns * milonga.groups);
+  milonga_allocate_global_vectors();
   
   wasora_var(wasora_mesh.vars.cells) = (double)milonga.mesh->n_cells;
   wasora_var(wasora_mesh.vars.nodes) = (double)milonga.mesh->n_nodes;
@@ -280,17 +280,17 @@ int diffusion_volumes_matrices_build(void) {
             if (milonga.mesh->structured == 0) {
               if (cell->neighbor[j].element == NULL ||
                   cell->neighbor[j].element->physical_entity == NULL ||
-                  cell->neighbor[j].element->physical_entity->bc_type_int == BC_NULL) {
+                  cell->neighbor[j].element->physical_entity->bc_type_phys == BC_NULL) {
                 bc_type = BC_NULL;
                 bc_args = cell->neighbor[j].element->physical_entity->bc_args;
               } else  {
-                bc_type = cell->neighbor[j].element->physical_entity->bc_type_int;
+                bc_type = cell->neighbor[j].element->physical_entity->bc_type_phys;
                 bc_args = cell->neighbor[j].element->physical_entity->bc_args;
               }
             } else {
               LL_FOREACH(wasora_mesh.physical_entities, physical_entity) {
                 if ((physical_entity->struct_bc_direction-1) == j) {
-                  bc_type = physical_entity->bc_type_int;
+                  bc_type = physical_entity->bc_type_phys;
                   bc_args = physical_entity->bc_args;
                 }
               }

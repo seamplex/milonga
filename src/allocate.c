@@ -35,7 +35,9 @@
 #define __FUNCT__ "milonga_allocate_global_matrices"
 int milonga_allocate_global_matrices(int problem_size, int widthR, int widthF) {
 
-  milonga.problem_size = problem_size;
+  if (problem_size != 0) {
+    milonga.problem_size = problem_size;
+  }
   if (widthR != 0) {
     milonga.widthR = widthR;
   }
@@ -66,9 +68,7 @@ int milonga_allocate_global_matrices(int problem_size, int widthR, int widthF) {
 
 #undef  __FUNCT__
 #define __FUNCT__ "milonga_allocate_global_vectors"
-int milonga_allocate_global_vectors(int problem_size) {
-
-  milonga.problem_size = problem_size;
+int milonga_allocate_global_vectors(void) {
 
   // el autovector que va a tener el flujo
   petsc_call(MatCreateVecs(milonga.R, NULL, &milonga.phi));

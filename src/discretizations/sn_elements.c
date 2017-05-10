@@ -88,12 +88,11 @@ int sn_elements_problem_init(void) {
   int g, n;
 
   PetscFunctionBegin;
-
   milonga.spatial_unknowns = milonga.mesh->n_nodes;
   milonga_allocate_global_matrices(milonga.spatial_unknowns * milonga.directions * milonga.groups,
                                    milonga.mesh->max_first_neighbor_nodes * milonga.directions * milonga.groups,
                                    milonga.mesh->max_first_neighbor_nodes * milonga.directions * milonga.groups);
-  milonga_allocate_global_vectors(milonga.spatial_unknowns * milonga.groups);
+  milonga_allocate_global_vectors();
   
 
   // inicializamos los pesos de las ordenadas discretas
@@ -522,11 +521,11 @@ int sn_elements_set_essential_bc(void) {
   for (i = 0; i < milonga.mesh->n_elements; i++) {
     if (milonga.mesh->element[i].type->dim == milonga.dimensions-1) {
       surface_element = &milonga.mesh->element[i];
-      if (surface_element->physical_entity == NULL || surface_element->physical_entity->bc_type_int == BC_NULL
-                                                   || surface_element->physical_entity->bc_type_int == BC_UNDEFINED) {
+      if (surface_element->physical_entity == NULL || surface_element->physical_entity->bc_type_phys == BC_NULL
+                                                   || surface_element->physical_entity->bc_type_phys == BC_UNDEFINED) {
         bc_type = BC_VACUUM;
       } else {
-        bc_type = surface_element->physical_entity->bc_type_int;
+        bc_type = surface_element->physical_entity->bc_type_phys;
       }
         
       sn_elements_compute_outward_normal(surface_element, outward_normal);

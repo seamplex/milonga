@@ -1,10 +1,10 @@
 //
 // radius of a critical sphere
-// rc = 7.428998;
+rc = 7.428998;
 // // cube half-length to maintain the same volume as the critical sphere
-// a = (4*Pi/(8*3))^(1/3) * rc;
+a = (4*Pi/(8*3))^(1/3) * rc;
 
-a = 50;
+// a = 50;
 lc = a/10;        // element characteristic length
 
 Point(1) = {-a, -a, -a, lc};

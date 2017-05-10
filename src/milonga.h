@@ -304,7 +304,7 @@ extern int milonga_define_result_functions(void);
 
 // allocate.c
 extern int milonga_allocate_global_matrices(int, int, int);
-extern int milonga_allocate_global_vectors(int);
+extern int milonga_allocate_global_vectors(void);
 extern int milonga_free_global_matrices(void);
 extern int milonga_free_global_vectors(void);
 
