@@ -282,7 +282,7 @@ int diffusion_volumes_matrices_build(void) {
                   cell->neighbor[j].element->physical_entity == NULL ||
                   cell->neighbor[j].element->physical_entity->bc_type_phys == BC_NULL) {
                 bc_type = BC_NULL;
-                bc_args = cell->neighbor[j].element->physical_entity->bc_args;
+                bc_args = NULL;
               } else  {
                 bc_type = cell->neighbor[j].element->physical_entity->bc_type_phys;
                 bc_args = cell->neighbor[j].element->physical_entity->bc_args;
