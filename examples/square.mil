@@ -29,13 +29,14 @@ PRINT TEXT "\# keff  = " %.8f keff
 PRINT TEXT "\# kreal = " %.8f kreal
 PRINT TEXT "\# rel error = " %.2e (keff-kreal)/keff
 
-# compute the peak factor
-VAR phimax vol intphi
-MESH_FIND_MAX  FUNCTION phi1           MESH $1 MAX phimax
-MESH_INTEGRATE EXPR     1    OVER fuel MESH $1 RESULT vol
-MESH_INTEGRATE FUNCTION phi1 OVER fuel MESH $1 RESULT intphi
-fp = phimax * vol / intphi
-PRINT TEXT "\# peak factor =" %.3f fp
+# this does not work if there are more than one mesh
+# # compute the peak factor
+# VAR phimax vol intphi
+# MESH_FIND_MAX  FUNCTION phi1           MESH $1 MAX phimax
+# MESH_INTEGRATE EXPR     1    OVER fuel MESH $1 RESULT vol
+# MESH_INTEGRATE FUNCTION phi1 OVER fuel MESH $1 RESULT intphi
+# fp = phimax * vol / intphi
+# PRINT TEXT "\# peak factor =" %.3f fp
 
 
 # post-processing in vtk and gmsh format
