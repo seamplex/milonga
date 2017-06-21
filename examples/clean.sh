@@ -6,3 +6,4 @@ rm -f *pwr*.txt ../*pwr*.txt *pwr*.msh ../*pwr*.msh
 rm -f *pwr*.pdf ../*pwr*.pdf 
 rm -f *pwr*.html ../*pwr*.html
 rm -f *.log *.trs
+rm -f meta-*.msh col_*.msh

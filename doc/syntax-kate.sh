@@ -2,6 +2,7 @@
 # take the output of this script as a kate syntax definition file for milonga
 #
 # ./syntax-kate.sh > $HOME/.kde/share/apps/katepart/syntax/milonga.xml
+# ./syntax-kate.sh > $HOME/.local/share/katepart5/syntax/milonga.html
 #
 
 . ./keywords.sh
