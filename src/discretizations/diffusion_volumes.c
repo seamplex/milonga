@@ -54,6 +54,12 @@ int diffusion_volumes_problem_init(void) {
     wasora_mesh_struct_init_rectangular_for_cells(milonga.mesh);
   }
 
+//Check that the mesh is order 1 in finite volumes method.
+  if(milonga.scheme == scheme_volumes && milonga.mesh->order > 1)
+    {
+    wasora_push_error_message("The finite volumes methods only accepts 1 order elements and your mesh has at least one element with order %d. Please remesh with order 1.\n", milonga.mesh->order);
+    return WASORA_PARSER_ERROR;
+    }
 
   milonga.spatial_unknowns = milonga.mesh->n_cells;
   milonga_allocate_global_matrices(milonga.spatial_unknowns * milonga.groups,
