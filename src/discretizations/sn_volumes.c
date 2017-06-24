@@ -39,6 +39,13 @@ int sn_volumes_problem_init(void) {
     wasora_push_error_message("no mesh found");
     return WASORA_RUNTIME_ERROR;
   }
+
+//Check that the mesh is order 1 in finite volumes method.
+  if(milonga.scheme == scheme_volumes && milonga.mesh->order > 1)
+    {
+    wasora_push_error_message("The finite volumes methods only accepts 1 order elements and your mesh has at least one element with order %d. Please remesh with order 1.\n", milonga.mesh->order);
+    return WASORA_RUNTIME_ERROR;
+    }
   
   if (milonga.mesh->structured == 0) {
     if (milonga.mesh->cell == NULL) {
