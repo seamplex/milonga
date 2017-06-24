@@ -44,7 +44,7 @@ int sn_volumes_problem_init(void) {
   if(milonga.scheme == scheme_volumes && milonga.mesh->order > 1)
     {
     wasora_push_error_message("The finite volumes methods only accepts 1 order elements and your mesh has at least one element with order %d. Please remesh with order 1.\n", milonga.mesh->order);
-    return WASORA_PARSER_ERROR;
+    return WASORA_RUNTIME_ERROR;
     }
   
   if (milonga.mesh->structured == 0) {
