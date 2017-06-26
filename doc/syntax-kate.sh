@@ -9,7 +9,6 @@
 
 cat << EOF
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE language SYSTEM "language.dtd">
 <language name="milonga" version="0.3" kateversion="3.7.4" section="Scientific" extensions="*.mil" author="jeremy theler" license="GPL">
 EOF
 
