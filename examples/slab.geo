@@ -1,7 +1,7 @@
 // homogeneous slab of width a for milonga
 // generate mesh with
 //  $ gmsh -1 slab.geo
-a = 100;
+a = 2 * 10.371065;
 lc = a/18;
 
 Point(1) = {0,   0, 0, 1.4*lc};
@@ -14,3 +14,5 @@ Line(2) = {2, 3};
 Physical Point("left") = {1};
 Physical Point("right") = {3};
 Physical Line("fuel") = {1, 2};
+//Uncomment the next line to have 2 order elements.
+//Mesh.ElementOrder = 2;
