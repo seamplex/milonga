@@ -56,7 +56,7 @@ int diffusion_volumes_problem_init(void) {
 
   //Check that the mesh is order 1 in finite volumes method.
   if(milonga.scheme == scheme_volumes && milonga.mesh->order > 1) {
-    wasora_push_error_message("finite volumes methods work with first-order elements only.\n");
+    wasora_push_error_message("finite volumes methods work with first-order elements only");
     return WASORA_RUNTIME_ERROR;
   }
 

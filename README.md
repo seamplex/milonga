@@ -249,6 +249,10 @@ $ milonga 3dshape.mil bunny
 
 The angular fluxes $\psi_g$ for $g=1,\dots,8$ from the S$_2$ formulation.
 
+# Workshop
+
+Check out <https://bitbucket.org/seamplex/2015-workshop> for a “hands-on” tutorial (text and input files) given a workshop held in 2015. The [presentation slides are here](https://www.seamplex.com/docs/2015-milonga-handson.pdf).
+
 # Licensing
 
 Milonga is distributed under the terms of the [GNU General Public License](http://www.gnu.org/copyleft/gpl.html) version 3 or (at your option) any later version.

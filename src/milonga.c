@@ -1,7 +1,7 @@
 /*------------ -------------- -------- --- ----- ---   --       -            -
  *  milonga plugin for wasora
  *
- *  Copyright (C) 2010--2016 jeremy theler
+ *  Copyright (C) 2010--2017 jeremy theler
  *
  *  This file is part of milonga.
  *
@@ -39,23 +39,23 @@ int milonga_instruction_step(void *arg) {
   milonga_times_t cpu;
   PetscStageLog     stageLog;  
   struct rusage resource_usage;
-  
-  
+
+
   double spectrum;
   int (*user_provided_eigensolver)(Mat, Mat, Vec, PetscScalar *);
   int (*user_provided_linearsolver)(Mat, Vec, Vec);
   int i;
-  
+
   PetscFunctionBegin;
-  
+
   if (!milonga.initialized) {
     petsc_call(PetscLogStagePush(milonga.petsc_stage_init));
     petsc_call(PetscLogEventBegin(milonga.petsc_event_init, 0, 0, 0, 0));
     time_checkpoint(init_begin);
-    
+
     wasora_call(milonga.problem_init());
     wasora_call(milonga_read_boundaries());
-    
+
     // chequeamos que el espectro de fision este normalizado
     spectrum = 0;
     for (i = 0; i < milonga.vectors.chi->size; i++) {
@@ -65,7 +65,7 @@ int milonga_instruction_step(void *arg) {
       wasora_push_error_message("vector 'chi' with the fission spectrum is not normalized to one (sum of elements is %.6f)", spectrum);
       return WASORA_RUNTIME_ERROR;
     }
-    
+
     wasora_var(milonga.vars.unknowns) = (double)milonga.problem_size;
     milonga.initialized = 1;
 
