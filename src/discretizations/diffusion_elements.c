@@ -64,19 +64,19 @@ int diffusion_elements_problem_init(void) {
 
   int g;
 
-  milonga.spatial_unknowns = milonga.mesh->n_nodes;
+  milonga.spatial_unknowns = wasora_mesh.main_mesh->n_nodes;
   milonga_allocate_global_matrices(milonga.spatial_unknowns * milonga.groups,
-                                   milonga.mesh->max_first_neighbor_nodes * milonga.groups,
-                                   milonga.mesh->max_first_neighbor_nodes * milonga.groups);
+                                   wasora_mesh.main_mesh->max_first_neighbor_nodes * milonga.groups,
+                                   wasora_mesh.main_mesh->max_first_neighbor_nodes * milonga.groups);
   milonga_allocate_global_vectors();
 
-  wasora_var(wasora_mesh.vars.cells) = (double)milonga.mesh->n_cells;
-  wasora_var(wasora_mesh.vars.nodes) = (double)milonga.mesh->n_nodes;
-  wasora_var(wasora_mesh.vars.elements) = (double)milonga.mesh->n_elements;
-  milonga.mesh->data_type = data_type_node;
+  wasora_var(wasora_mesh.vars.cells) = (double)wasora_mesh.main_mesh->n_cells;
+  wasora_var(wasora_mesh.vars.nodes) = (double)wasora_mesh.main_mesh->n_nodes;
+  wasora_var(wasora_mesh.vars.elements) = (double)wasora_mesh.main_mesh->n_elements;
+  wasora_mesh.main_mesh->data_type = data_type_node;
 
-  if (milonga.mesh->structured) {
-    wasora_mesh_struct_init_rectangular_for_nodes(milonga.mesh);
+  if (wasora_mesh.main_mesh->structured) {
+    wasora_mesh_struct_init_rectangular_for_nodes(wasora_mesh.main_mesh);
   }
   
   for (g = 0; g < milonga.groups; g++) {
@@ -84,7 +84,7 @@ int diffusion_elements_problem_init(void) {
   }
   wasora_call(diffusion_elements_results_fill_args(milonga.functions.pow));
 
-  wasora_call(mesh_node_indexes(milonga.mesh, milonga.groups));
+  wasora_call(mesh_node_indexes(wasora_mesh.main_mesh, milonga.groups));
 
   return WASORA_RUNTIME_OK;
 }
@@ -97,25 +97,25 @@ int diffusion_elements_results_fill_args(function_t *function) {
 
   // tenemos data
   function->data_size = milonga.spatial_unknowns;
-  if (milonga.mesh->structured) {
+  if (wasora_mesh.main_mesh->structured) {
     function->rectangular_mesh = 1;
     function->x_increases_first = 1;
-    function->rectangular_mesh_size = milonga.mesh->rectangular_mesh_size;
-    function->rectangular_mesh_point = milonga.mesh->rectangular_mesh_point;    
+    function->rectangular_mesh_size = wasora_mesh.main_mesh->rectangular_mesh_size;
+    function->rectangular_mesh_point = wasora_mesh.main_mesh->rectangular_mesh_point;    
   }
 
   // pero tambien variables por si queremos hacer cuentitas
   function->var_argument = calloc(3, sizeof(var_t *));
   function->var_argument = wasora_mesh.vars.arr_x;
 
-  function->data_argument = milonga.mesh->nodes_argument;
+  function->data_argument = wasora_mesh.main_mesh->nodes_argument;
   function->data_value = calloc(function->data_size, sizeof(double));
 
 
   // y tipo milonga_status.mesh node en elementos
   function->type = type_pointwise_mesh_node;
   function->multidim_threshold = DEFAULT_MULTIDIM_INTERPOLATION_THRESHOLD;
-  function->mesh = milonga.mesh;
+  function->mesh = wasora_mesh.main_mesh;
 
   return WASORA_RUNTIME_OK;;
 }
@@ -142,11 +142,11 @@ int diffusion_elements_allocate_particular_elemental_objects(element_t *element)
   L = milonga.groups * element->type->nodes;
 
   // TODO: esta las tendria que alocar mesh
-  gsl_matrix_free(milonga.mesh->fem.H);
-  milonga.mesh->fem.H = gsl_matrix_calloc(milonga.mesh->degrees_of_freedom, L);
+  gsl_matrix_free(wasora_mesh.main_mesh->fem.H);
+  wasora_mesh.main_mesh->fem.H = gsl_matrix_calloc(wasora_mesh.main_mesh->degrees_of_freedom, L);
   
-  gsl_matrix_free(milonga.mesh->fem.B);
-  milonga.mesh->fem.B = gsl_matrix_calloc(milonga.mesh->degrees_of_freedom * milonga.mesh->bulk_dimensions, L);
+  gsl_matrix_free(wasora_mesh.main_mesh->fem.B);
+  wasora_mesh.main_mesh->fem.B = gsl_matrix_calloc(wasora_mesh.main_mesh->degrees_of_freedom * wasora_mesh.main_mesh->bulk_dimensions, L);
 
   gsl_matrix_free(DB); 
   DB = gsl_matrix_calloc(milonga.groups * milonga.dimensions, L);
@@ -180,27 +180,27 @@ int diffusion_elements_matrices_build(void) {
   
   wasora_call(diffusion_elements_allocate_general_elemental_objects());
 
-  for (i = 0; i < milonga.mesh->n_elements; i++) {
+  for (i = 0; i < wasora_mesh.main_mesh->n_elements; i++) {
     
-    if (milonga.mesh->element[i].type != NULL && milonga.mesh->element[i].type->dim == milonga.mesh->bulk_dimensions) {
+    if (wasora_mesh.main_mesh->element[i].type != NULL && wasora_mesh.main_mesh->element[i].type->dim == wasora_mesh.main_mesh->bulk_dimensions) {
 
       // solo los elementos que tengan la dimension del problema
       // son los que usamos para las matrices elementales
-      wasora_call(diffusion_elements_build_volume_objects(&milonga.mesh->element[i]));
+      wasora_call(diffusion_elements_build_volume_objects(&wasora_mesh.main_mesh->element[i]));
       
-    } else if (milonga.mesh->element[i].type != NULL && milonga.mesh->element[i].type->dim == milonga.mesh->bulk_dimensions-1) {
+    } else if (wasora_mesh.main_mesh->element[i].type != NULL && wasora_mesh.main_mesh->element[i].type->dim == wasora_mesh.main_mesh->bulk_dimensions-1) {
       
       // si tienen dimension dim-1 entonces son candidatos a condiciones de contorno
       // pero aca miramos solo las de neumann y de robin porque las de dirichlet van
       // una vez que ensamblamos las matrizotas
       
-      if (milonga.mesh->element[i].physical_entity != NULL) {
-        if (milonga.mesh->element[i].physical_entity->bc_type_phys == BC_MIRROR) {
+      if (wasora_mesh.main_mesh->element[i].physical_entity != NULL) {
+        if (wasora_mesh.main_mesh->element[i].physical_entity->bc_type_phys == BC_MIRROR) {
           // TODO: que se puedan poner corrientes no nulas (no debe haber o fision o fuentes)
           ; // no hay que hacer naranja!
-        } else if (milonga.mesh->element[i].physical_entity->bc_type_phys == BC_VACUUM ||
-                   milonga.mesh->element[i].physical_entity->bc_type_phys == BC_UNDEFINED) {
-          wasora_call(diffusion_elements_build_robin_objects(&milonga.mesh->element[i], milonga.mesh->element[i].physical_entity->bc_args));
+        } else if (wasora_mesh.main_mesh->element[i].physical_entity->bc_type_phys == BC_VACUUM ||
+                   wasora_mesh.main_mesh->element[i].physical_entity->bc_type_phys == BC_UNDEFINED) {
+          wasora_call(diffusion_elements_build_robin_objects(&wasora_mesh.main_mesh->element[i], wasora_mesh.main_mesh->element[i].physical_entity->bc_args));
         }
       }
     }
@@ -278,7 +278,7 @@ int diffusion_elements_build_volume_objects(element_t *element) {
     for (v = 0; v < element->type->gauss[GAUSS_POINTS_CANONICAL].V; v++) {
 
       // para este punto de gauss, calculamos las matrices H y B
-      w_gauss = mesh_compute_fem_objects_at_gauss(milonga.mesh, element, v);    
+      w_gauss = mesh_compute_fem_objects_at_gauss(wasora_mesh.main_mesh, element, v);    
 
       // inicializamos las matrices con las XS (estas si dependen de la formulacion)
       gsl_matrix_set_zero(A);
@@ -339,30 +339,30 @@ int diffusion_elements_build_volume_objects(element_t *element) {
       }
 
       // armamos la matriz elemental del termino de difusion
-      gsl_blas_dgemm(CblasNoTrans, CblasNoTrans, 1, D, milonga.mesh->fem.B, 0, DB);
-      gsl_blas_dgemm(CblasTrans, CblasNoTrans, w_gauss, milonga.mesh->fem.B, DB, 1, Ki);
+      gsl_blas_dgemm(CblasNoTrans, CblasNoTrans, 1, D, wasora_mesh.main_mesh->fem.B, 0, DB);
+      gsl_blas_dgemm(CblasTrans, CblasNoTrans, w_gauss, wasora_mesh.main_mesh->fem.B, DB, 1, Ki);
 
       // la matriz elemental de scattering
-      gsl_blas_dgemm(CblasNoTrans, CblasNoTrans, 1, A, milonga.mesh->fem.H, 0, AH);
-      gsl_blas_dgemm(CblasTrans, CblasNoTrans, w_gauss, milonga.mesh->fem.H, AH, 1, Ai);
+      gsl_blas_dgemm(CblasNoTrans, CblasNoTrans, 1, A, wasora_mesh.main_mesh->fem.H, 0, AH);
+      gsl_blas_dgemm(CblasTrans, CblasNoTrans, w_gauss, wasora_mesh.main_mesh->fem.H, AH, 1, Ai);
 
       // la matriz elemental de fision
       if (this_element_has_fission) {
-        gsl_blas_dgemm(CblasNoTrans, CblasNoTrans, 1, X, milonga.mesh->fem.H, 0, XH);
-        gsl_blas_dgemm(CblasTrans, CblasNoTrans, w_gauss, milonga.mesh->fem.H, XH, 1, Xi);
+        gsl_blas_dgemm(CblasNoTrans, CblasNoTrans, 1, X, wasora_mesh.main_mesh->fem.H, 0, XH);
+        gsl_blas_dgemm(CblasTrans, CblasNoTrans, w_gauss, wasora_mesh.main_mesh->fem.H, XH, 1, Xi);
       }
       // el vector elemental de fuentes
       if (this_element_has_sources) {
-        gsl_blas_dgemv(CblasTrans, w_gauss, milonga.mesh->fem.H, S, 1, Si);
+        gsl_blas_dgemv(CblasTrans, w_gauss, wasora_mesh.main_mesh->fem.H, S, 1, Si);
       }
     }
 
-    MatSetValues(milonga.R, L, milonga.mesh->fem.l, L, milonga.mesh->fem.l, gsl_matrix_ptr(Ki, 0, 0), ADD_VALUES);
-    MatSetValues(milonga.R, L, milonga.mesh->fem.l, L, milonga.mesh->fem.l, gsl_matrix_ptr(Ai, 0, 0), ADD_VALUES);  
+    MatSetValues(milonga.R, L, wasora_mesh.main_mesh->fem.l, L, wasora_mesh.main_mesh->fem.l, gsl_matrix_ptr(Ki, 0, 0), ADD_VALUES);
+    MatSetValues(milonga.R, L, wasora_mesh.main_mesh->fem.l, L, wasora_mesh.main_mesh->fem.l, gsl_matrix_ptr(Ai, 0, 0), ADD_VALUES);  
     if (this_element_has_fission) {
-      MatSetValues(milonga.F, L, milonga.mesh->fem.l, L, milonga.mesh->fem.l, gsl_matrix_ptr(Xi, 0, 0), ADD_VALUES);
+      MatSetValues(milonga.F, L, wasora_mesh.main_mesh->fem.l, L, wasora_mesh.main_mesh->fem.l, gsl_matrix_ptr(Xi, 0, 0), ADD_VALUES);
     }
-    VecSetValues(milonga.S, L, milonga.mesh->fem.l, gsl_vector_ptr(Si, 0), ADD_VALUES);
+    VecSetValues(milonga.S, L, wasora_mesh.main_mesh->fem.l, gsl_vector_ptr(Si, 0), ADD_VALUES);
     
   }
   
@@ -383,18 +383,18 @@ int diffusion_elements_build_robin_objects(element_t *element, expr_t *bc_a) {
   gsl_matrix_set_zero(Ni);
 
   for (v = 0; v < element->type->gauss[GAUSS_POINTS_CANONICAL].V; v++) {
-    w_gauss = mesh_compute_fem_objects_at_gauss(milonga.mesh, element, v);    
+    w_gauss = mesh_compute_fem_objects_at_gauss(wasora_mesh.main_mesh, element, v);    
     // por default ponemos a = 1/2
     if ((a = fabs(wasora_evaluate_expression(bc_a))) == 0) {
       a = 0.5;
     }
-    gsl_blas_dgemm(CblasTrans, CblasNoTrans, w_gauss * a, milonga.mesh->fem.H, milonga.mesh->fem.H, 1, Ni);
+    gsl_blas_dgemm(CblasTrans, CblasNoTrans, w_gauss * a, wasora_mesh.main_mesh->fem.H, wasora_mesh.main_mesh->fem.H, 1, Ni);
   }
   
 //  printf("element %d\n", element->id);
 //  fino_print_gsl_matrix(Ni, stdout);
 
-  MatSetValues(milonga.R, L, milonga.mesh->fem.l, L, milonga.mesh->fem.l, gsl_matrix_ptr(Ni, 0, 0), ADD_VALUES);
+  MatSetValues(milonga.R, L, wasora_mesh.main_mesh->fem.l, L, wasora_mesh.main_mesh->fem.l, gsl_matrix_ptr(Ni, 0, 0), ADD_VALUES);
   
   return WASORA_RUNTIME_OK;
 }
@@ -408,11 +408,11 @@ int diffusion_elements_free_elemental_objects(void) {
   L = 0;
 
   // matrices de interpolacion
-  gsl_matrix_free(milonga.mesh->fem.H);
-  milonga.mesh->fem.H = NULL;
+  gsl_matrix_free(wasora_mesh.main_mesh->fem.H);
+  wasora_mesh.main_mesh->fem.H = NULL;
   
-  gsl_matrix_free(milonga.mesh->fem.B);
-  milonga.mesh->fem.B = NULL;
+  gsl_matrix_free(wasora_mesh.main_mesh->fem.B);
+  wasora_mesh.main_mesh->fem.B = NULL;
 
   // matrices de coeficientes
   gsl_matrix_free(D);
@@ -454,15 +454,15 @@ int diffusion_elements_set_essential_bc(void) {
   // hay que ensamblar porque creo que el chiste es que MatZeroRows usa INSERT_VALUES
   wasora_call(milonga_assembly_objects(MAT_FINAL_ASSEMBLY));  
 
-  for (i = 0; i < milonga.mesh->n_elements; i++) {
-    if (milonga.mesh->element[i].type != NULL && milonga.mesh->element[i].type->dim == milonga.mesh->bulk_dimensions-1) {
-      if (milonga.mesh->element[i].physical_entity == NULL || milonga.mesh->element[i].physical_entity->bc_type_phys == BC_NULL) {
-        for (j = 0; j < milonga.mesh->element[i].type->nodes; j++) {
+  for (i = 0; i < wasora_mesh.main_mesh->n_elements; i++) {
+    if (wasora_mesh.main_mesh->element[i].type != NULL && wasora_mesh.main_mesh->element[i].type->dim == wasora_mesh.main_mesh->bulk_dimensions-1) {
+      if (wasora_mesh.main_mesh->element[i].physical_entity == NULL || wasora_mesh.main_mesh->element[i].physical_entity->bc_type_phys == BC_NULL) {
+        for (j = 0; j < wasora_mesh.main_mesh->element[i].type->nodes; j++) {
           if (milonga.has_fission) {
-            MatZeroRows(milonga.F, milonga.groups, milonga.mesh->element[i].node[j]->index, 0.0, PETSC_NULL, PETSC_NULL);
+            MatZeroRows(milonga.F, milonga.groups, wasora_mesh.main_mesh->element[i].node[j]->index, 0.0, PETSC_NULL, PETSC_NULL);
           }
-          MatZeroRows(milonga.R, milonga.groups, milonga.mesh->element[i].node[j]->index, 1.0, PETSC_NULL, PETSC_NULL);
-          VecSetValues(milonga.S, milonga.groups, milonga.mesh->element[i].node[j]->index, gzeros, INSERT_VALUES);
+          MatZeroRows(milonga.R, milonga.groups, wasora_mesh.main_mesh->element[i].node[j]->index, 1.0, PETSC_NULL, PETSC_NULL);
+          VecSetValues(milonga.S, milonga.groups, wasora_mesh.main_mesh->element[i].node[j]->index, gzeros, INSERT_VALUES);
         }
       }
     }
@@ -480,9 +480,9 @@ int diffusion_elements_results_fill_flux(void) {
   int k, g;
 
   // rellenamos las funciones de los flujos con lo que dio PETSc
-  for (k = 0; k < milonga.mesh->n_nodes; k++) {
+  for (k = 0; k < wasora_mesh.main_mesh->n_nodes; k++) {
     for (g = 0; g < milonga.groups; g++) {
-      VecGetValues(milonga.phi, 1, &milonga.mesh->node[k].index[g], &milonga.functions.phi[g]->data_value[k]);
+      VecGetValues(milonga.phi, 1, &wasora_mesh.main_mesh->node[k].index[g], &milonga.functions.phi[g]->data_value[k]);
     }
   }
   
@@ -501,11 +501,11 @@ int diffusion_elements_normalize_flux(void) {
   if (wasora_var(milonga.vars.power) == 0) {
 
     // calculamos el factor de normalizacion
-    for (i = 0; i < milonga.mesh->n_elements; i++) {
-      if (milonga.mesh->element[i].type != NULL && milonga.mesh->element[i].type->dim == milonga.mesh->bulk_dimensions) {
-        num += milonga.mesh->element[i].type->element_volume(&milonga.mesh->element[i]);
+    for (i = 0; i < wasora_mesh.main_mesh->n_elements; i++) {
+      if (wasora_mesh.main_mesh->element[i].type != NULL && wasora_mesh.main_mesh->element[i].type->dim == wasora_mesh.main_mesh->bulk_dimensions) {
+        num += wasora_mesh.main_mesh->element[i].type->element_volume(&wasora_mesh.main_mesh->element[i]);
         for (g = 0; g < milonga.groups; g++) {
-          den += mesh_integral_over_element(milonga.functions.phi[g], &milonga.mesh->element[i], NULL);
+          den += mesh_integral_over_element(milonga.functions.phi[g], &wasora_mesh.main_mesh->element[i], NULL);
         }
       }
     }
@@ -515,15 +515,15 @@ int diffusion_elements_normalize_flux(void) {
     xs_t *xs;
 
     num = wasora_var(milonga.vars.power);
-    for (i = 0; i < milonga.mesh->n_elements; i++) {
-      if (milonga.mesh->element[i].type != NULL && milonga.mesh->element[i].type->dim == milonga.mesh->bulk_dimensions && milonga.mesh->element[i].physical_entity != NULL) {
-        if ((xs = (xs_t *)milonga.mesh->element[i].physical_entity->material->ext) == NULL) {
-          wasora_push_error_message("physical entity %d needs a material", milonga.mesh->cell[i].element->physical_entity->id);
+    for (i = 0; i < wasora_mesh.main_mesh->n_elements; i++) {
+      if (wasora_mesh.main_mesh->element[i].type != NULL && wasora_mesh.main_mesh->element[i].type->dim == wasora_mesh.main_mesh->bulk_dimensions && wasora_mesh.main_mesh->element[i].physical_entity != NULL) {
+        if ((xs = (xs_t *)wasora_mesh.main_mesh->element[i].physical_entity->material->ext) == NULL) {
+          wasora_push_error_message("physical entity %d needs a material", wasora_mesh.main_mesh->cell[i].element->physical_entity->id);
           return WASORA_RUNTIME_ERROR;
         }
 
         for (g = 0; g < milonga.groups; g++) {
-          den += mesh_integral_over_element(milonga.functions.phi[g], &milonga.mesh->element[i], xs->eSigmaF[g]);
+          den += mesh_integral_over_element(milonga.functions.phi[g], &wasora_mesh.main_mesh->element[i], xs->eSigmaF[g]);
         }
       }
     }
@@ -537,7 +537,7 @@ int diffusion_elements_normalize_flux(void) {
   factor = num/den;
 
   // normalizamos los valores de las funciones flujo
-  for (k = 0; k < milonga.mesh->n_nodes; k++) {
+  for (k = 0; k < wasora_mesh.main_mesh->n_nodes; k++) {
     for (g = 0; g < milonga.groups; g++) {
       milonga.functions.phi[g]->data_value[k] *= factor;
     }
@@ -557,18 +557,18 @@ int diffusion_elements_results_fill_power(void) {
   element_list_item_t *associated_element;
 
 
-  for (k = 0; k < milonga.mesh->n_nodes; k++) {
+  for (k = 0; k < wasora_mesh.main_mesh->n_nodes; k++) {
     den = 0;
-    LL_FOREACH(milonga.mesh->node[k].associated_elements, associated_element) {
+    LL_FOREACH(wasora_mesh.main_mesh->node[k].associated_elements, associated_element) {
       element = associated_element->element;
       pow = 0;
       if (element != NULL && element->physical_entity != NULL && element->physical_entity->material != NULL) {
         den += element->type->element_volume(element);
         xs = (xs_t *)element->physical_entity->material->ext;
         if (xs != NULL && xs->eSigmaF != NULL) {
-          wasora_var(wasora_mesh.vars.x) = milonga.mesh->node[k].x[0];
-          wasora_var(wasora_mesh.vars.y) = milonga.mesh->node[k].x[1];
-          wasora_var(wasora_mesh.vars.z) = milonga.mesh->node[k].x[2];
+          wasora_var(wasora_mesh.vars.x) = wasora_mesh.main_mesh->node[k].x[0];
+          wasora_var(wasora_mesh.vars.y) = wasora_mesh.main_mesh->node[k].x[1];
+          wasora_var(wasora_mesh.vars.z) = wasora_mesh.main_mesh->node[k].x[2];
 
           for (g = 0; g < milonga.groups; g++) {
             pow += wasora_evaluate_expression(xs->eSigmaF[g]) * milonga.functions.phi[g]->data_value[k];
@@ -593,7 +593,7 @@ int diffusion_elements_problem_free(void) {
   
   int g;
 
-  if (milonga.mesh != NULL && milonga.mesh->n_elements != 0) {
+  if (wasora_mesh.main_mesh != NULL && wasora_mesh.main_mesh->n_elements != 0) {
     if (milonga.functions.phi != NULL) {
       for (g = 0; g < milonga.groups; g++) {
         free(milonga.functions.phi[g]->data_value);
@@ -608,7 +608,7 @@ int diffusion_elements_problem_free(void) {
     }
  
     diffusion_elements_free_elemental_objects();
-    mesh_free(milonga.mesh);
+    mesh_free(wasora_mesh.main_mesh);
   }
    
   return WASORA_RUNTIME_OK;

@@ -130,6 +130,7 @@ int plugin_parse_line(char *line) {
           }
 
 ///kw+MILONGA_PROBLEM+usage [ MESH <identifier> ]
+/*
         } else if (strcasecmp(token, "MESH") == 0) {
           char *mesh_name;
           
@@ -140,6 +141,7 @@ int plugin_parse_line(char *line) {
             return WASORA_PARSER_ERROR;
           }
           free(mesh_name);
+ */
 
 ///kw+MILONGA_PROBLEM+usage [ SCHEME { volumes | elements } ]
         } else if (strcasecmp(token, "SCHEME") == 0) {
@@ -190,20 +192,20 @@ int plugin_parse_line(char *line) {
       }
 
       // si no nos dieron explicitamente la malla, ponemos la principal
-      if (milonga.mesh == NULL && (milonga.mesh = wasora_mesh.main_mesh) == NULL) {
+      if (wasora_mesh.main_mesh == NULL) {
         wasora_push_error_message("unknown mesh for MILONGA_PROBLEM (no MESH keyword)", token);
         return WASORA_PARSER_ERROR;
       }
       
       // por si ya nos dieron mesh, usamos las dimensiones de la malla si no nos las dieron aca
-      if (milonga.dimensions == 0 && milonga.mesh->bulk_dimensions != 0) {
-        milonga.dimensions = milonga.mesh->bulk_dimensions;
+      if (milonga.dimensions == 0 && wasora_mesh.main_mesh->bulk_dimensions != 0) {
+        milonga.dimensions = wasora_mesh.main_mesh->bulk_dimensions;
       }
       // al reves, si ya nos la dieron, se las damos a todas las mallas
       // TOOD: esto no me termina de convencer
-      if (milonga.mesh != NULL && milonga.mesh->bulk_dimensions == 0 && milonga.dimensions != 0) {
+      if (wasora_mesh.main_mesh != NULL && wasora_mesh.main_mesh->bulk_dimensions == 0 && milonga.dimensions != 0) {
         mesh_t *mesh;
-        for (mesh = milonga.mesh; mesh != NULL; mesh = mesh->hh.next) {
+        for (mesh = wasora_mesh.main_mesh; mesh != NULL; mesh = mesh->hh.next) {
           if (mesh->bulk_dimensions == 0) {
             mesh->bulk_dimensions = milonga.dimensions;
           }
@@ -312,13 +314,13 @@ int plugin_parse_line(char *line) {
 
       milonga_step_t *milonga_step = calloc(1, sizeof(milonga_step_t));
       
-      if (milonga.mesh == NULL && (milonga.mesh = wasora_mesh.main_mesh) == NULL) {
+      if (wasora_mesh.main_mesh == NULL) {
         wasora_push_error_message("no mesh found! (MILONGA_STEP before MESH)");
         return WASORA_PARSER_ERROR;
       }
 
       // chequeo de dimensiones
-      if (milonga.dimensions == 0 && milonga.mesh->bulk_dimensions == 0) {
+      if (milonga.dimensions == 0 && wasora_mesh.main_mesh->bulk_dimensions == 0) {
         wasora_push_error_message("no spatial dimensions given neither in MILONGA_PROBLEM nor in MESH");
         return WASORA_PARSER_ERROR;
       }
@@ -326,14 +328,14 @@ int plugin_parse_line(char *line) {
       // si alguna es cero, la rellenamos con la otra
       // TODO: no hay que rellenar la dimension de la malla con la de milonga!
       if (milonga.dimensions == 0) {
-        milonga.dimensions = milonga.mesh->bulk_dimensions;
-      } else if (milonga.mesh->bulk_dimensions == 0) {
-        milonga.mesh->bulk_dimensions = milonga.dimensions;
+        milonga.dimensions = wasora_mesh.main_mesh->bulk_dimensions;
+      } else if (wasora_mesh.main_mesh->bulk_dimensions == 0) {
+        wasora_mesh.main_mesh->bulk_dimensions = milonga.dimensions;
       }
       
       // si son diferentes nos quejamos
-      if (milonga.dimensions != milonga.mesh->bulk_dimensions) {
-        wasora_push_error_message("inconsistent dimensions (MILONGA_PROBLEM = %d, MESH = %d)", milonga.dimensions, milonga.mesh->bulk_dimensions);
+      if (milonga.dimensions != wasora_mesh.main_mesh->bulk_dimensions) {
+        wasora_push_error_message("inconsistent dimensions (MILONGA_PROBLEM = %d, MESH = %d)", milonga.dimensions, wasora_mesh.main_mesh->bulk_dimensions);
         return WASORA_PARSER_ERROR;
       }
       
@@ -404,7 +406,7 @@ int plugin_parse_line(char *line) {
       }
     
     
-      mesh_post->mesh = milonga.mesh;
+      mesh_post->mesh = wasora_mesh.main_mesh;
       mesh_post->flags = POST_INCLUDE_FLUX*flux + POST_INCLUDE_XS*xs;
       if (mesh_post->file == NULL) {
         wasora_push_error_message("neither FILE not FILE_PATH given (use explicitly 'stdout' if you intend to)");

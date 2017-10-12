@@ -366,7 +366,7 @@ int plugin_init_after_parser(void) {
   // las funciones tipo propiedad van a parar a la malla del problema
   for (function = wasora.functions; function != NULL; function = function->hh.next) {
     if (function->type == type_pointwise_mesh_property) {
-      function->mesh = milonga.mesh;
+      function->mesh = wasora_mesh.main_mesh;
     }
   }
   
@@ -424,7 +424,7 @@ int plugin_init_after_parser(void) {
   }
 
 
-  if (milonga.mesh != NULL) {
+  if (wasora_mesh.main_mesh != NULL) {
     wasora_call(milonga_set_entry_points());
   }
   

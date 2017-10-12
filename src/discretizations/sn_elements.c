@@ -88,23 +88,23 @@ int sn_elements_problem_init(void) {
   int g, n;
 
   PetscFunctionBegin;
-  milonga.spatial_unknowns = milonga.mesh->n_nodes;
+  milonga.spatial_unknowns = wasora_mesh.main_mesh->n_nodes;
   milonga_allocate_global_matrices(milonga.spatial_unknowns * milonga.directions * milonga.groups,
-                                   milonga.mesh->max_first_neighbor_nodes * milonga.directions * milonga.groups,
-                                   milonga.mesh->max_first_neighbor_nodes * milonga.directions * milonga.groups);
+                                   wasora_mesh.main_mesh->max_first_neighbor_nodes * milonga.directions * milonga.groups,
+                                   wasora_mesh.main_mesh->max_first_neighbor_nodes * milonga.directions * milonga.groups);
   milonga_allocate_global_vectors();
   
 
   // inicializamos los pesos de las ordenadas discretas
   wasora_call(sn_init_weights());
   
-  wasora_var(wasora_mesh.vars.cells) = (double)milonga.mesh->n_cells;
-  wasora_var(wasora_mesh.vars.nodes) = (double)milonga.mesh->n_nodes;
-  wasora_var(wasora_mesh.vars.elements) = (double)milonga.mesh->n_elements;
-  milonga.mesh->data_type = data_type_node;
+  wasora_var(wasora_mesh.vars.cells) = (double)wasora_mesh.main_mesh->n_cells;
+  wasora_var(wasora_mesh.vars.nodes) = (double)wasora_mesh.main_mesh->n_nodes;
+  wasora_var(wasora_mesh.vars.elements) = (double)wasora_mesh.main_mesh->n_elements;
+  wasora_mesh.main_mesh->data_type = data_type_node;
   
-  if (milonga.mesh->structured) {
-    wasora_mesh_struct_init_rectangular_for_nodes(milonga.mesh);
+  if (wasora_mesh.main_mesh->structured) {
+    wasora_mesh_struct_init_rectangular_for_nodes(wasora_mesh.main_mesh);
   }
   
   for (n = 0; n < milonga.directions; n++) {
@@ -118,7 +118,7 @@ int sn_elements_problem_init(void) {
   }
   wasora_call(sn_elements_results_fill_args(milonga.functions.pow));
 
-  wasora_call(mesh_node_indexes(milonga.mesh, milonga.groups * milonga.directions));
+  wasora_call(mesh_node_indexes(wasora_mesh.main_mesh, milonga.groups * milonga.directions));
 
   PetscFunctionReturn(WASORA_RUNTIME_OK);
 }
@@ -138,14 +138,14 @@ int sn_elements_results_fill_args(function_t *function) {
   function->var_argument = calloc(3, sizeof(var_t *));
   function->var_argument = wasora_mesh.vars.arr_x;
 
-  function->data_argument = milonga.mesh->nodes_argument;
+  function->data_argument = wasora_mesh.main_mesh->nodes_argument;
   function->data_value = calloc(function->data_size, sizeof(double));
 
 
   // y tipo milonga_status.mesh node en elementos
   function->type = type_pointwise_mesh_node;
   function->multidim_threshold = DEFAULT_MULTIDIM_INTERPOLATION_THRESHOLD;
-  function->mesh = milonga.mesh;
+  function->mesh = wasora_mesh.main_mesh;
 
   PetscFunctionReturn(WASORA_RUNTIME_OK);
 }
@@ -159,7 +159,7 @@ int sn_elements_allocate_general_elemental_objects(void) {
 
   PetscFunctionBegin;
   
-  OMEGA = gsl_matrix_calloc(milonga.mesh->degrees_of_freedom, milonga.directions * milonga.groups * milonga.dimensions);
+  OMEGA = gsl_matrix_calloc(wasora_mesh.main_mesh->degrees_of_freedom, milonga.directions * milonga.groups * milonga.dimensions);
   
   for (m = 0; m < milonga.directions; m++) {
     for (g = 0; g < milonga.groups; g++) {
@@ -169,9 +169,9 @@ int sn_elements_allocate_general_elemental_objects(void) {
     }
   }
   
-  A = gsl_matrix_calloc(milonga.mesh->degrees_of_freedom, milonga.mesh->degrees_of_freedom);
-  X = gsl_matrix_calloc(milonga.mesh->degrees_of_freedom, milonga.mesh->degrees_of_freedom);
-  S = gsl_vector_calloc(milonga.mesh->degrees_of_freedom);
+  A = gsl_matrix_calloc(wasora_mesh.main_mesh->degrees_of_freedom, wasora_mesh.main_mesh->degrees_of_freedom);
+  X = gsl_matrix_calloc(wasora_mesh.main_mesh->degrees_of_freedom, wasora_mesh.main_mesh->degrees_of_freedom);
+  S = gsl_vector_calloc(wasora_mesh.main_mesh->degrees_of_freedom);
   
   PetscFunctionReturn(WASORA_RUNTIME_OK);
 }
@@ -185,22 +185,22 @@ int sn_elements_allocate_particular_elemental_objects(element_t *element) {
   L = milonga.directions * milonga.groups * element->type->nodes;
 
   // TODO: esta las tendria que alocar mesh
-  gsl_matrix_free(milonga.mesh->fem.H);
-  milonga.mesh->fem.H = gsl_matrix_calloc(milonga.mesh->degrees_of_freedom, L);
+  gsl_matrix_free(wasora_mesh.main_mesh->fem.H);
+  wasora_mesh.main_mesh->fem.H = gsl_matrix_calloc(wasora_mesh.main_mesh->degrees_of_freedom, L);
   
-  gsl_matrix_free(milonga.mesh->fem.B);
-  milonga.mesh->fem.B = gsl_matrix_calloc(milonga.mesh->degrees_of_freedom * milonga.mesh->bulk_dimensions, L);
+  gsl_matrix_free(wasora_mesh.main_mesh->fem.B);
+  wasora_mesh.main_mesh->fem.B = gsl_matrix_calloc(wasora_mesh.main_mesh->degrees_of_freedom * wasora_mesh.main_mesh->bulk_dimensions, L);
   
   // esta no se, es la de petrov (h con un cacho de B)
   gsl_matrix_free(P);
-  P = gsl_matrix_calloc(milonga.mesh->degrees_of_freedom, L);
+  P = gsl_matrix_calloc(wasora_mesh.main_mesh->degrees_of_freedom, L);
 
   gsl_matrix_free(OMEGAB);  
-  OMEGAB = gsl_matrix_calloc(milonga.mesh->degrees_of_freedom, L);
+  OMEGAB = gsl_matrix_calloc(wasora_mesh.main_mesh->degrees_of_freedom, L);
   gsl_matrix_free(AH);
-  AH = gsl_matrix_calloc(milonga.mesh->degrees_of_freedom, L);
+  AH = gsl_matrix_calloc(wasora_mesh.main_mesh->degrees_of_freedom, L);
   gsl_matrix_free(XH);
-  XH = gsl_matrix_calloc(milonga.mesh->degrees_of_freedom, L);
+  XH = gsl_matrix_calloc(wasora_mesh.main_mesh->degrees_of_freedom, L);
 
   gsl_matrix_free(Ki);
   Ki = gsl_matrix_calloc(L, L);
@@ -224,14 +224,14 @@ int sn_elements_matrices_build(void) {
 
   wasora_call(sn_elements_allocate_general_elemental_objects());
   
-  for (i = 0; i < milonga.mesh->n_elements; i++) {
-    if (milonga.mesh->element[i].type->dim == milonga.mesh->bulk_dimensions) {
+  for (i = 0; i < wasora_mesh.main_mesh->n_elements; i++) {
+    if (wasora_mesh.main_mesh->element[i].type->dim == wasora_mesh.main_mesh->bulk_dimensions) {
 
       // solo los elementos que tengan la dimension del problema
       // son los que usamos para las matrices elementales
       // las condiciones de contorno son todas de dirichlet (esenciales)
       // asi que van despues
-      wasora_call(sn_elements_build_elemental_objects(&milonga.mesh->element[i]));
+      wasora_call(sn_elements_build_elemental_objects(&wasora_mesh.main_mesh->element[i]));
       
     }
   }
@@ -311,11 +311,11 @@ int sn_elements_build_elemental_objects(element_t *element) {
   for (v = 0; v < element->type->gauss[GAUSS_POINTS_CANONICAL].V; v++) {
 
     // para este punto de gauss, calculamos las matrices H y B
-    w_gauss = mesh_compute_fem_objects_at_gauss(milonga.mesh, element, v);
+    w_gauss = mesh_compute_fem_objects_at_gauss(wasora_mesh.main_mesh, element, v);
     
     // la estabilizacion de petrov
     for (j = 0; j < element->type->nodes; j++) {
-      xi = element->type->h(j, milonga.mesh->fem.r);
+      xi = element->type->h(j, wasora_mesh.main_mesh->fem.r);
       for (m = 0; m < milonga.directions; m++) {
         for (g = 0; g < milonga.groups; g++) {
           // parte base, igual a las h
@@ -323,7 +323,7 @@ int sn_elements_build_elemental_objects(element_t *element) {
           // correccion
           for (n = 0; n < milonga.dimensions; n++) {
             gsl_matrix_add_to_element(P, dof_index(m,g), milonga.directions*milonga.groups*j + dof_index(m,g), 
-                               tau * Omega[m][n] * gsl_matrix_get(milonga.mesh->fem.dhdx, j, n));
+                               tau * Omega[m][n] * gsl_matrix_get(wasora_mesh.main_mesh->fem.dhdx, j, n));
           }
         }
       }
@@ -413,16 +413,16 @@ int sn_elements_build_elemental_objects(element_t *element) {
     }
     
     // armamos la matriz elemental del termino de fugas (estabilizada con petrov)
-    gsl_blas_dgemm(CblasNoTrans, CblasNoTrans, 1, OMEGA, milonga.mesh->fem.B, 0, OMEGAB);
+    gsl_blas_dgemm(CblasNoTrans, CblasNoTrans, 1, OMEGA, wasora_mesh.main_mesh->fem.B, 0, OMEGAB);
     gsl_blas_dgemm(CblasTrans, CblasNoTrans, w_gauss, P, OMEGAB, 1, Ki);    
 
     // la matriz elemental de scattering (estabilizada con petrov)
-    gsl_blas_dgemm(CblasNoTrans, CblasNoTrans, 1, A, milonga.mesh->fem.H, 0, AH);
+    gsl_blas_dgemm(CblasNoTrans, CblasNoTrans, 1, A, wasora_mesh.main_mesh->fem.H, 0, AH);
     gsl_blas_dgemm(CblasTrans, CblasNoTrans, w_gauss, P, AH, 1, Ai);
     
     // la matriz elemental de fision (estabilizada con petrov)
     if (this_element_has_fission) {
-      gsl_blas_dgemm(CblasNoTrans, CblasNoTrans, 1, X, milonga.mesh->fem.H, 0, XH);
+      gsl_blas_dgemm(CblasNoTrans, CblasNoTrans, 1, X, wasora_mesh.main_mesh->fem.H, 0, XH);
       gsl_blas_dgemm(CblasTrans, CblasNoTrans, w_gauss, P, XH, 1, Xi);
     }
     // el vector elemental de fuentes (estabilizado con petrov)
@@ -431,13 +431,13 @@ int sn_elements_build_elemental_objects(element_t *element) {
     }
   }
   
-  petsc_call(MatSetValues(milonga.R, L, milonga.mesh->fem.l, L, milonga.mesh->fem.l, gsl_matrix_ptr(Ki, 0, 0), ADD_VALUES));
-  petsc_call(MatSetValues(milonga.R, L, milonga.mesh->fem.l, L, milonga.mesh->fem.l, gsl_matrix_ptr(Ai, 0, 0), ADD_VALUES));  
+  petsc_call(MatSetValues(milonga.R, L, wasora_mesh.main_mesh->fem.l, L, wasora_mesh.main_mesh->fem.l, gsl_matrix_ptr(Ki, 0, 0), ADD_VALUES));
+  petsc_call(MatSetValues(milonga.R, L, wasora_mesh.main_mesh->fem.l, L, wasora_mesh.main_mesh->fem.l, gsl_matrix_ptr(Ai, 0, 0), ADD_VALUES));  
   if (this_element_has_fission) {
-    petsc_call(MatSetValues(milonga.F, L, milonga.mesh->fem.l, L, milonga.mesh->fem.l, gsl_matrix_ptr(Xi, 0, 0), ADD_VALUES));
+    petsc_call(MatSetValues(milonga.F, L, wasora_mesh.main_mesh->fem.l, L, wasora_mesh.main_mesh->fem.l, gsl_matrix_ptr(Xi, 0, 0), ADD_VALUES));
   }
   if (this_element_has_sources) {
-    petsc_call(VecSetValues(milonga.S, L, milonga.mesh->fem.l, gsl_vector_ptr(Si, 0), ADD_VALUES));
+    petsc_call(VecSetValues(milonga.S, L, wasora_mesh.main_mesh->fem.l, gsl_vector_ptr(Si, 0), ADD_VALUES));
   }
     
 
@@ -454,10 +454,10 @@ int sn_elements_free_elemental_objects(void) {
   L = 0;
 
   // matrices de interpolacion
-  gsl_matrix_free(milonga.mesh->fem.H);
-  milonga.mesh->fem.H = NULL;
-  gsl_matrix_free(milonga.mesh->fem.B);
-  milonga.mesh->fem.B = NULL;
+  gsl_matrix_free(wasora_mesh.main_mesh->fem.H);
+  wasora_mesh.main_mesh->fem.H = NULL;
+  gsl_matrix_free(wasora_mesh.main_mesh->fem.B);
+  wasora_mesh.main_mesh->fem.B = NULL;
 
   // matrices de coeficientes
   gsl_matrix_free(OMEGA);
@@ -514,13 +514,13 @@ int sn_elements_set_essential_bc(void) {
 
 /* 
   TODO: elegir barrer nodos o elementos 
-  for (k = 0; k < milonga.mesh->n_nodes; k++) {
-    if ((surface_element = mesh_find_node_neighbor_of_dim(&milonga.mesh->node[k], milonga.dimensions-1)) != NULL) {
+  for (k = 0; k < wasora_mesh.main_mesh->n_nodes; k++) {
+    if ((surface_element = mesh_find_node_neighbor_of_dim(&wasora_mesh.main_mesh->node[k], milonga.dimensions-1)) != NULL) {
       if (surface_element->physical_entity == NULL || surface_element->physical_entity->bc_type_int != BC_UNDEFINED) {
  */
-  for (i = 0; i < milonga.mesh->n_elements; i++) {
-    if (milonga.mesh->element[i].type->dim == milonga.dimensions-1) {
-      surface_element = &milonga.mesh->element[i];
+  for (i = 0; i < wasora_mesh.main_mesh->n_elements; i++) {
+    if (wasora_mesh.main_mesh->element[i].type->dim == milonga.dimensions-1) {
+      surface_element = &wasora_mesh.main_mesh->element[i];
       if (surface_element->physical_entity == NULL || surface_element->physical_entity->bc_type_phys == BC_NULL
                                                    || surface_element->physical_entity->bc_type_phys == BC_UNDEFINED) {
         bc_type = BC_VACUUM;
@@ -728,11 +728,11 @@ int sn_elements_results_fill_flux(void) {
   PetscFunctionBegin;
   
 
-  for (k = 0; k < milonga.mesh->n_nodes; k++) {
+  for (k = 0; k < wasora_mesh.main_mesh->n_nodes; k++) {
     for (g = 0; g < milonga.groups; g++) {
       milonga.functions.phi[g]->data_value[k] = 0;
       for (n = 0; n < milonga.directions; n++) {
-        VecGetValues(milonga.phi, 1, &milonga.mesh->node[k].index[dof_index(n,g)], &milonga.functions.psi[n][g]->data_value[k]);
+        VecGetValues(milonga.phi, 1, &wasora_mesh.main_mesh->node[k].index[dof_index(n,g)], &milonga.functions.psi[n][g]->data_value[k]);
         milonga.functions.phi[g]->data_value[k] += w[n] * milonga.functions.psi[n][g]->data_value[k];
       }
     }
@@ -755,11 +755,11 @@ int sn_elements_normalize_flux(void) {
   if (wasora_var(milonga.vars.power) == 0) {
 
     // calculamos el factor de normalizacion
-    for (i = 0; i < milonga.mesh->n_elements; i++) {
-      if (milonga.mesh->element[i].type->dim == milonga.mesh->bulk_dimensions) {
-        num += milonga.mesh->element[i].type->element_volume(&milonga.mesh->element[i]);
+    for (i = 0; i < wasora_mesh.main_mesh->n_elements; i++) {
+      if (wasora_mesh.main_mesh->element[i].type->dim == wasora_mesh.main_mesh->bulk_dimensions) {
+        num += wasora_mesh.main_mesh->element[i].type->element_volume(&wasora_mesh.main_mesh->element[i]);
         for (g = 0; g < milonga.groups; g++) {
-          den += mesh_integral_over_element(milonga.functions.phi[g], &milonga.mesh->element[i], NULL);
+          den += mesh_integral_over_element(milonga.functions.phi[g], &wasora_mesh.main_mesh->element[i], NULL);
         }
       }
     }
@@ -769,15 +769,15 @@ int sn_elements_normalize_flux(void) {
     xs_t *xs;
 
     num = wasora_var(milonga.vars.power);
-    for (i = 0; i < milonga.mesh->n_elements; i++) {
-      if (milonga.mesh->element[i].type->dim == milonga.mesh->bulk_dimensions) {
-        if ((xs = (xs_t *)milonga.mesh->element[i].physical_entity->material->ext) == NULL) {
-          wasora_push_error_message("physical entity %d needs a material", milonga.mesh->cell[i].element->physical_entity->id);
+    for (i = 0; i < wasora_mesh.main_mesh->n_elements; i++) {
+      if (wasora_mesh.main_mesh->element[i].type->dim == wasora_mesh.main_mesh->bulk_dimensions) {
+        if ((xs = (xs_t *)wasora_mesh.main_mesh->element[i].physical_entity->material->ext) == NULL) {
+          wasora_push_error_message("physical entity %d needs a material", wasora_mesh.main_mesh->cell[i].element->physical_entity->id);
           PetscFunctionReturn(WASORA_RUNTIME_ERROR);
         }
 
         for (g = 0; g < milonga.groups; g++) {
-          den += mesh_integral_over_element(milonga.functions.phi[g], &milonga.mesh->element[i], xs->eSigmaF[g]);
+          den += mesh_integral_over_element(milonga.functions.phi[g], &wasora_mesh.main_mesh->element[i], xs->eSigmaF[g]);
         }
       }
     }
@@ -791,7 +791,7 @@ int sn_elements_normalize_flux(void) {
   factor = num/den;
 
   // normalizamos los valores de las funciones flujo
-  for (k = 0; k < milonga.mesh->n_nodes; k++) {
+  for (k = 0; k < wasora_mesh.main_mesh->n_nodes; k++) {
     for (g = 0; g < milonga.groups; g++) {
       milonga.functions.phi[g]->data_value[k] *= factor;
     }
@@ -820,16 +820,16 @@ int sn_elements_results_fill_power(void) {
 
   PetscFunctionBegin;
 
-  for (k = 0; k < milonga.mesh->n_nodes; k++) {
-    LL_FOREACH(milonga.mesh->node[k].associated_elements, associated_element) {
+  for (k = 0; k < wasora_mesh.main_mesh->n_nodes; k++) {
+    LL_FOREACH(wasora_mesh.main_mesh->node[k].associated_elements, associated_element) {
       element = associated_element->element;
     }
     if (element != NULL && element->physical_entity != NULL && element->physical_entity->material != NULL) {
       xs = (xs_t *)element->physical_entity->material->ext;
       if (xs != NULL && xs->eSigmaF != NULL) {
-        wasora_var(wasora_mesh.vars.x) = milonga.mesh->node[k].x[0];
-        wasora_var(wasora_mesh.vars.y) = milonga.mesh->node[k].x[1];
-        wasora_var(wasora_mesh.vars.z) = milonga.mesh->node[k].x[2];
+        wasora_var(wasora_mesh.vars.x) = wasora_mesh.main_mesh->node[k].x[0];
+        wasora_var(wasora_mesh.vars.y) = wasora_mesh.main_mesh->node[k].x[1];
+        wasora_var(wasora_mesh.vars.z) = wasora_mesh.main_mesh->node[k].x[2];
 
         pow = 0;
         for (g = 0; g < milonga.groups; g++) {
@@ -852,7 +852,7 @@ int sn_elements_problem_free(void) {
   
   PetscFunctionBegin;
 
-  if (milonga.mesh != NULL && milonga.mesh->n_elements != 0) {
+  if (wasora_mesh.main_mesh != NULL && wasora_mesh.main_mesh->n_elements != 0) {
     if (milonga.functions.phi != NULL) {
       for (g = 0; g < milonga.groups; g++) {
         free(milonga.functions.phi[g]->data_value);
@@ -867,7 +867,7 @@ int sn_elements_problem_free(void) {
     }
   
     sn_elements_free_elemental_objects();
-    mesh_free(milonga.mesh);
+    mesh_free(wasora_mesh.main_mesh);
   }
    
   PetscFunctionReturn(WASORA_RUNTIME_OK);

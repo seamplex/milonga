@@ -25,7 +25,7 @@
 #include "../milonga.h"
 #include "sn_volumes.h"
 
-#define flat_index(i,j,k) ((i) + (j)*milonga.mesh->ncells_x + (k)*milonga.mesh->ncells_x*milonga.mesh->ncells_y) 
+#define flat_index(i,j,k) ((i) + (j)*wasora_mesh.main_mesh->ncells_x + (k)*wasora_mesh.main_mesh->ncells_x*wasora_mesh.main_mesh->ncells_y) 
 #define dof_index(m,g) ((m)*milonga.groups + (g))
 //#define dof_index(m,g) ((m) + (g)*milonga.directions)
 
@@ -35,34 +35,34 @@ int sn_volumes_problem_init(void) {
 
   int g, n;
 
-  if (milonga.mesh == NULL) {
+  if (wasora_mesh.main_mesh == NULL) {
     wasora_push_error_message("no mesh found");
     return WASORA_RUNTIME_ERROR;
   }
 
   //Check that the mesh is order 1 in finite volumes method.
-  if(milonga.scheme == scheme_volumes && milonga.mesh->order > 1) {
+  if(milonga.scheme == scheme_volumes && wasora_mesh.main_mesh->order > 1) {
     wasora_push_error_message("finite volumes methods work with first-order elements only");
     return WASORA_RUNTIME_ERROR;
   }
 
-  if (milonga.mesh->structured == 0) {
-    if (milonga.mesh->cell == NULL) {
-      wasora_call(mesh_element2cell(milonga.mesh));
+  if (wasora_mesh.main_mesh->structured == 0) {
+    if (wasora_mesh.main_mesh->cell == NULL) {
+      wasora_call(mesh_element2cell(wasora_mesh.main_mesh));
     }
-    if (milonga.mesh->cell[0].ifaces == NULL) {
-      wasora_call(mesh_find_neighbors(milonga.mesh));
+    if (wasora_mesh.main_mesh->cell[0].ifaces == NULL) {
+      wasora_call(mesh_find_neighbors(wasora_mesh.main_mesh));
     }
   
-    wasora_call(mesh_compute_coords(milonga.mesh));
-    wasora_call(mesh_fill_neighbors(milonga.mesh));
+    wasora_call(mesh_compute_coords(wasora_mesh.main_mesh));
+    wasora_call(mesh_fill_neighbors(wasora_mesh.main_mesh));
   } else {
-    wasora_mesh_struct_init_rectangular_for_cells(milonga.mesh);
+    wasora_mesh_struct_init_rectangular_for_cells(wasora_mesh.main_mesh);
   }
 
-  milonga.spatial_unknowns = milonga.mesh->n_cells;
+  milonga.spatial_unknowns = wasora_mesh.main_mesh->n_cells;
   milonga_allocate_global_matrices(milonga.spatial_unknowns * milonga.directions * milonga.groups,
-                                   milonga.mesh->max_faces_per_element + milonga.directions * milonga.groups,
+                                   wasora_mesh.main_mesh->max_faces_per_element + milonga.directions * milonga.groups,
                                    milonga.directions * milonga.groups);
   milonga_allocate_global_vectors();
   
@@ -70,10 +70,10 @@ int sn_volumes_problem_init(void) {
   // inicializamos los pesos de las ordenadas discretas
   wasora_call(sn_init_weights());
 
-  wasora_var(wasora_mesh.vars.cells) = (double)milonga.mesh->n_cells;
-  wasora_var(wasora_mesh.vars.nodes) = (double)milonga.mesh->n_nodes;
-  wasora_var(wasora_mesh.vars.elements) = (double)milonga.mesh->n_elements;
-  milonga.mesh->data_type = data_type_element;
+  wasora_var(wasora_mesh.vars.cells) = (double)wasora_mesh.main_mesh->n_cells;
+  wasora_var(wasora_mesh.vars.nodes) = (double)wasora_mesh.main_mesh->n_nodes;
+  wasora_var(wasora_mesh.vars.elements) = (double)wasora_mesh.main_mesh->n_elements;
+  wasora_mesh.main_mesh->data_type = data_type_element;
 
   for (n = 0; n < milonga.directions; n++) {
     for (g = 0; g < milonga.groups; g++) {
@@ -86,7 +86,7 @@ int sn_volumes_problem_init(void) {
   }
   wasora_call(sn_volumes_results_fill_args(milonga.functions.pow));
 
-  wasora_call(mesh_cell_indexes(milonga.mesh, milonga.groups * milonga.directions));
+  wasora_call(mesh_cell_indexes(wasora_mesh.main_mesh, milonga.groups * milonga.directions));
   
   return WASORA_RUNTIME_OK;  
 }
@@ -99,11 +99,11 @@ int sn_volumes_results_fill_args(function_t *function) {
 
   // estructurado o no, tenemos data
   function->data_size = milonga.spatial_unknowns;
-  if (milonga.mesh->structured) {
+  if (wasora_mesh.main_mesh->structured) {
     function->rectangular_mesh = 1;
     function->x_increases_first = 1;
-    function->rectangular_mesh_size = milonga.mesh->rectangular_mesh_size;
-    function->rectangular_mesh_point = milonga.mesh->rectangular_mesh_point;    
+    function->rectangular_mesh_size = wasora_mesh.main_mesh->rectangular_mesh_size;
+    function->rectangular_mesh_point = wasora_mesh.main_mesh->rectangular_mesh_point;    
   }
   
   // pero tambien variables por si queremos hacer cuentitas
@@ -112,13 +112,13 @@ int sn_volumes_results_fill_args(function_t *function) {
 
   // los argumentos los calculamos en results_init_structured_data_arg
   // y aca apuntamos cada funcion a ese array
-  function->data_argument = milonga.mesh->cells_argument;
+  function->data_argument = wasora_mesh.main_mesh->cells_argument;
   function->data_value = calloc(function->data_size, sizeof(double));
   
   // en volumes finitos decimos que la funcion es tipo mesh cell
   function->type = type_pointwise_mesh_cell;
   function->multidim_threshold = DEFAULT_MULTIDIM_INTERPOLATION_THRESHOLD;
-  function->mesh = milonga.mesh;
+  function->mesh = wasora_mesh.main_mesh;
 
   return WASORA_RUNTIME_OK;
 }
@@ -140,8 +140,8 @@ int sn_volumes_matrices_build(void) {
   double w_ij;
   double Omega_dot_outward;
   
-  for (i = 0; i < milonga.mesh->n_cells; i++) {
-    cell = &milonga.mesh->cell[i];
+  for (i = 0; i < wasora_mesh.main_mesh->n_cells; i++) {
+    cell = &wasora_mesh.main_mesh->cell[i];
     
     if (cell->element->physical_entity != NULL && cell->element->physical_entity->material != NULL) {
 
@@ -228,7 +228,7 @@ int sn_volumes_matrices_build(void) {
               physical_entity_t *physical_entity;
               int bc_type = BC_UNDEFINED;
                             
-              if (milonga.mesh->structured == 0) {
+              if (wasora_mesh.main_mesh->structured == 0) {
                 if (cell->neighbor[j].element == NULL ||
                     cell->neighbor[j].element->physical_entity == NULL ||
                     cell->neighbor[j].element->physical_entity->bc_type_phys == BC_VACUUM ||
@@ -276,7 +276,7 @@ int sn_volumes_matrices_build(void) {
                   }
                   if (m_refl == milonga.directions) {
                     wasora_push_error_message("cannot find a reflected direction for n=%d (%.3f %.3f %.3f) in cell %d (normal %.3f %.3f %.3f)",
-                            m, milonga.mesh->cell[i].id, Omega[m][0], Omega[m][1], Omega[m][2], neighbor->n_ij[0], neighbor->n_ij[1], neighbor->n_ij[2]);
+                            m, wasora_mesh.main_mesh->cell[i].id, Omega[m][0], Omega[m][1], Omega[m][2], neighbor->n_ij[0], neighbor->n_ij[1], neighbor->n_ij[2]);
                     return WASORA_RUNTIME_ERROR;
                   }                  
 
@@ -315,11 +315,11 @@ int sn_volumes_results_fill_flux(void) {
 
   int i, g, n;
 
-  for (i = 0; i < milonga.mesh->n_cells; i++) {
+  for (i = 0; i < wasora_mesh.main_mesh->n_cells; i++) {
     for (g = 0; g < milonga.groups; g++) {
       milonga.functions.phi[g]->data_value[i] = 0;
       for (n = 0; n < milonga.directions; n++) {
-        VecGetValues(milonga.phi, 1, &milonga.mesh->cell[i].index[dof_index(n,g)], &milonga.functions.psi[n][g]->data_value[i]);
+        VecGetValues(milonga.phi, 1, &wasora_mesh.main_mesh->cell[i].index[dof_index(n,g)], &milonga.functions.psi[n][g]->data_value[i]);
         milonga.functions.phi[g]->data_value[i] += w[n] * milonga.functions.psi[n][g]->data_value[i];
       }
     }
@@ -339,10 +339,10 @@ int sn_volumes_normalize_flux(void) {
 
   if (wasora_var(milonga.vars.power) == 0) {
     // calculamos el factor de normalizacion factor = num/den
-    for (i = 0; i < milonga.mesh->n_cells; i++) {
-      num += milonga.mesh->cell[i].volume;
+    for (i = 0; i < wasora_mesh.main_mesh->n_cells; i++) {
+      num += wasora_mesh.main_mesh->cell[i].volume;
       for (g = 0; g < milonga.groups; g++) {
-        den += milonga.mesh->cell[i].volume * milonga.functions.phi[g]->data_value[i];
+        den += wasora_mesh.main_mesh->cell[i].volume * milonga.functions.phi[g]->data_value[i];
       }
     }
 
@@ -351,15 +351,15 @@ int sn_volumes_normalize_flux(void) {
     xs_t *xs;
 
     num = wasora_var(milonga.vars.power);
-    for (i = 0; i < milonga.mesh->n_cells; i++) {
-      if (milonga.mesh->cell[i].element->physical_entity != NULL && (xs = (xs_t *)milonga.mesh->cell[i].element->physical_entity->material->ext) != NULL) {
+    for (i = 0; i < wasora_mesh.main_mesh->n_cells; i++) {
+      if (wasora_mesh.main_mesh->cell[i].element->physical_entity != NULL && (xs = (xs_t *)wasora_mesh.main_mesh->cell[i].element->physical_entity->material->ext) != NULL) {
         for (g = 0; g < milonga.groups; g++) {
           milonga.functions.phi[g]->data_value[i] = 0;
           for (n = 0; n < milonga.directions; n++) {
-            VecGetValues(milonga.phi, 1, &milonga.mesh->cell[i].index[g], &milonga.functions.psi[n][g]->data_value[i]);
+            VecGetValues(milonga.phi, 1, &wasora_mesh.main_mesh->cell[i].index[g], &milonga.functions.psi[n][g]->data_value[i]);
             milonga.functions.phi[g]->data_value[i] += w[n] * milonga.functions.psi[n][g]->data_value[i];
           }
-          den += sn_volumes_cell_integral(&milonga.mesh->cell[i], xs->eSigmaF[g]) * milonga.functions.phi[g]->data_value[i];
+          den += sn_volumes_cell_integral(&wasora_mesh.main_mesh->cell[i], xs->eSigmaF[g]) * milonga.functions.phi[g]->data_value[i];
         }
       }
     }
@@ -398,17 +398,17 @@ int sn_volumes_results_fill_power(void) {
   int i, g;
   xs_t *xs;
   
-  for (i = 0; i < milonga.mesh->n_cells; i++) {
+  for (i = 0; i < wasora_mesh.main_mesh->n_cells; i++) {
 
-    wasora_var(wasora_mesh.vars.x) = milonga.mesh->cell[i].x[0];
-    wasora_var(wasora_mesh.vars.y) = milonga.mesh->cell[i].x[1];
-    wasora_var(wasora_mesh.vars.z) = milonga.mesh->cell[i].x[2];
+    wasora_var(wasora_mesh.vars.x) = wasora_mesh.main_mesh->cell[i].x[0];
+    wasora_var(wasora_mesh.vars.y) = wasora_mesh.main_mesh->cell[i].x[1];
+    wasora_var(wasora_mesh.vars.z) = wasora_mesh.main_mesh->cell[i].x[2];
     
     milonga.functions.pow->data_value[i] = 0;
 
-    if (milonga.mesh->cell[i].element->physical_entity != NULL &&
-        milonga.mesh->cell[i].element->physical_entity->material != NULL &&
-        (xs = (xs_t *)milonga.mesh->cell[i].element->physical_entity->material->ext) != NULL) {    
+    if (wasora_mesh.main_mesh->cell[i].element->physical_entity != NULL &&
+        wasora_mesh.main_mesh->cell[i].element->physical_entity->material != NULL &&
+        (xs = (xs_t *)wasora_mesh.main_mesh->cell[i].element->physical_entity->material->ext) != NULL) {    
 
       for (g = 0; g < milonga.groups; g++) {
         milonga.functions.pow->data_value[i] += wasora_evaluate_expression(xs->eSigmaF[g]) * milonga.functions.phi[g]->data_value[i];
@@ -426,7 +426,7 @@ int sn_volumes_problem_free(void) {
   
   int g;
   
-  if (milonga.mesh != NULL && milonga.mesh->n_cells != 0) {
+  if (wasora_mesh.main_mesh != NULL && wasora_mesh.main_mesh->n_cells != 0) {
     if (milonga.functions.phi != NULL) {  
       for (g = 0; g < milonga.groups; g++) {
         free(milonga.functions.phi[g]->data_value);
@@ -440,7 +440,7 @@ int sn_volumes_problem_free(void) {
       milonga.functions.pow->var_argument = NULL;      
     }
 
-    mesh_free(milonga.mesh);
+    mesh_free(wasora_mesh.main_mesh);
   }
    
   return WASORA_RUNTIME_OK;
