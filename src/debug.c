@@ -451,14 +451,14 @@ int milonga_instruction_debug(void *arg) {
     if (debug->matrices & DEBUG_MATRICES_PETSC_ASCII) {
       sprintf(filename, "%s-R.asc", debug->file->path);
       PetscViewerASCIIOpen(PETSC_COMM_WORLD, filename, &viewer);
-      PetscViewerSetFormat(viewer, PETSC_VIEWER_DEFAULT);
+      PetscViewerPushFormat(viewer, PETSC_VIEWER_DEFAULT);
       MatView(milonga.R, viewer);
       petsc_call(PetscViewerDestroy(&viewer));
 
       if (milonga.has_fission && !milonga.has_sources) {
         sprintf(filename, "%s-F.asc", debug->file->path);
         PetscViewerASCIIOpen(PETSC_COMM_WORLD, filename, &viewer);
-        PetscViewerSetFormat(viewer, PETSC_VIEWER_DEFAULT);
+        PetscViewerPushFormat(viewer, PETSC_VIEWER_DEFAULT);
         MatView(milonga.F, viewer);
         petsc_call(PetscViewerDestroy(&viewer));
       }
@@ -467,14 +467,14 @@ int milonga_instruction_debug(void *arg) {
     if (debug->matrices & DEBUG_MATRICES_PETSC_OCTAVE) {
       sprintf(filename, "%s-R.m", debug->file->path);
       PetscViewerASCIIOpen(PETSC_COMM_WORLD, filename, &viewer);
-      PetscViewerSetFormat(viewer, PETSC_VIEWER_ASCII_MATLAB);
+      PetscViewerPushFormat(viewer, PETSC_VIEWER_ASCII_MATLAB);
       MatView(milonga.R, viewer);
       petsc_call(PetscViewerDestroy(&viewer));
 
       if (milonga.has_fission && !milonga.has_sources) {
         sprintf(filename, "%s-F.m", debug->file->path);
         PetscViewerASCIIOpen(PETSC_COMM_WORLD, filename, &viewer);
-        PetscViewerSetFormat(viewer, PETSC_VIEWER_ASCII_MATLAB);
+        PetscViewerPushFormat(viewer, PETSC_VIEWER_ASCII_MATLAB);
         MatView(milonga.F, viewer);
         petsc_call(PetscViewerDestroy(&viewer));
       }
@@ -483,14 +483,14 @@ int milonga_instruction_debug(void *arg) {
     if (debug->matrices & DEBUG_MATRICES_PETSC_DENSE) {
       sprintf(filename, "%s-R.den", debug->file->path);
       PetscViewerASCIIOpen(PETSC_COMM_WORLD, filename, &viewer);
-      PetscViewerSetFormat(viewer, PETSC_VIEWER_ASCII_DENSE);
+      PetscViewerPushFormat(viewer, PETSC_VIEWER_ASCII_DENSE);
       MatView(milonga.R, viewer);
       petsc_call(PetscViewerDestroy(&viewer));
 
       if (milonga.has_fission) {
         sprintf(filename, "%s-F.den", debug->file->path);
         PetscViewerASCIIOpen(PETSC_COMM_WORLD, filename, &viewer);
-        PetscViewerSetFormat(viewer, PETSC_VIEWER_ASCII_DENSE);
+        PetscViewerPushFormat(viewer, PETSC_VIEWER_ASCII_DENSE);
         MatView(milonga.F, viewer);
         petsc_call(PetscViewerDestroy(&viewer));
       }
@@ -499,14 +499,14 @@ int milonga_instruction_debug(void *arg) {
     if (debug->matrices & DEBUG_MATRICES_SNG) {
       sprintf(filename, "%s-R.sng", debug->file->path);
       PetscViewerASCIIOpen(PETSC_COMM_WORLD, filename, &viewer);
-      PetscViewerSetFormat(viewer, PETSC_VIEWER_DEFAULT);
+      PetscViewerPushFormat(viewer, PETSC_VIEWER_DEFAULT);
       mat2sng(milonga.R, size, (PetscInt)(wasora_evaluate_expression(&debug->matrices_stride)), 0, viewer);
       petsc_call(PetscViewerDestroy(&viewer));
 
       if (milonga.has_fission && !milonga.has_sources) {
         sprintf(filename, "%s-F.sng", debug->file->path);
         PetscViewerASCIIOpen(PETSC_COMM_WORLD, filename, &viewer);
-        PetscViewerSetFormat(viewer, PETSC_VIEWER_DEFAULT);
+        PetscViewerPushFormat(viewer, PETSC_VIEWER_DEFAULT);
         mat2sng(milonga.F, size, (PetscInt)(wasora_evaluate_expression(&debug->matrices_stride)), 0, viewer);
         petsc_call(PetscViewerDestroy(&viewer));
       }
@@ -515,14 +515,14 @@ int milonga_instruction_debug(void *arg) {
     if (debug->matrices & DEBUG_MATRICES_SNG_STRUCT) {
       sprintf(filename, "%s-str-R.sng", debug->file->path);
       PetscViewerASCIIOpen(PETSC_COMM_WORLD, filename, &viewer);
-      PetscViewerSetFormat(viewer, PETSC_VIEWER_DEFAULT);
+      PetscViewerPushFormat(viewer, PETSC_VIEWER_DEFAULT);
       mat2sng(milonga.R, size, (PetscInt)(wasora_evaluate_expression(&debug->matrices_stride)), 1, viewer);
       petsc_call(PetscViewerDestroy(&viewer));
 
       if (milonga.has_fission && !milonga.has_sources) {
         sprintf(filename, "%s-str-F.sng", debug->file->path);
         PetscViewerASCIIOpen(PETSC_COMM_WORLD, filename, &viewer);
-        PetscViewerSetFormat(viewer, PETSC_VIEWER_DEFAULT);
+        PetscViewerPushFormat(viewer, PETSC_VIEWER_DEFAULT);
         mat2sng(milonga.F, size, (PetscInt)(wasora_evaluate_expression(&debug->matrices_stride)), 1, viewer);
         petsc_call(PetscViewerDestroy(&viewer));
       }
