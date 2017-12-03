@@ -52,7 +52,7 @@ int milonga_debug_n_processors(void) {
   int n_processors = 0;
   char *buffer;
 
-  assert(proccpuinfo = fopen("/proc/cpuinfo", "r"));
+  assert((proccpuinfo = fopen("/proc/cpuinfo", "r")));
   buffer = malloc(BUFFER_SIZE);
 
   while (fscanf(proccpuinfo, "%s", buffer) != EOF) {
