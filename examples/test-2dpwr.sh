@@ -1,3 +1,4 @@
+#!/bin/bash
 # run the 2D IAEA PWR benchmark over an unstructured mesh of
 # characteristic length lc=3.5cm with finite elements
 
