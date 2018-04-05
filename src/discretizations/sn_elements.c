@@ -141,7 +141,6 @@ int sn_elements_results_fill_args(function_t *function) {
   function->data_argument = wasora_mesh.main_mesh->nodes_argument;
   function->data_value = calloc(function->data_size, sizeof(double));
 
-
   // y tipo milonga_status.mesh node en elementos
   function->type = type_pointwise_mesh_node;
   function->multidim_threshold = DEFAULT_MULTIDIM_INTERPOLATION_THRESHOLD;
@@ -848,8 +847,8 @@ int sn_elements_results_fill_power(void) {
 #define __FUNCT__ "sn_elements_problem_free"
 int sn_elements_problem_free(void) {
   
-  int g;
-  
+  int g, n;
+    
   PetscFunctionBegin;
 
   if (wasora_mesh.main_mesh != NULL && wasora_mesh.main_mesh->n_elements != 0) {
@@ -865,10 +864,22 @@ int sn_elements_problem_free(void) {
       milonga.functions.pow->data_value = NULL;
       milonga.functions.pow->var_argument = NULL;
     }
-  
-    sn_elements_free_elemental_objects();
-    mesh_free(wasora_mesh.main_mesh);
+    if (milonga.functions.psi != NULL) {
+      // psi is allocated in parser.c end never de-allocated.
+      // it is a ** function [n][g] where n is the number of directions (SN method)
+      // and g the number of groups
+      for (n = 0; n < milonga.directions; n++) {
+	for (g = 0; g < milonga.groups; g++) {
+	  free(milonga.functions.psi[n][g]->data_value);
+	}
+	free(milonga.functions.psi[n]);
+      }
+    }
   }
-   
+  
+  sn_elements_free_elemental_objects();
+  mesh_free(wasora_mesh.main_mesh);
+  
+  
   PetscFunctionReturn(WASORA_RUNTIME_OK);
 }
