@@ -28,11 +28,13 @@ MATERIAL U235a SigmaT 0.32640 SigmaS 0.248064 SigmaA 0.013056 nuSigmaF 2.7*0.065
 PHYSICAL_ENTITY NAME fuel     MATERIAL U235a
 PHYSICAL_ENTITY NAME external BC vacuum
 
+# sn_alpha = 1.0
+
 # do the magic!
 MILONGA_STEP
 
 # write some results into to the standard output
-PRINT_FUNCTION phi1 HEADER
+# PRINT_FUNCTION phi1 HEADER
 PRINT TEXT "\# keff     = " %.8f keff SEP " " TEXT "(" %+.1f 1e5*(1-1/keff) TEXT "pcm )"
 PRINT TEXT "\# nodes    = " %.0f nodes
 PRINT TEXT "\# elements = " %.0f elements

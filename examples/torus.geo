@@ -3,9 +3,9 @@ SetFactory("OpenCASCADE");
 
 // geometry taken from gmsh's t5.geo
 rc = 7.428998;    // critical radius according to los alamos report
-lc = rc/10;        // element characteristic length
+lc = rc/5;        // element characteristic length
 
-Sphere(1) = {0,0,0, rc};
+Torus(1) = {0,0,0, 2*rc, 0.75*rc};
 
 Mesh.CharacteristicLengthMin = lc;
 Mesh.CharacteristicLengthMax = lc;

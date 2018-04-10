@@ -1,7 +1,12 @@
+//
 SetFactory("OpenCASCADE");
 
-a = 10;
-n = 10;
+// radius of a critical sphere
+rc = 7.428998;
+// cylinder radius to maintain the same volume as the critical sphere
+a = (2/3)^(1/3) * rc;
+
+n = 8;
 Mesh.CharacteristicLengthMin = a/n;
 Mesh.CharacteristicLengthMax = a/n;
 
@@ -13,5 +18,5 @@ Coherence;
 Mesh.RecombineAll = 1;
 Mesh.Algorithm = 8;
 
-Physical Surface("external") = {4, 8, 7, 3, 2, 6};
+Physical Surface("external") = {2,3,5,6,7,8};
 Physical Volume("fuel") = {1, 2};

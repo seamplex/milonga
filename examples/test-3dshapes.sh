@@ -5,7 +5,7 @@
 
 checkgmsh
 
-for i in cube cylinder sphere bunny; do
+for i in cube cylinder sphere torus bunny; do
  runmilonga 3dshape.mil $i > $i.dat
 done
 
