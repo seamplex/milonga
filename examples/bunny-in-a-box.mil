@@ -1,0 +1,30 @@
+MESH FILE_PATH bunny-in-a-box.msh DIMENSIONS 3
+
+MILONGA_PROBLEM SCHEME elements FORMULATION s2
+# MILONGA_SOLVER EPS_TYPE jd ST_TYPE precond KSP_TYPE bcgs PC_TYPE asm
+
+MATERIAL U235a  SigmaT 0.32640 SigmaS 0.248064 SigmaA 0.013056 nuSigmaF 2.7*0.065280
+MATERIAL vacuum
+
+PHYSICAL_ENTITY NAME fuel     MATERIAL U235a
+PHYSICAL_ENTITY NAME external BC vacuum
+
+sn_alpha = 1.0
+
+MILONGA_STEP
+
+# write some results into to the standard output
+# PRINT_FUNCTION phi1 HEADER
+PRINT TEXT "\# keff     = " %.8f keff SEP " " TEXT "(" %+.1f 1e5*(1-1/keff) TEXT "pcm )"
+PRINT TEXT "\# nodes    = " %.0f nodes
+PRINT TEXT "\# elements = " %.0f elements
+PRINT TEXT "\# CPU usage: "
+PRINT TEXT "\#   init   = " %.3f time_cpu_ini   TEXT "seconds"
+PRINT TEXT "\#   build  = " %.3f time_cpu_build TEXT "seconds"
+PRINT TEXT "\#   solve  = " %.3f time_cpu_solve TEXT "seconds"
+PRINT TEXT "\#   total  = " %.3f time_cpu_total TEXT "seconds"
+
+# files for gmsh and vtk post-processing
+# MESH_POST FILE_PATH $1_out.msh phi1
+MESH_POST FILE_PATH bunny-in-a-box.vtk SigmaT phi1 psi1.1 psi2.1 psi3.1 psi4.1 psi5.1 psi6.1 psi7.1 psi8.1
+# FLUX_POST FILE_PATH bunny-in-a-box_psi.vtk SigmaT
