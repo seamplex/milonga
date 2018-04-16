@@ -4,9 +4,17 @@
 
 
 
-[milonga](http://www.seamplex.com/milonga/) is a free core-level neutronic code that solves the steady-state multigroup neutron transport equation (either using the diffusion approximation or the discrete ordinates $S_N$ method) over unstructured grids (although simple structured grids can also be used) using either a finite-volumes or a finite-elements discretization scheme. It works on top of the [wasora](http://www.seamplex.com/wasora) framework, which provides means to parse and understand a high-level plain-text input file containing algebraic expressions, data for function interpolation, differential equations and output instructions amongst other facilities. Therefore, any mathematical computation which can be done by wasora---i.e. parametric calculations, multidimensional optimization, function interpolation and integration, etc.---can be combined with the facilities that milonga provides to solve the neutron diffusion equation.
+[milonga](http://www.seamplex.com/milonga/) is a free core-level neutronic code that solves the steady-state multigroup neutron transport equation using either
 
-Its main features are:
+ a. the diffusion approximation, or
+ b. the discrete ordinates $S_N$ method
+over unstructured grids (although simple structured grids can also be used) based on either
+
+ i. a finite-volumes, or
+ ii. a finite-elements
+discretization scheme. It works on top of the [wasora](http://www.seamplex.com/wasora) framework, which provides means to parse and understand a high-level plain-text input file containing algebraic expressions, data for function interpolation, differential equations and output instructions amongst other facilities. Therefore, any mathematical computation which can be done by wasora---i.e. parametric calculations, multidimensional optimization, function interpolation and integration, etc.---can be combined with the facilities that milonga provides to solve the neutron diffusion equation.
+
+Milonga’s main features are:
 
  * free & open source software (released under the terms of the [GNU GPL version 3](http://www.gnu.org/copyleft/gpl.html))
  * solves the steady-state few-group neutron transport equation over a [Gmsh](http://geuz.org/gmsh/)-generated unstructured grid in one, two or three spatial dimensions
@@ -27,8 +35,6 @@ Its main features are:
  * high-quality free & open third-party libraries are used to perform tasks that other people have already worked out: PETSc, SLEPc, GSL, IDA, Readline
  * new formulations and/or spatial discretizations schemes can be (more or less) easily added
  * milonga interfaces well with other UNIX tools (m4, grep, sed, awk, etc.) and plotting & post-processing tools (Gnuplot, Gmsh, LaTeX, ParaView, Pyxplot, etc.)
- 
- 
 
 Actually, milonga can be seen as a glue layer between a mesh generator (i.e [Gmsh](http://geuz.org/gmsh/)) and a large sparse matrix solver (i.e [SLEPc](http://www.grycap.upv.es/slepc/) for eigenvalue problems and [PETSc](http://www.mcs.anl.gov/petsc/) for linear problems). That is to say, milonga builds the matrices $R$ and $F$ that cast the multigroup neutron transport/diffusion equation as a matrix-based eigenvalue problem:
 
@@ -49,19 +55,30 @@ Milonga provides also a second glue layer that links the output of the linear/ei
 
 # Quick start
 
-If you are impatient to run milonga, open a terminal in any GNU/Linux box (may be a VirtualBox box) and run:
+> It is really worth any amount of time and effort to get away from Windows
+if you are doing computational science.
+>
+> <https://lists.mcs.anl.gov/pipermail/petsc-users/2015-July/026388.html>
+
+Open a terminal in a GNU/Linux box (may be a VirtualBox box) and make sure you install the following packages:
 
 ```
-sudo apt-get install curl m4 make autoconf automake gcc git libgsl0-dev wget findutils
-curl https://www.seamplex.com/milonga/get.sh | sh
+sudo apt-get install m4 make autoconf automake gcc git findutils libgsl-dev libsundials-serial-dev libreadline-dev libpetsc-dev libslepc-dev
 ```
 
-Make sure you have `curl` installed and if you are behind a proxy, that both `http_proxy` and `https_proxy` are properly set. If you get any error, either
+If your distribution does not have [PETSc](http://www.mcs.anl.gov/petsc/) or [SLEPc](http://www.grycap.upv.es/slepc/), then you might need to compile them yourself. Ask for help in the mailing list at <https://www.seamplex.com/lists.html>.
 
- a. See the detailed explanation in [INSTALL](INSTALL.md)  
- b. Ask for help in the mailing list at <https://groups.google.com/a/seamplex.com/forum/#!forum/wasora>
+Clone the milonga repository, bootstrap (might take a while as it has to clone and bootstrap [wasora](https://www.seamplex.com/wasora/) first), configure, compile and check:
 
-If these instructions are non-sense to you, go directly to point b.
+```
+git clone https://bitbucket.org/seamplex/milonga/
+cd milonga
+./autogen.sh
+./configure
+make
+make check
+```
+
 
 
 # Examples & test suite
