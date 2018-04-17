@@ -44,7 +44,7 @@ ACLOCAL_AMFLAGS = \$(ACLOCAL_FLAGS)
 
 bin_PROGRAMS = ${plugin}
 
-${plugin}_CFLAGS = -I../wasora/src \$(SLEPC_CC_INCLUDES) \$(CC_INCLUDES) \$(all_includes) -DHARDCODEDPLUGIN 
+${plugin}_CFLAGS = -I../wasora/src \$(SLEPC_CC_INCLUDES) \$(PETSC_CC_INCLUDES) \$(CC_INCLUDES) \$(all_includes) -DHARDCODEDPLUGIN 
 ${plugin}_LDADD = \$(STANDALONELIBS) \$(SLEPC_LIB) \$(all_libraries)
 ${plugin}_LDFLAGS = -rdynamic
 

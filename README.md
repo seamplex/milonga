@@ -60,13 +60,18 @@ if you are doing computational science.
 >
 > <https://lists.mcs.anl.gov/pipermail/petsc-users/2015-July/026388.html>
 
-Open a terminal in a GNU/Linux box (may be a VirtualBox box) and make sure you install the following packages:
+Open a terminal in a GNU/Linux box (may be a VirtualBox box) and install the following tools:
 
 ```
-sudo apt-get install m4 make autoconf automake gcc git findutils libgsl-dev libsundials-serial-dev libreadline-dev libpetsc-dev libslepc-dev
+sudo apt-get install m4 make autoconf automake gcc g++ git findutils
+```
+and the following libraries
+
+```
+sudo apt-get install libgsl-dev libsundials-serial-dev libreadline-dev petsc-dev slepc-dev
 ```
 
-If your distribution does not have [PETSc](http://www.mcs.anl.gov/petsc/) or [SLEPc](http://www.grycap.upv.es/slepc/), then you might need to compile them yourself. Ask for help in the mailing list at <https://www.seamplex.com/lists.html>.
+If your distribution does not have a bundled version of [PETSc](http://www.mcs.anl.gov/petsc/) or [SLEPc](http://www.grycap.upv.es/slepc/), then you might need to compile them yourself. Ask for help in the mailing list at <https://www.seamplex.com/lists.html>.
 
 Clone the milonga repository, bootstrap (might take a while as it has to clone and bootstrap [wasora](https://www.seamplex.com/wasora/) first), configure, compile and check:
 
@@ -314,7 +319,7 @@ Repository: <http://bitbucket.org/seamplex/milonga>
 Mailing list and bug reports: <wasora@seamplex.com>  
 
 
-milonga is copyright ©2010--2017 jeremy theler  
+milonga is copyright ©2010--2018 jeremy theler  
 milonga is licensed under [GNU GPL version 3](http://www.gnu.org/copyleft/gpl.html) or (at your option) any later version.  
 milonga is  [free software](https://www.gnu.org/philosophy/free-sw.html): you are free to change and redistribute it.  
 There is NO WARRANTY, to the extent permitted by law.  
