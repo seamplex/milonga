@@ -375,8 +375,12 @@ int plugin_init_after_parser(void) {
     milonga.vectors.chi = wasora_define_vector("chi", milonga.groups, NULL, NULL);
     wasora_call(wasora_vector_init(milonga.vectors.chi));
     gsl_vector_set(wasora_value_ptr(milonga.vectors.chi), 0, 1);
-  } else if (milonga.vectors.chi->size != milonga.groups) {
-    wasora_push_error_message("vector chi has size %d and problem has %d groups", milonga.vectors.chi->size, milonga.groups);
+  } else {
+    wasora_call(wasora_vector_init(milonga.vectors.chi));
+    if (milonga.vectors.chi->size != milonga.groups) {
+      wasora_push_error_message("vector chi has size %d and problem has %d groups", milonga.vectors.chi->size, milonga.groups);
+      return WASORA_PARSER_ERROR;
+    }
   }
   
   // procesamos los FLUX_POSTs
