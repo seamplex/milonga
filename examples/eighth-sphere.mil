@@ -1,0 +1,44 @@
+# one-eighth of a reflected sphere with one energy group
+# run this example with
+#
+# $ milonga eighth-sphere.mil lc inner_radius outer_radius formulation
+#
+
+DEFAULT_ARGUMENT_VALUE 1 20         # lc
+DEFAULT_ARGUMENT_VALUE 2 160        # a
+DEFAULT_ARGUMENT_VALUE 3 260        # b
+DEFAULT_ARGUMENT_VALUE 4 volumes
+
+# fill the geo template with the lengths
+M4 INPUT_FILE_PATH eighth-sphere.geo.m4 OUTPUT_FILE_PATH eighth-sphere-$1-$2-$3.geo \
+  MACRO lc $1 \
+  MACRO  a $2 \
+  MACRO  b $3
+
+# create mesh if it does not already exist
+SHELL "if test ! -e eighth-sphere-$1-$2-$3.msh; then gmsh -v 0 -3 eighth-sphere-$1-$2-$3.geo; fi"
+
+# use the above-generated mesh
+MESH FILE_PATH eighth-sphere-$1-$2-$3.msh DIMENSIONS 3
+
+# set scheme from commandline (it is an argument so we can use $4 in the vtk file name)
+MILONGA_PROBLEM SCHEME $4
+
+# uniform XSs (SigmaS is optional in this formulation)
+# note that the material name here coincides with the physical name in the geo file
+MATERIAL fuel       D 1.03453E+00    SigmaA 5.59352E-03   nuSigmaF 6.68462E-03  SigmaS 3.94389E-01
+MATERIAL reflector  D 1.02370E+00    SigmaA 7.60914E-05   SigmaS 3.60013E-01
+
+# set boundary conditions
+PHYSICAL_ENTITY NAME internal    BC mirror
+PHYSICAL_ENTITY NAME external    BC vacuum
+
+# solve problem
+MILONGA_STEP
+
+# write output
+PRINT "\# lc" a  b    TEXT keff         mem_us                    mem_disp               t_tot          t_solve
+PRINT $1 $2 $3  %.5f keff     %.2f memory_usage_global/1e9  available_memory/1e9    time_cpu_total time_cpu_solve
+
+# write vtk file with flux and XSs
+FLUX_POST FILE_PATH eighth-sphere-$1-$2-$3-$4.vtk XS

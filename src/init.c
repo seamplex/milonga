@@ -391,6 +391,7 @@ int plugin_init_after_parser(void) {
       if (wasora_var(milonga.vars.power) != 0) {
         mesh_post_dist_t *mesh_post_dist = calloc(1, sizeof(mesh_post_dist_t));
         mesh_post_dist->scalar = milonga.functions.pow;
+        mesh_post_dist->centering = centering_cells;       // la potencia en celdas
         LL_APPEND(mesh_post->mesh_post_dists, mesh_post_dist);
       }
       
@@ -398,6 +399,7 @@ int plugin_init_after_parser(void) {
       for (g = 0; g < milonga.groups; g++) {
         mesh_post_dist_t *mesh_post_dist = calloc(1, sizeof(mesh_post_dist_t));
         mesh_post_dist->scalar = milonga.functions.phi[g];
+        mesh_post_dist->centering = (milonga.scheme == scheme_volumes) ? centering_cells : centering_nodes;
         LL_APPEND(mesh_post->mesh_post_dists, mesh_post_dist);
       }
       

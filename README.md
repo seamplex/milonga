@@ -84,7 +84,7 @@ make
 make check
 ```
 
-
+If these instructions are non-sense to you, go directly to the [mailing list](https://www.seamplex.com/lists.html).
 
 # Examples & test suite
 
