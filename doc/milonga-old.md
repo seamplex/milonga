@@ -1,14 +1,5 @@
-\frontmatter
-\newpage
-\thispagestyle{empty}
-\vspace{1.5cm plus 0.5cm minus 0.25cm}
-\LARGE{\textsf{\textbf{MILONGA}}}
-\vspace{0.25cm plus 0.25cm minus 0.25cm}
-\large{a free nuclear reactor core analysis code}
-\vspace{1.5cm plus 0.5cm}
 **Abstract**
 
-\vspace{0.75cm plus 0.5cm}
 Milonga is a free computer code that solves the steady-state multigroup
 neutron diffusion equation using either a finite-volumes or a
 finite-differences scheme. Not only is it designed to cope with common
@@ -35,12 +26,12 @@ only can milonga utilize user-provided *ad-hoc* numerical routines, but
 it is also released under the GNU Public License so further scalability
 and improvements may be introduced at will.
 
-\vspace{\fill}
-\vspace{\fill}
-\vspace{\fill}
+
+
+
 ![image](sombrero){width="4cm"}
 
-\vspace{\fill}
+
 Preface to version 0.1 {#preface-to-version-0.1 .unnumbered .unnumbered}
 ======================
 
@@ -60,7 +51,7 @@ your comments back. These may be a linear combination of suggestions,
 corrections, bug reports and improvements, in increasing order of
 desirability.
 
-\medskip
+
 This version of the code is not entirely complete in the sense that
 there are some kind of problems it cannot solve in its present state.
 Particularly, it does not fully support three dimensional calculations,
@@ -79,7 +70,7 @@ the fact that milonga is part of a set of codes that share a common
 framework, conforming a suite of engineering codes called wasora that is
 also part of my PhD thesis and of course are under development.
 
-\medskip
+
 I would like to point out here in this preface that milonga is based on
 the PETSc library to handle the matrices that are the base of the
 multigroup diffusion problem formulation. This library provides very
@@ -90,37 +81,34 @@ facilities provided by PETSc. In fact, this first version is very
 computationally demanding because efficiency was not the main focus.
 Optimization is expected to drive my attention as of version 1.0.
 
-\medskip
+
 Finally, I want to say that milonga---and indeed the whole wasora
 suite---was conceived as free software from scratch. Not only are
 hacking and distribution under the terms of the GNU General Public
 License allowed, but also encouraged. And of course, the kind gesture of
 giving feedback to the original author will be highly appreciated.
 
-\vspace{2cm}
+
 Buenos Aires, July 2011
 
-\vspace{2cm}
-\tableofcontents
-\mainmatter
+
+
 Introduction {#cap:introduction}
 ============
 
-\vspace{0.5 cm plus 0.25cm minus 0.25cm}
-\hspace{\fill}
-\sf 
-\footnotesize
+
+
 An engineer has to think without doing anything fifty percent of the
 time,\
 and do without thinking the other fifty percent of the time.\
 And a good engineer knows when to think without doing\
 and when to do without thinking.
 
-\vspace{0.25cm}
+
 *Fabián. J. Bonetto, PhD in Nuclear Engineering\
 comment to the author during an engineering thesis advisory, 2007*
 
-\vspace{2cm plus 0.5cm minus 0.5cm}
+
 The first thing that should be said in relation to this code is that it
 is an academic project part of a PhD thesis in Nuclear Engineering. This
 thesis is not about software development, but about its usage as a
@@ -207,9 +195,9 @@ cingi
 
 Further information and updates be obtained by accessing
 
-<http://ib.cnea.gov.ar/~thelerg/wasora>
+<https://www.seamplex.com/wasora>
 
-\medskip
+
 Of course, milonga---whose description is this tiny document---is also
 part of the suite. A great deal of milonga's functionality directly
 depends on the routines and methods provided by wasora, so its
@@ -248,7 +236,7 @@ stages of the development. Actually, milonga's design basis that follows
 was presented at the 2010 Annual Meeting of the Argentine Nuclear
 Technology Association [@milonga2010].
 
-\bigskip
+
 There are four main subspaces in the design basis, each spanned by
 several vectors, as schematically illustrated in
 figure [\[fig:basis\]](#fig:basis){reference-type="ref"
@@ -263,7 +251,7 @@ to" is deliberately over-used.
 ![[\[fig:basis\]]{#fig:basis label="fig:basis"}Design basis vectors,
 spanning four subspaces](basis)
 
-\medskip
+
 For the code to be of interest, it should be able to solve detailed
 models of both power and research nuclear reactors. So this is one of
 the main vectors to keep in mind: the ability to cope with mathematical
@@ -290,7 +278,7 @@ certain figures or functions change with a certain parameter while
 keeping constant the rest. Solving this parametric kind of problems
 should be also a central part of the design basis vectors.
 
-\medskip
+
 The second subspace spanned by the basis is about flexibility. It is the
 main subject around milonga's design and---at least in these firsts
 versions---flexibility should have precedence over efficiency. One
@@ -331,7 +319,7 @@ course, even both. They might be entered in the input, read from local
 or remote text files or exchanged with other engineering codes using
 some efficient coupling mechanism.
 
-\medskip
+
 [\[t-rex\]]{#t-rex label="t-rex"} Back when input data was entered by
 making holes in a card, T-Rexes ruled the continent and calculation
 times were measured in weeks, computer simulation codes had to give as
@@ -362,7 +350,7 @@ basis discussed in this paragraph, but also the whole code structure has
 to provide the needed flexibility to present to the user the proper
 output information.
 
-\medskip
+
 Finally, a very important subset of the design basis is that of
 scalability. This concept basically means that the code should be able
 to run efficiently not only in what are considered current scientific
@@ -416,7 +404,7 @@ at this point to clearly state the license under which the code is
 distributed. To know what kind of rights you are entitled to is as
 important as to know how to use the software.
 
-\medskip
+
 Milonga is free software---both as in free speech and as in free beer,
 although the first meaning is far more important than the second
 one---and is distributed under the terms of the GNU General Public
@@ -450,19 +438,19 @@ hack it. And of course, to share under the terms of the GNU
 GPL---especially with milonga's original author---her discoveries,
 suggestions, improvements and fixed bugs. To sum up:
 
-\bigskip
+
 > Milonga is free software: you can redistribute it and/or modify\
 > it under the terms of the GNU General Public License as published by\
 > the Free Software Foundation, either version 3 of the License, or\
 > (at your option) any later version.
 >
-> \bigskip
+> 
 > Milonga is distributed in the hope that it will be useful,\
 > but WITHOUT ANY WARRANTY; without even the implied warranty of\
 > MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the\
 > GNU General Public License for more details.
 >
-> \bigskip
+> 
 > You should have received a copy of the GNU General Public License\
 > along with wasora. If not, see <http://www.gnu.org/licenses/>.
 
@@ -488,18 +476,18 @@ associated documentation for more information.
 The equations inside milonga {#cap:equations}
 ============================
 
-\vspace{0.5 cm plus 0.25cm minus 0.25cm}
+
 \hspace{\fill}
 \sf 
 \footnotesize
 I am not scared by this complicated scattering\
 kernel integral, but by the tiny divergence term.
 
-\vspace{0.25cm}
+
 *Javier Fernandez, PhD in Mathematics,\
 after his first looking at the diffusion equation, 2006*
 
-\vspace{2cm plus 0.5cm minus 0.5cm}
+
 Milonga is a computer code that essentially solves a certain
 mathematical equation whose solution, in some way, can be useful from an
 engineering point of view. Needless to say, the code is by no means
@@ -515,7 +503,7 @@ input continuous parameters are also condensed into a finite set. All
 these features are thoroughly explained in this chapter and thus, it is
 of central importance for the practical usage of the software.
 
-\medskip
+
 Milonga is a neutron diffusion code, i.e. it solves the
 steady-state---at least in this version---neutron diffusion equation.
 This means that its results cannot be more accurate than the diffusion
@@ -530,12 +518,12 @@ rectangle is a source of uncertainties that should be taken into
 account, and whose magnitude the user ought to be able to quantify when
 executing the last step shown in the diagram.
 
-\medskip
+
 \reversemarginpar
 Whenever an approximation is introduced in the development, an
 exclamation mark as the one shown in the left margin will appear.
 
-\medskip
+
 This chapter focuses on the particular mathematical steps that milonga
 takes to go from the continuous diffusion equation up to the numerical
 solution of the eigenvalue problem, specifically the three rectangles
@@ -565,7 +553,7 @@ which, of course, should be met for milonga to be useful. It is assumed
 that the user thoroughly understands the physics behind Fick's law and
 what the diffusion equation implies.
 
-\medskip 
+ 
 The main goal is to solve the associated critical reactor neutron
 diffusion equation with fission sources, namely
 
@@ -608,7 +596,7 @@ probability $\chi(E)\, dE$ for a fission neutron to be born with an
 energy between $E$ and $E + dE$. For simplicity, this chapter assumes
 there is a single common fission spectrum.
 
-\medskip
+
 The typical problem to be tackled by milonga is a three-dimensional
 reflected nuclear reactor core, including its reactivity control
 mechanisms and possibly taking into account the effects of temperature,
@@ -630,7 +618,7 @@ expressions or a combination of all of them. As a result, all the
 parameters are continuous functions that can be evaluated at any point
 in space.](typical){height="8cm"}
 
-\medskip
+
 [\[par:nonlinear\]]{#par:nonlinear label="par:nonlinear"} If the
 macroscopic nuclear parameters $D$, $\Sigma_t$, $\Sigma_s$ and
 $\nu \Sigma_f$ are known functions of the space and the energy only,
@@ -694,7 +682,7 @@ analyze. However, under normal circumstances---i.e. usual dependence of
 cross sections with parameters---there is an stable fixed point that is
 the actual solution to the non-linear problem.
 
-\medskip
+
 In this example case, $\mathcal{P}^\star$ was related to the equilibrium
 xenon concentration, but the same idea holds for other parameters such
 as temperature and density distributions, boron concentration, etc. Note
@@ -702,7 +690,7 @@ that these distributions are outside milonga's scope so in order to take
 these effects into account a coupled calculation between the reactor and
 other codes is needed.
 
-\medskip
+
 For a definite step $n$ of this iterative procedure with fixed
 parameters, the explicit dependence on $\mathcal{P}$ may be dropped and
 thought of as implicit in the dependence of the cross sections on the
@@ -759,7 +747,7 @@ $\text{cm}^{-2} \, \text{s}^{-1}$) while the latter has units of inverse
 squared length, inverse time and inverse energy (i.e.
 $\text{cm}^{-2} \, \text{s}^{-1} \, \text{eV}^{-1}$).
 
-\medskip
+
 The multi-group formulation seeks to obtain $G$ equations for the group
 fluxes. Integrating
 equation [\[eq:diffusion-continuous\]](#eq:diffusion-continuous){reference-type="eqref"
@@ -811,7 +799,7 @@ definition given by
 equation [\[eq:sigma\_t\_weighted\]](#eq:sigma_t_weighted){reference-type="eqref"
 reference="eq:sigma_t_weighted"}.
 
-\medskip
+
 The scattering term can be written as
 
 $$\begin{aligned}
@@ -829,7 +817,7 @@ $$\label{eq:sigma_s_weighted}
 Again, these $G^2$ parameters are treated as known values prior to the
 solution of the diffusion equation.
 
-\medskip
+
 The fission term can be written as
 
 $$\begin{aligned}
@@ -894,7 +882,7 @@ position $\ensuremath\mathbf{r}$. It is the user's responsibility to
 generate them from a lattice code or whatever other applicable source
 consistently with the expected usage shown in this section.
 
-\bigskip
+
 Collecting these results, the continuous diffusion
 equation [\[eq:diffusion-continuous\]](#eq:diffusion-continuous){reference-type="eqref"
 reference="eq:diffusion-continuous"} can be discretized in energy as $G$
@@ -943,7 +931,7 @@ differences schemes recipes are also provided by milonga that are
 introduced in section [2.1.3](#sec:differences){reference-type="ref"
 reference="sec:differences"}.
 
-\medskip
+
 The basis of the finite volumes spatial discretization is the division
 of the domain into $N$ adjacent cells, as depicted in
 figure [\[fig:division-cells\]](#fig:division-cells){reference-type="ref"
@@ -976,7 +964,7 @@ domain into a finite number of cells.](2d-covering.pdf)
 \subfloat[2D]{\includegraphics{cell2d}}
 \hspace{1cm}
 \subfloat[3D]{\includegraphics{cell3d}}
-\medskip
+
 Again, the notation $\phi(i,g)$ over $\phi_g^i$ will be preferred to
 avoid the excessive use of sub-indexes. The flux of group $g$ in
 cell $i$ is a scalar number, not a function. The set of the
@@ -992,7 +980,7 @@ equation [\[eq:energy-integrated-flux\]](#eq:energy-integrated-flux){reference-
 reference="eq:energy-integrated-flux"}---namely, inverse squared length
 and inverse time.
 
-\medskip
+
 It should be remarked again that the mean flux $\phi(i,g)$ that will be
 the solution to the problem is the mean value of the continuous flux
 distribution over the cell, and not the value of the flux evaluated at
@@ -1050,7 +1038,7 @@ equations that should be satisfied by the mean cell cross sections in
 order for the discretization to be a faithful representation of the
 continuous equation.
 
-\medskip
+
 The integrated scattering term is
 
 $$\begin{aligned}
@@ -1072,7 +1060,7 @@ Therefore
 
 $$\nu \Sigma_f(i,g) = \frac{\displaystyle \int_{V_i} \nu \Sigma_f(\ensuremath\mathbf{r},g) \cdot \phi(\ensuremath\mathbf{r}, g) \, d^m\ensuremath\mathbf{r}}{\displaystyle \int_{V_i} \phi(\ensuremath\mathbf{r}, g) \, d^m\ensuremath\mathbf{r}}$$
 
-\bigskip
+
 The only term remaining is the net leakage out of the cell. It is in the
 spatial discretization of this term that the fun of the neutron
 diffusion problem pops up, so it is analyzed thoroughly for one, two and
@@ -1103,7 +1091,7 @@ the solution sought for, while the fluxes with half-integer arguments
 (squares) are estimations from the integer-indexes
 fluxes.](1ddiscretization.pdf)
 
-\medskip
+
 The integrated leakage term in one dimension is
 
 $$\begin{aligned}
@@ -1142,7 +1130,7 @@ function of the fluxes in cells $i$ and $i+1$ is therefore
 $$\label{eq:intermediate-flux}
  \phi(i+1/2) = \frac{D(x_i-\epsilon) \cdot \phi(i) + D(x_i+\epsilon) \cdot \phi(i+1)}{D(x_i-\epsilon) + D(x_i+\epsilon)}$$
 
-\medskip
+
 Note that if $D(x)$ is continuous, the intermediate fluxes in
 equation [\[eq:intermediate-flux\]](#eq:intermediate-flux){reference-type="eqref"
 reference="eq:intermediate-flux"} are
@@ -1210,7 +1198,7 @@ $$\begin{aligned}
 \nonumber \\
  C_i^{+} &= \frac{2}{\Delta x} \frac{D(x_i-\epsilon) \cdot D(x_i+\epsilon)}{D(x_i-\epsilon)+D(x_i+\epsilon)}\end{aligned}$$
 
-\medskip
+
 This set of coefficients gives good results either for cases with $D(x)$
 varying smoothly with $x$ or for discontinuities located exactly at cell
 boundaries. When there are material interfaces that do not coincide with
@@ -1228,7 +1216,7 @@ position of the interface, but indirectly via the way of computing the
 cell-averaged macroscopic cross sections, which is physically incorrect
 or at least inaccurate.
 
-\medskip
+
 One way of avoiding these unphysical results is to use average values
 over each half of the cells for the diffusion coefficients
 
@@ -1249,7 +1237,7 @@ particular problem being solved.
 \subfloat[]{\includegraphics[width=7cm]{1ddminusepsilon}}
 \hspace{0.5cm}
 \subfloat[]{\includegraphics[width=7cm]{1dmean}}
-\medskip
+
 Note finally that if the diffusion coefficient is homogeneous in the
 whole domain, i.e. $D(x)=D$, the coefficients $C$ (either using $D$
 or $\langle D \rangle$) are
@@ -1320,7 +1308,7 @@ $$\label{eq:2d-current-continuity}
 \int_{y_{{i_y}-1}}^{y_{i_y}} D(x_{i_x}+\epsilon, y)    \cdot \frac{\partial \phi}{\partial x}(x_{i_x}+\epsilon, y) \, dy$$
 for some $0 < \epsilon \ll \Delta x$.
 
-\medskip
+
 To obtain a finite volumes scheme using only four neighbors, is must be
 assumed that the net current can be written as
 
@@ -1352,7 +1340,7 @@ Note that $x,y \in \mathbb{R}$ and $i_x,i_y \in \mathbb{N}$, so the
 first expression is a function of $x$ for a fixed $i_y$ and the second
 is a function of $y$ for a fixed $i_x$.
 
-\medskip
+
 By using the
 approximation [\[eq:2d-first-integral\]](#eq:2d-first-integral){reference-type="eqref"
 reference="eq:2d-first-integral"} in
@@ -1457,7 +1445,7 @@ with similar expressions for the rest of the diffusion coefficients in
 equations [\[eq:cs-2d-volumes-epsilon\]](#eq:cs-2d-volumes-epsilon){reference-type="eqref"
 reference="eq:cs-2d-volumes-epsilon"}.
 
-\medskip
+
 If the diffusion coefficient is homogeneous over the whole spatial
 domain $D(x,y)=D$, then the leakage term in two dimensions is
 
@@ -1517,7 +1505,7 @@ evaluated at nodes (filled circles) instead of representing cell
 (squares) mean values. For convenience, the nodes are taken as the
 finite-volumes cells centers.](2d-covering-differences)
 
-\medskip
+
 The finite differences scheme consists in replacing the $G$ continuous
 multigroup diffusion
 equations [\[eq:diffusion\_multigroup\]](#eq:diffusion_multigroup){reference-type="eqref"
@@ -1591,7 +1579,7 @@ gradient of the diffusion coefficient also as a finite-difference
 approximation instead of using the actual derivative of the continuous
 property. All these four combinations can be handled by milonga.
 
-\medskip
+
 Last but not least, there is one important thing to add. If the
 diffusion coefficient $D(\ensuremath\mathbf{r})$ is not differentiable
 at some point $\ensuremath\mathbf{r}_d$, then
@@ -1637,7 +1625,7 @@ $$\tag{\ref{eq:xs-total-associated}}
 However, it is clear that for the formulation to be useful, the
 coefficients ought not to depend on the flux itself.
 
-\medskip
+
 Up to a first order approximation, two approaches can be taken to take
 out the fluxes of the cross-section expression. The first is to assume a
 flat profile inside each cell. Call
@@ -1649,7 +1637,7 @@ $$\label{eq:cell-xs-mean}
 and the cell total macroscopic cross section is the mean value of the
 continuous macroscopic cross section distribution inside the cell.
 
-\medskip
+
 The second---and rather extreme--approach is to assume that somehow the
 flux is concentrated in the center of the
 cell $\phi(\ensuremath\mathbf{r},g)=\varphi \cdot \delta(\ensuremath\mathbf{r}_i)$
@@ -1695,7 +1683,7 @@ domain (green) solve the diffusion problem. Cells that contain the
 border (orange) impose the problem boundary conditions. The rest of the
 cells (black) are forced to have a null flux.](boundary)
 
-\medskip
+
 In nuclear reactor diffusion theory [@duderstadt], it is usual to make
 the flux vanish at a certain distance from the external surfaces called
 extrapolation length. However, for common reactor sizes, this length is
@@ -1754,7 +1742,7 @@ the linear extrapolation to vanish at the boundary of the cell (try to
 make a mental picture and see the similar triangles with ratio three to
 one).
 
-\medskip
+
 [\[negative-fluxes\]]{#negative-fluxes label="negative-fluxes"}It is
 important to note that if the boundary lies to the right of the cell
 center ($\delta x > 0$), then the flux $\phi(i_0)$ has to be negative to
@@ -1777,7 +1765,7 @@ surface, one of the fluxes has to be negative. This is a mathematical
 artifact to handle discrete boundary conditions, and should be
 understood as such.](1dplanarbcneg)
 
-\medskip
+
 Had the outward direction been the positive $x$ direction, then the
 equation to impose the boundary condition would have been
 
@@ -1833,7 +1821,7 @@ $$\begin{aligned}
 &\quad\quad\quad - \frac{x_c-x_0+R\cos\theta}{\Delta x} \cdot \phi(i_0-1,j_0) - \frac{y_c-y_0+R\sin\theta}{\Delta y} \cdot \phi(i_0, j_0-1)\end{aligned}$$
 with similar equations for the other three quadrants.
 
-\medskip
+
 Note that depending on the relative location of the cell
 center $(x_0,y_0)$ and the point $(x^\star, y^\star)$, the boundary
 equation may require the flux $\phi(i_0, j_0)$ to be negative as with
@@ -1941,7 +1929,7 @@ that
 3.  All other eigenvectors either have some elements that are zero or
     have elements that differ in sign from each other
 
-\medskip
+
 The eigenvalue
 form [\[eq:multigroup-eigenvalue\]](#eq:multigroup-eigenvalue){reference-type="eqref"
 reference="eq:multigroup-eigenvalue"} is maintained for the
@@ -1994,7 +1982,7 @@ also hold for
 equation [\[eq:multigroup-eigenvalue-discrete\]](#eq:multigroup-eigenvalue-discrete){reference-type="eqref"
 reference="eq:multigroup-eigenvalue-discrete"}.
 
-\bigskip
+
 The direct storage of a matrix of size $NG \times NG$ for values of $N$
 of interest in nuclear reactor analysis is intractable with
 computational resources available nowadays[^2]. Luckily, matrices $R$
@@ -2019,7 +2007,7 @@ for solving a generalized eigenvalue problem in the form of
 equation [\[eq:multigroup-eigenvalue-discrete\]](#eq:multigroup-eigenvalue-discrete){reference-type="eqref"
 reference="eq:multigroup-eigenvalue-discrete"} ought to be used.
 
-\medskip
+
 Milonga uses the PETSc[^3] [@petsc-user-ref; @petsc-efficient] library
 to build and handle $\boldsymbol{\phi}$, $R$ and $F$, and the
 SLEPc [@Hernandez:2005:SSF; @Hernandez:2003:SSL] library to solve the
@@ -2043,7 +2031,7 @@ reference="eq:standard-eigenvalue"} stated in page , only one
 eigenvalue-eigenvector pair is the solution sought for in the neutron
 diffusion equation, this feature is particularly convenient.
 
-\medskip
+
 On the one hand, depending on the kind of physical problem being solved,
 some solution methods are more suitable than others. On the other hand,
 some methods work better---and may even not work at all---when one
@@ -2095,7 +2083,7 @@ mind
 figure [\[fig:uncertainties\]](#fig:uncertainties){reference-type="ref"
 reference="fig:uncertainties"} with this respect.
 
-\medskip
+
 SLEPc considers that the eigenvalue problem is solved whenever a certain
 residual is less than some small positive value. There are three
 possible criteria, namely absolute residual, relative residual with
@@ -2125,7 +2113,7 @@ the numerical method. Nevertheless, $\| r \|_2$ stills should give a
 measure of the distance between the real eigenvalue $\lambda$ and the
 approximate solution $\lambda$.
 
-\medskip
+
 As $\| r \|$ depends on the size of the problem, in general a finer
 discretization will lead to more iterations for the eigenvalue problem.
 To avoid this escalation, milonga uses as a measure of the convergence
@@ -2194,7 +2182,7 @@ into account. Otherwise, a correction factor to take into account
 delayed power has to be incorporated either in $P^\star$ or
 in $E\Sigma_f$.
 
-\medskip
+
 Three-dimensional reactors occupy a finite volume in space, and thus
 $P^\star$ is the reactor power, either total or fission according to the
 definition of $E\Sigma_f$. But one and two-dimensional reactors are
@@ -2205,7 +2193,7 @@ density per unit length perpendicular to the $x$-$y$ plane. Note that
 $E\Sigma_f \cdot \phi$ has units of energy $\cdot$ length$^{-3}$. Units
 consistency is expected.
 
-\medskip
+
 When a power setpoint is defined, the flux is normalized such that
 
 $$\begin{aligned}
@@ -2226,7 +2214,7 @@ the methods discussed in
 section [2.2](#sec:xs-association){reference-type="ref"
 reference="sec:xs-association"}.
 
-\medskip
+
 Note that the integrals over the spatial domain were replaced by sums by
 using
 equation [\[eq:flux-in-volumes\]](#eq:flux-in-volumes){reference-type="eqref"
@@ -2334,7 +2322,7 @@ dimensionless numbers.
 Input preparation {#cap:input}
 =================
 
-\vspace{0.5 cm plus 0.25cm minus 0.25cm}
+
 \hspace{\fill}
 \sf 
 \footnotesize
@@ -2343,7 +2331,7 @@ Art is everything else we do.
 
 *Donald Knuth, Foreword to the book "A=B", 1996*
 
-\vspace{2cm plus 0.5cm minus 0.5cm}
+
 This chapter is about imagination. It is about asking a dumb computer to
 solve a set of equations that somehow represent a nuclear reactor. And
 according to milonga's design basis, chances are that this nuclear
@@ -2357,7 +2345,7 @@ under the terms of the GNU Public License or---even better---share your
 modifications with the author to have them appended into the official
 milonga distribution.
 
-\medskip
+
 Although milonga has a lot of options that can be tweaked, it comes with
 a great deal of default values that should satisfy most needs. That is
 why input files can be either very small or arbitrary large. For
@@ -2412,7 +2400,7 @@ can be enclosed in braces '{' and '}' spanning different file lines.
 From milonga's point of view, whatever appears enclosed in braces is
 treated as belonging to the same line.
 
-\medskip
+
 The following examples illustrates the general keyword syntax:
 
 \lstset{language=mil,backgroundcolor=\color{mil_fondo},basicstyle=\footnotesize}
@@ -2425,14 +2413,14 @@ The following examples illustrates the general keyword syntax:
       KEYWORD2 "one single argument"
     }
 
-\medskip
+
 There are keywords that are common to all the packages belonging to the
 wasora suite---i.e. the common framework---and keywords that are
 specific to milonga. Special stress is given to specific keywords,
 although as some reference to common keywords is done, a basic
 explanation about the framework's features is also provided.
 
-\medskip
+
 Some information is given to milonga by giving arguments to keywords,
 and others by defining special variables to take certain values. This is
 the case for information about the problem that may either be given from
@@ -2443,7 +2431,7 @@ direction is given as a variable because this value may be part of a
 parametric study and/or needed to be used as an output or to request the
 flux distribution at the computed points to avoid interpolation.
 
-\medskip
+
 In any case, most of the parameters are entered by using algebraic
 expressions accepted by the wasora framework. These expressions are a
 combination of numeric constants, variables, functions and operators. A
@@ -2476,20 +2464,20 @@ appearing as keyword arguments, there should be no intermediate blanks
 and the whole expression should be a single token. If not, the
 expression should be enclosed in double quotes.
 
-\medskip
+
 In any location of an input file, another input file can be included
 with the keyword
 
-\medskip
+
     INCLUDE file
 
-\medskip
+
 where `file` is either a relative or absolute path. The effect is as if
 the included file was pasted right in the place where the keyword was
 inserted in the original input file. Nested inclusions, i.e. `INCLUDE`
 keywords in included files, are possible.
 
-\medskip
+
 During this chapter, optional constructions are presented as enclosed in
 square brackets '\[' and '\]'. Whenever only one of several keywords is
 to be selected, all the possible keywords are enclosed in
@@ -2498,7 +2486,7 @@ arguments are written in lowercase, and if the content and meaning is
 not explained in the surrounding paragraphs, it should be inferred by
 the context.
 
-\medskip
+
 As with the example about variables and keyword arguments above, the
 rest of this chapter contains partial examples of the usage of the
 feature being discussed. However, they are just illustrative and by no
@@ -2520,10 +2508,10 @@ is given by the primary keyword `PROBLEM`, that takes the secondary
 keywords `DIMENSIONS` and `GROUPS`. Each one takes one integer argument,
 thus defining the dimension of the problem phase space
 
-\medskip
+
     PROBLEM DIMENSIONS m GROUPS g
 
-\medskip
+
 This information is mandatory and should appear before any other of
 milonga's specific keywords. For example, to define a two-dimensional
 problem with three energy groups:
@@ -2531,18 +2519,18 @@ problem with three energy groups:
 \lstset{language=mil,backgroundcolor=\color{mil_fondo},frame=single}
     PROBLEM DIMENSIONS 2 GROUPS 3
 
-\medskip
+
 To define the geometry, you start with an $m$-dimensional bare prism and
 then you define one or more material zones inside it. This prism is
 characterized by $m$ lengths, called the bare lengths. These lengths are
 entered as three variables, one for each direction:
 
-\medskip
+
     x_bare_length
     y_bare_length
     z_bare_length
 
-\medskip
+
 For two-dimensional problems, `z_bare_length` is ignored and does not
 need to be entered. The same applies for `y_bare_length` in
 one-dimensional problems. The units of these variables are to be decided
@@ -2556,7 +2544,7 @@ non-dimensional problems, the consistency between the
 nondimensionalization of the lengths and the cross sections is up to the
 user.
 
-\medskip
+
 To define a three-dimensional bare prism from which to start defining
 the reactor geometry with a size of 100$\times$100$\times$100 of a
 certain units consistent with the cross sections, say centimeters, enter
@@ -2579,12 +2567,12 @@ nodalization. This version only supports uniformly distributed cells, so
 the number of cells in each direction has to be given. To do so, use the
 following variables:
 
-\medskip
+
     x_cells
     y_cells
     z_cells
 
-\medskip
+
 These variables should be non-dimensional integers. If any of these
 values is non-integral, it will be rounded to the nearest integer. A
 valid construction is
@@ -2609,7 +2597,7 @@ This information should be entered before the definition of the material
 zones, that is explained in
 section [3.3](#sec:zones){reference-type="ref" reference="sec:zones"}.
 
-\medskip
+
 Milonga assumes that there is a single fissionable isotope or,
 equivalently, that all the available isotopes have the same fission
 spectrum. The default fission spectrum is thermal, i.e., all the
@@ -2647,10 +2635,10 @@ the zone. Then, there may be zero or more optional secondary keywords
 with arguments that define the geometric place of the zone. There is
 also one optional secondary keyword `INCREMENTAL`.
 
-\medskip
+
     ZONE name MATERIAL mat [X_MIN expr] [X_MAX expr] [Y_MIN expr] [Y_MIN expr] [Z_MIN expr] [Z_MAX expr] [X_CENTER expr] [Y_CENTER expr] [INNER_RADIUS expr] [OUTER_RADIUS expr] [INCREMENTAL]
 
-\medskip
+
 The identification `name` should be unique for each zone. Milonga gives
 an error if two zones have the same name. The material should be one
 defined with a `MATERIAL` primary keyword
@@ -2660,7 +2648,7 @@ needed to have the material defined before the zone in the input file,
 so the material definitions can be left to the end of the file---or
 maintained in an `INCLUDE`'d file---for readability.
 
-\medskip
+
 By default, if no geometry keywords are entered, the zone spans the
 whole bare prism. Currently, only prisms with faces parallel to the bare
 prisms and circles in the $x$-$y$ plane are supported in this version.
@@ -2680,7 +2668,7 @@ If the optional keyword `INCREMENTAL` is given, then the cross sections
 of the material associated are algebraically added to whatever zones are
 existing under the new one.
 
-\medskip
+
 For example, to define one single region that spans the whole bare prism
 with a material named "fuel", write
 
@@ -2729,10 +2717,10 @@ To change from null to mirror conditions, use the primary keyword
 that define the kind of boundary condition for each axis and for each
 direction
 
-\medskip
+
     BOUNDARY_CONDITIONS [X_MIN (NULL | MIRROR)] [X_MAX (NULL | MIRROR)] [Y_MIN (NULL | MIRROR)] [Y_MAX (NULL | MIRROR)] [Z_MIN (NULL | MIRROR)] [Z_MAX (NULL | MIRROR)]
 
-\medskip
+
 The order in the input file at which the `BOUNDARY_CONDITIONS` keyword
 appears is irrelevant. If one secondary keyword is omitted, the
 corresponding boundary condition is taken as `NULL` by default. For
@@ -2808,7 +2796,7 @@ cross sections, all the $G^2$ groups combinations can be entered.
   (prompt or total) should also be consistent with the character of the
   power setpoint.
 
-\medskip
+
 Milonga uses the total macroscopic cross sections for the multigroup
 formulation [\[eq:diffusion\_multigroup\]](#eq:diffusion_multigroup){reference-type="eqref"
 reference="eq:diffusion_multigroup"}. However, lattice codes usually
@@ -2819,7 +2807,7 @@ $$\Sigma_t(g) = \Sigma_a(g) + \sum_{g^{\prime}=1}^G \Sigma_s(g \rightarrow g^\pr
 the total cross section can be computed by milonga from the absorption
 and scattering cross sections.
 
-\medskip
+
 The nuclear parameters entered should be consistent with the
 mathematical development discussed in
 section [2.1.1](#sec:multigroup){reference-type="ref"
@@ -2827,7 +2815,7 @@ reference="sec:multigroup"}. Again, it is stressed that it is the user's
 responsibility to assure that the macroscopic cross sections are as
 expected by milonga according to its multigroup formulation.
 
-\bigskip
+
 The scattering cross sections keywords are formed with two group numbers
 separated by a point. The first number is the energy group of the
 impinging neutrons and the second is the energy of the scattered
@@ -2841,7 +2829,7 @@ negative term in
 equation [\[eq:diffusion\_multigroup\]](#eq:diffusion_multigroup){reference-type="eqref"
 reference="eq:diffusion_multigroup"} and cancels out.
 
-\medskip
+
 When giving a power setpoint, the `ESigmaF` keywords should also be
 given for at least one material. This values represent the product of
 the energy released in a single fission times the macroscopic fission
@@ -2852,7 +2840,7 @@ expected both in the units and in the sense of prompt or total character
 of the fission energy and the power setpoint values as discussed in
 page .
 
-\bigskip
+
 Of course, nuclear properties may change within the same material
 because the parameters on which the cross sections depend may have
 non-trivial spatial distributions. This dependence can be taken into
@@ -2905,7 +2893,7 @@ external codes trough shared memory objects. Many interpolation methods
 for one and more dimensions are available, and further operations on
 functions such as integration or differentiation can be done.
 
-\medskip
+
 To illustrate the joint usage of the `MATERIAL` keyword with continuous
 functions, consider the following definition, where a one-dimensional
 fuel and temperature distributions are assumed and the cross sections of
@@ -2933,10 +2921,10 @@ Milonga uses special variables both for gathering information to solve
 the problem and for giving back the results to the user. The most
 important variable is called
 
-\medskip
+
     keff
 
-\medskip
+
 that contains the effective multiplication factor as obtained by solving
 the eigenvalue problem. This variable is defined when starting the
 execution and initialized to one, and its content is "filled" with the
@@ -2952,15 +2940,15 @@ was defined. For example, in
 only variable `rho2` contains the correct reactivity of the problem
 being solved, while `rho1` is equal to zero.
 
-\medskip
+
 The other output variables given by milonga are
 
-\medskip
+
     keff_error
     build_time
     solve_time
 
-\medskip
+
 The first one, `keff_error`, gives an estimation of the absolute error
 committed in the solution of the eigenvalue problem, `build_time` that
 gives the time needed to build the matrices and `solve_time` that gives
@@ -2971,14 +2959,14 @@ actual time elapsed and not to the CPU time used. They both may depend
 on how busy the operating system scheduler is, whether memory access is
 cached or swapped, etc.
 
-\medskip
+
 Information about spatial distributions are given as functions. The flux
 distribution for group $g$ is given in a function named
 
-\medskip
+
     flux_g
 
-\medskip
+
 where $g$ is supposed to be replaced by the actual group number. The
 first---usually the fast---group is number one. The functions take as
 many arguments as the spatial dimension of the problem. They are
@@ -3013,7 +3001,7 @@ section [2.4.2](#sec:power){reference-type="ref"
 reference="sec:power"}---is equal to one. Otherwise, fluxes have units
 of inverse squared length and inverse time.
 
-\medskip
+
 Even though the functions are point-wise defined, they can be evaluated
 at any point in space. For example, if there is a neutron detector
 located at $\ensuremath\mathbf{r}=(153, 241, 308)$ then its reading may
@@ -3025,18 +3013,18 @@ be assigned to a variable by
 although there may not be a cell located at that point. Details about
 function interpolation can be found in wasora documentation.
 
-\medskip
+
 Information about the resulting cell cross sections values can be
 obtained by using the functions
 
-\medskip
+
     D_g
     SigmaT_g
     SigmaA_g
     nuSigmaF_g
     ESigmaF_g
 
-\medskip
+
 They are also linear-interpolated point-wise defined functions
 containing the macroscopic cross section associated to the cell
 discussed in section [2.2](#sec:xs-association){reference-type="ref"
@@ -3044,32 +3032,32 @@ reference="sec:xs-association"}, according to the selected method as
 explained in section [3.8](#sec:scheme-settings){reference-type="ref"
 reference="sec:scheme-settings"}.
 
-\medskip
+
 There is one function named
 
-\medskip
+
     bc
 
-\medskip
+
 that is also point-wise defined that shows which cells contain boundary
 condition equations instead of the diffusion equation. It is non-zero
 only for the location of the cells that have boundary conditions
 equations. The actual value is not important, as is an internal
 identification number for each type of condition.
 
-\medskip
+
 There are five additional functions which give information about the
 actual original continuous spatial cross sections distributions, i.e.
 before the association to the discrete cells:
 
-\medskip
+
     cD
     cSigmaT
     cSigmaA
     cnuSigmaF
     cESigmaF
 
-\medskip
+
 The 'c' in the name means "continuous", and it is included because it is
 not so common to ask milonga for the continuous cross section
 distribution as having variables called `D` or `nuSigmaF`. Thus, the
@@ -3085,7 +3073,7 @@ $\ensuremath\mathbf{r}=(10.5,25.2,4.3)$ of group number 3, ask for
 They are not point-wise defined, so when using them within a
 `PRINT_FUNCTION` keyword, a range is mandatory, as explained below.
 
-\bigskip
+
 In general, one or more of these functions are part the desired output
 of milonga. This information might be passed forward to other codes for
 further calculation or might be written to files for analysis and
@@ -3097,10 +3085,10 @@ However, for completeness, a brief summary of output keywords is
 presented. In order to write information into a file, first the `FILE`
 primary keyword has to used
 
-\medskip
+
     FILE id path [STEP]
 
-\medskip
+
 The two mandatory arguments are an internal identification string and
 the actual file path, which can be either absolute or relative to the
 actual directory. If the optional secondary keyword `STEP` is given,
@@ -3110,11 +3098,11 @@ overwritten.
 
 The keywords used to print data are
 
-\medskip
+
     PRINT [FILE id] [CONDITION expr] [expr1 | TEXT string1] [expr2 | TEXT string2] [...]
     PRINT_FUNCTION [FILE id] [CONDITION expr] function1 [function2] [function3] [...] [MIN x_min [y_min [z_min]] MAX x_max [y_max [z_max]] STEP x_step [y_step [z_step]]]
 
-\medskip
+
 If no file is given, default is to write to standard output. If a
 condition is given, the argument expression is evaluated and the print
 instruction is executed only if it is nonzero. For the `PRINT` keyword,
@@ -3159,7 +3147,7 @@ two-dimensional problem, one may want to do
 \lstset{language=mil,backgroundcolor=\color{mil_fondo},frame=single}
     PRINT_FUNCTION cSigmaA_1 cnuSigmaF_2 MIN 1 0 0 MAX 1 x_bare_length y_bare_length STEP 1 0.1*x_bare_length/x_cells 0.1*y_bare_length/x_cells
 
-\medskip
+
 to obtain a representation of the absorption and nu-fission cross
 sections with a resolution of $10\times10$ grid for each cell.
 Chapter [4](#cap:examples){reference-type="ref"
@@ -3178,10 +3166,10 @@ setpoint has to be given. Also, values for $E\Sigma_f$ for at least one
 zone has to be given, in order to compute the normalization factor. The
 power setpoint is entered by means of the special variable
 
-\medskip
+
     power
 
-\medskip
+
 The units of the setpoint power given in variable `power` depend on the
 number of spatial dimensions of the problem. For three-dimensional
 cases, units are power, i.e., energy and inverse time. In two
@@ -3193,11 +3181,11 @@ in units of energy inverse time inverse squared length.
 If the `power` variable is set to a non-zero value, two functions of
 space are defined:
 
-\medskip
+
     power_density
     xenon
 
-\medskip
+
 The first one gives the power density dissipated locally at
 position $\ensuremath\mathbf{r}$ in units of energy inverse times
 inverse cubed length. As with the fluxes, this function is
@@ -3209,7 +3197,7 @@ the power peak factor, for example in one dimension:
 \lstset{language=mil,backgroundcolor=\color{mil_fondo},frame=single}
     peak = max(power_density(x), x, 0, x_bare_length)/(power/x_bare_length)
 
-\bigskip
+
 The other function is called `xenon`, and contains the steady-state
 xenon concentration distribution associated to the last computed neutron
 flux distribution, in units of inverse cubed length. To compute this
@@ -3218,14 +3206,14 @@ reference="eq:xenon"} is used. There are some defaults for the yields,
 the xenon decay constant and the number of neutrons emitted in one
 fission, but they can be changed by means of the following variables
 
-\medskip
+
     gamma_I
     gamma_Xe
     lambda_I
     lambda_Xe
     nu
 
-\medskip
+
 whose default values are
 
 \lstset{language=mil,backgroundcolor=\color{mil_fondo},frame=single}
@@ -3247,14 +3235,14 @@ poisoning works while in college or while having to develop a power
 distribution control algorithm, or to use a time unit different than
 seconds.
 
-\medskip
+
 The microscopic neutron absorption of $^{135}$Xe is entered as a vector
 of size $G$ named
 
-\medskip
+
     sigmaAXe
 
-\medskip
+
 whose individual elements can be set as with the `chi` vector. The
 default behavior is to have zero absorption for every group except for
 the last one---considered the thermal group. Assuming a two-group
@@ -3267,7 +3255,7 @@ problem, vector `sigmaAXe` is set to
 that corresponds to a value of two million barns when lengths are
 measured in centimeters.
 
-\medskip
+
 If the nuclear parameters given in the `MATERIALS` keywords do not
 depend on the xenon distribution, then the function `xenon` is only
 informative and does not need further treating. However, if---as
@@ -3282,17 +3270,17 @@ power calculation is needed, giving rise to a new xenon concentration,
 and so on. To tell milonga to make an iterative calculation, the special
 variable
 
-\medskip
+
     static_iterations
 
-\medskip
+
 has to be set to a value greater than one. The current iteration number
 can be read from the content of the special variable
 
-\medskip
+
     static_step
 
-\medskip
+
 Convergence in the sense of
 equation [\[eq:iterations\_convergence\]](#eq:iterations_convergence){reference-type="eqref"
 reference="eq:iterations_convergence"} is not checked for. The user has
@@ -3320,7 +3308,7 @@ holds:
     # set done to true if convergence is attained
     done = less(abs(keff-kold), 1e-6)
 
-\medskip
+
 When printing distributions in an iterative calculation, output files
 should be defined using the secondary keyword `STEP` to the primary
 keyword `FILE`. See the examples in the next chapter.
@@ -3371,7 +3359,7 @@ If no `SCHEME` keyword is entered, the default behavior is as if
 
 was entered. For finite differences, default is `GRAD_D_NEIGHBORS`.
 
-\medskip
+
 The value of $\epsilon$ is taken from the special variable
 
     epsilon
@@ -3389,7 +3377,7 @@ that is the relative error allowed. The default value is $10^{-2}$
 meaning 1% tolerance. The computational effort needed to build the
 problem matrices depends heavily on this parameter.
 
-\medskip
+
 Another keyword that controls the behavior of the solution is
 
 \lstset{language=mil,backgroundcolor=\color{white},frame=none}
@@ -3425,22 +3413,22 @@ interval, either linearly or exponentially.
 To define a linear parametric study, the following keyword has to be
 entered
 
-\medskip
+
     PARAMETRIC variable minimum maximum step
 
-\medskip
+
 The values `min`, `max` are the ends of the interval to be studied and
 `step` is the increment. They cannot be expressions, they have to be
 floating point constants. If there selected variable has one or more
 explicit assignments in the input file, they are ignored. For example,
 
-\medskip
+
 \lstset{language=mil,backgroundcolor=\color{mil_fondo},frame=single}
     PARAMETRIC a   1  10  1
     a = 5
     PRINT a
 
-\medskip
+
 will output the natural numbers up to ten instead of ten values of five.
 
 If more than one `PARAMETRIC` keyword is given, multidimensional studies
@@ -3453,14 +3441,14 @@ Instead of incrementing the variable with a fixed value, a
 logarithmic---or exponential, depending on the point of view---study can
 be done with
 
-\medskip
+
     PARAMETRIC_LOG variable minimum maximum step
 
-\medskip
+
 In this case, `step` is a multiplicative constant by which is multiplied
 the selected variable in each calculation.
 
-\medskip
+
 Each calculation step is independent from the previous one, i.e., the
 initial conditions of step $n+1$ are not the last conditions of
 step $n$. By default, milonga waits for the previous step to finish
@@ -3469,10 +3457,10 @@ kind of calculations are especially suitable to take advantage of
 multicore architectures by running simultaneously two or more parametric
 steps. To have milonga run in parallel, use
 
-\medskip
+
     MAX_DAUGHTERS  n
 
-\medskip
+
 The parameter `n` is an integer representing the maximum number of
 process that may be launched in parallel. If it is equal to zero, the
 number of available cores is taken. Default is one, meaning no
@@ -3484,20 +3472,20 @@ all the steps, but because of random uncertainties in the operating
 system scheduler the order of printing may not be the expected. For
 example,
 
-\medskip
+
 \lstset{language=mil,backgroundcolor=\color{mil_fondo},frame=single}
     MAX_DAUGHTERS  8
     PARAMETRIC a   0  10  1
     PARAMETRIC b   0  10  1
     PRINT a b a+b
 
-\medskip
+
 may not output the $[1,1]\times[10,10]$ square in the correct order and
 plotting utilities may complain about it. To overcome this difficulty,
 one solution is to output each line to a file and the concatenate all of
 them into a single one in the correct order. First,
 
-\medskip
+
 \lstset{language=mil,backgroundcolor=\color{mil_fondo},frame=single}
     MAX_DAUGHTERS  8
     PARAMETRIC a   0  10  1
@@ -3505,10 +3493,10 @@ them into a single one in the correct order. First,
     FILE out tmp
     PRINT FILE out a b a+b
 
-\medskip
+
 and then in the terminal
 
-\medskip
+
 \lstset{language=,backgroundcolor=\color{bash_fondo},basicstyle=\ttfamily\footnotesize}
      $ milonga square.mil
      $ cat tmp.* > output
@@ -3537,10 +3525,10 @@ or simply provide extra output.
 
 To obtain extra debug output, use the following keyword
 
-\medskip
+
     DEBUG filename [MATRICES_ASCII] [MATRICES_BINARY]
 
-\medskip
+
 The `filename` argument should be a full or relative path to the text
 file with the extra information. Variables `build_time` and `solve_time`
 are included in the debug file. If the optional secondary keyword
@@ -3551,7 +3539,7 @@ execution directory are created. They contain a binary dump of the
 matrices as created by PETSc's `PetscViewerBinaryOpen` and `MatView`
 functions, that can be accessed by using `MatLoad` [@petsc-user-ref].
 
-\medskip
+
 There is a lot of useful information about the problem being solved that
 should be dumped in the debug file. Future versions of milonga will
 include further debugging and bechmkarking options.
@@ -3565,11 +3553,11 @@ replaced in the input. If a the token `$1` is entered in the input file,
 it will be replaced by the first non-file commandline argument, `$2`
 with the next one, and so on. For example
 
-\medskip
+
 \lstset{language=mil,backgroundcolor=\color{mil_fondo},frame=single}
     PRINT $1
 
-\medskip
+
 will print whatever argument is given in the commandline after the input
 file:
 
@@ -3580,19 +3568,19 @@ file:
 
 This can be useful to provide filenames from the commandline
 
-\medskip
+
 \lstset{language=mil,backgroundcolor=\color{mil_fondo},frame=single}
     FILE output        $1
     FILE distribution  $2
 
-\medskip
+
 or to choose between several options without having to modify the input
 
-\medskip
+
 \lstset{language=mil,backgroundcolor=\color{mil_fondo},frame=single}
     SCHEME $1
 
-\medskip
+
 If less arguments than the required are provided, milonga fails with an
 error.
 
@@ -3648,10 +3636,10 @@ and, in case the result is not a number, a handler is called. What the
 code does is controlled by the following optional keyword in the input
 file
 
-\medskip
+
     ON_NAN [INFORM | BE_QUIET] [QUIT | CONTINUE]
 
-\medskip
+
 Default behavior is to print a message to the standard error output
 (`INFORM`) and quit immediately (`QUIT`), but any combination of giving
 the error or not and continuing the execution or quitting may be given.
@@ -3673,81 +3661,81 @@ report and quit. The keyword to modify this is
 
 For example,
 
-\medskip
+
 \lstset{language=mil,backgroundcolor=\color{mil_fondo},frame=single}
     PRINT 1/0
 
-\medskip
+
 gives
 
-\medskip
+
 \lstset{language=,backgroundcolor=\color{bash_fondo},basicstyle=\ttfamily\footnotesize}
     error: NaN found
 
-\medskip
+
 while
 
-\medskip
+
 \lstset{language=mil,backgroundcolor=\color{mil_fondo},frame=single}
     ON_NAN CONTINUE BE_QUIET
     PRINT 1/0
 
-\medskip
+
 results in
 
 \lstset{language=,backgroundcolor=\color{bash_fondo},basicstyle=\ttfamily\footnotesize}
     inf
 
-\medskip
+
 In the same sense, for example if a zone with a diffusion coefficient
 equal to zero is entered, probably PETSc will complain through milonga
 with something like
 
-\medskip
+
 \lstset{language=,backgroundcolor=\color{bash_fondo},basicstyle=\ttfamily\footnotesize}
     error: PETSc error 71-1 'Zero pivot row 99 value 3.20577e-15 tolerance 1e-12' in src/mat/impls/aij/seq/aijfact.c MatLUFactorNumeric_SeqAIJ:574
 
-\medskip
+
 Note that the keywords `ON_` define the overall behavior. They do not
 work in a by-block basis. The last keyword entered is how the code will
 behave for the whole input. For example
 
-\medskip
+
 \lstset{language=mil,backgroundcolor=\color{mil_fondo},frame=single}
     ON_NAN CONTINUE BE_QUIET
     PRINT 1/0
     ON_NAN INFORM
     PRINT sqrt(-1)
 
-\medskip
+
 gives
 
-\medskip
+
 \lstset{language=,backgroundcolor=\color{bash_fondo},basicstyle=\ttfamily\footnotesize}
     error: NaN found
     inf
     error: NaN found
     0.000000e+00
 
-\medskip
+
 i.e. as if
 
-\medskip
+
 \lstset{language=mil,backgroundcolor=\color{mil_fondo},frame=single}
     ON_NAN CONTINUE INFORM
     PRINT 1/0
     PRINT sqrt(-1)
 
-\medskip
+
 was entered. A final example illustrating `ON_GSL_ERROR`:
 
-\medskip
+
 \lstset{language=mil,backgroundcolor=\color{mil_fondo},frame=single}
     ON_GSL_ERROR INFORM   QUIT
     PRINT integral(1/(x-1),x,0,1.5)
 
-\medskip
-\medskip
+
+
 \lstset{language=,backgroundcolor=\color{bash_fondo},basicstyle=\ttfamily\footnotesize}
     error: gsl error 21 'bad integrand behavior found in the integration interval' in qag.c
 
@@ -3755,7 +3743,7 @@ was entered. A final example illustrating `ON_GSL_ERROR`:
 Examples {#cap:examples}
 ========
 
-\vspace{0.5 cm plus 0.25cm minus 0.25cm}
+
 \hspace{\fill}
 \sf 
 \footnotesize
@@ -3767,7 +3755,7 @@ ando buscando una mina\
 
 *Retintín (milonga), 1918*
 
-\vspace{2cm plus 0.5cm minus 0.5cm}
+
 Not only do these examples show what kind of problems can be tackled by
 milonga, but also---and more important---how to solve them. To obtain
 the most from this chapter, a thorough comprehension of
@@ -3793,7 +3781,7 @@ of the problem conditions. Thus, most of the cases are
 one-dimensional---except those that illustrate how to manage higher
 dimensions problems---in order to avoid introducing extra complications.
 
-\medskip
+
 The output information and figures that conform the result of the
 problems solved in this chapter were generated automatically from a
 series of scripts. Therefore, all the examples have the same structure.
@@ -3815,8 +3803,8 @@ examples. The commands shown in the sample terminal outputs should be
 reproducible using the provided files. Feedback about these examples or
 other desired test cases are welcome.
 
-\medskip
-\medskip
+
+
 Enough chitchat. It is time to *milonguear*!
 
 Cases with analytical solutions
@@ -6532,7 +6520,7 @@ task a nuclear engineer may have to perform and, as such, this is the
 last section of the examples chapter. In these cases, the input files
 may get rather cumbersome.
 
-\medskip
+
 There are a number of ways of passing information from one process to
 another, being the most straightforward---but also the most
 inefficient---writing and reading from plain files. Modern operating
@@ -6577,7 +6565,7 @@ and [@dypra2011]. As RELAP5CPL uses a coupling mechanism compatible with
 milonga, it can be used to perform neutronic-thermalhydraulic
 calculations.
 
-\medskip
+
 The problem selected to serve as an example of a coupled calculation is
 a simple one-dimensional model both in the thermalhydraulic and in the
 neutronic problem. The RELAP input---that is not shown---models a single
@@ -7068,7 +7056,7 @@ converging to the final solution.
 Installation and execution
 ==========================
 
-\vspace{0.5 cm plus 0.25cm minus 0.25cm}
+
 \hspace{\fill}
 \sf 
 \footnotesize
@@ -7076,10 +7064,10 @@ Part of the inhumanity of the computer is that, once it is\
 competently programmed and working smoothly,\
 it is completely honest.
 
-\vspace{0.25cm}
+
 *Isaac Asimov, Change!, 1983*
 
-\vspace{2cm plus 0.5cm minus 0.5cm}
+
 This chapter gives instructions to perform what should be a one-time
 only procedure, namely to compile and install milonga and its required
 libraries from scratch. This is the reason why it comes at last: to
@@ -7100,7 +7088,7 @@ instructions given in
 section [5.3](#sec:detailed-installation){reference-type="ref"
 reference="sec:detailed-installation"} to make the most out of milonga.
 
-\bigskip
+
 Milonga is a computer code that instructs a digital computer to perform
 certain mathematical operations in order to obtain some results. One
 question arises about the type of computers the code should instruct.
@@ -7133,7 +7121,7 @@ reference="sec:basis"}. Thus, even though GNU/Linux is selected as the
 development platform, the code is expected to run into other operating
 systems and architectures of interest.
 
-\medskip
+
 Feedback about installation and executing issues---either positive or
 negative---is welcome.
 
@@ -7203,7 +7191,7 @@ applied to other UNIX variants and even Cygwin distributions where
 milonga is known to compile and run, although no comprehensive testing
 was made on these platforms.
 
-\medskip
+
 The list of commands provided in the following sections should do the
 trick in a reasonable working GNU/Linux box, i.e. bash, ability to
 compile programs and internet access are assumed. If no internet
@@ -7432,7 +7420,7 @@ reference="sec:compiling-milonga"}). Or, easier, call your system
 administrator and kindly ask her to install `libgsl0-dev` from the
 distribution repository.
 
-\medskip
+
 GSL is distributed under the terms of the GNU General Public
 License [@gpl].
 
@@ -7443,7 +7431,7 @@ structures and routines for the scalable (parallel) solution of
 scientific applications modeled by partial differential equations. It
 employs the MPI standard for parallelism.
 
-\medskip
+
 Milonga uses it as an efficient handler of large sparse matrices.
 Current version of milonga does not use any of the parallelization
 mechanisms provided. At least version 3.1 is needed. Even though most
@@ -7534,7 +7522,7 @@ configuration. If no Fortran compiler is available,
 download, compile and use a BLAS+LAPACK version converted from Fortran
 to C using `f2c`.
 
-\medskip
+
 To compile SLEPc and milonga, two environment variables have to be set.
 The first one is `PETSC_DIR` and should contain the directory where
 PETSc was uncompressed. It can be easily set by executing
@@ -7571,7 +7559,7 @@ and then set `PETSC_ARCH` to the appropriate value
      $ export PETSC_ARCH=linux-gnu-opt
      $
 
-\medskip
+
 PETSs is released under a free license developed by the University of
 Chicago [@petsc-license].
 
@@ -7672,7 +7660,7 @@ compute the surface integrals of the diffusion coefficients. As cubature
 is a small routine, it is incorporated into milonga as another source
 file so actually no installation is needed.
 
-\medskip
+
 Cubature is released under the terms of the GNU General Public License
 v2 or later [@gpl].
 
@@ -7815,7 +7803,7 @@ definition for the text editor kate.
 ![[\[fig:kate\]]{#fig:kate label="fig:kate"} Syntax highlight in editor
 kate for milonga input files.](kate)
 
-\medskip
+
 To have kate understand milonga's input file, copy `milonga.xml`
 (located in subdirectory `doc`) to katepart's syntax directory. You may
 have to create the directory if it does not exist:
@@ -7837,7 +7825,7 @@ reference="fig:kate"}.
 \thispagestyle{empty}
  
 
-\vspace{\fill}
+
 \
 \
 
