@@ -172,10 +172,10 @@ int diffusion_volumes_matrices_build(void) {
           for (g_prime = 0; g_prime < milonga.groups; g_prime++) {
             xi = gsl_vector_get(wasora_value_ptr(milonga.vectors.chi), g) * diffusion_volumes_cell_integral(cell, material_xs->nuSigmaF[g_prime]);
             if (isnan(xi)) {
-              wasora_push_error_message("NaN found when computing fission term for group %d at cell %d (element %d)", g+1, cell->id, cell->element->id);
+              wasora_push_error_message("NaN found when computing fission term for group %d at cell %d (element %d)", g+1, cell->id, cell->element->tag);
               return WASORA_RUNTIME_ERROR;
             } else if (xi < 0) {
-              wasora_push_error_message("negative fission term for group %d at cell %d (element %d)", g+1, cell->id, cell->element->id);
+              wasora_push_error_message("negative fission term for group %d at cell %d (element %d)", g+1, cell->id, cell->element->tag);
               return WASORA_RUNTIME_ERROR;
             }
             if (xi != 0) {
@@ -225,15 +225,15 @@ int diffusion_volumes_matrices_build(void) {
 
                 // si no son del mismo material hay que hacer las cuentas para conservar la corriente
                 if (cell->neighbor[j].cell->element->physical_entity == NULL) {
-                  wasora_push_error_message("missing a physical entity for element %d'", cell->neighbor[j].cell->element->id);
+                  wasora_push_error_message("missing a physical entity for element %d'", cell->neighbor[j].cell->element->tag);
                   return WASORA_RUNTIME_ERROR;
                 }
                 if (cell->neighbor[j].cell->element->physical_entity->material == NULL) {
-                  wasora_push_error_message("missing a material for element %d", cell->neighbor[j].cell->element->id);
+                  wasora_push_error_message("missing a material for element %d", cell->neighbor[j].cell->element->tag);
                   return WASORA_RUNTIME_ERROR;
                 }
                 if ((neighbor_xs = (xs_t *)cell->neighbor[j].cell->element->physical_entity->material->ext) == NULL) {
-                  wasora_push_error_message("wrong XS set for element %d", cell->neighbor[j].cell->element->id);
+                  wasora_push_error_message("wrong XS set for element %d", cell->neighbor[j].cell->element->tag);
                   return WASORA_RUNTIME_ERROR;
                 }
                 
@@ -267,7 +267,7 @@ int diffusion_volumes_matrices_build(void) {
             }
 
             if (isnan(xi)) {
-              wasora_push_error_message("NaN found when computing leakage term for group %d at cell %d (element %d)", g+1, cell->id, cell->element->id);
+              wasora_push_error_message("NaN found when computing leakage term for group %d at cell %d (element %d)", g+1, cell->id, cell->element->tag);
               return WASORA_RUNTIME_ERROR;
             }
             if (xi != 0) {
@@ -318,7 +318,7 @@ int diffusion_volumes_matrices_build(void) {
                        / mesh_subtract_squared_module(cell->neighbor[j].x_ij, cell->x);
 
                 if (isnan(xi)) {
-                  wasora_push_error_message("NaN found when computing boundary term for group %d at cell %d (element %d)", g+1, cell->id, cell->element->id);
+                  wasora_push_error_message("NaN found when computing boundary term for group %d at cell %d (element %d)", g+1, cell->id, cell->element->tag);
                   return WASORA_RUNTIME_ERROR;
                 }
                 MatSetValue(milonga.R, cell->index[g], cell->index[g], +xi, ADD_VALUES);

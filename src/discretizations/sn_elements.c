@@ -282,10 +282,10 @@ int sn_elements_build_elemental_objects(element_t *element) {
   
 
   if (element->physical_entity == NULL) {
-    wasora_push_error_message("element %d needs a physical entity", element->id);
+    wasora_push_error_message("element %d needs a physical entity", element->tag);
     PetscFunctionReturn(WASORA_RUNTIME_ERROR);
   } else if (element->physical_entity->material == NULL) {
-    wasora_push_error_message("physical entity %d needs a material", element->physical_entity->id);
+    wasora_push_error_message("physical entity '%s' needs a material", element->physical_entity->material);
     PetscFunctionReturn(WASORA_RUNTIME_ERROR);
   }
 
@@ -595,7 +595,7 @@ int sn_elements_compute_outward_normal(element_t *surface_element, double *outwa
   PetscFunctionBegin;
 
   if ((volumetric_neighbor = mesh_find_element_volumetric_neighbor(surface_element)) == NULL) {
-    wasora_push_error_message("cannot find any volumetric neighbor for surface element %d", surface_element->id);
+    wasora_push_error_message("cannot find any volumetric neighbor for surface element %d", surface_element->tag);
     PetscFunctionReturn(WASORA_RUNTIME_ERROR);
   }
 
@@ -664,7 +664,7 @@ int sn_elements_add_vacuum_bc(node_t *node, double *outward_normal) {
         indexes_vacuum = realloc(indexes_vacuum, current_size_vacuum * sizeof(int));
       }
 
-      petsc_call(PetscMemcpy(indexes_vacuum+k_vacuum, node->index+dof_index(n,0), milonga.groups * sizeof(int)));
+      petsc_call(PetscMemcpy(indexes_vacuum+k_vacuum, node->index_dof+dof_index(n,0), milonga.groups * sizeof(int)));
       k_vacuum += milonga.groups;
     }
   }
@@ -697,7 +697,7 @@ int sn_elements_add_mirror_bc(node_t *node, double *outward_normal) {
         }
       }
       if (n_refl == milonga.directions) {
-        wasora_push_error_message("cannot find a reflected direction for n=%d in node %d", n, node->id);
+        wasora_push_error_message("cannot find a reflected direction for n=%d in node %d", n, node->tag);
         PetscFunctionReturn(WASORA_RUNTIME_ERROR);
       }
 
@@ -707,8 +707,8 @@ int sn_elements_add_mirror_bc(node_t *node, double *outward_normal) {
         indexes_mirror = realloc(indexes_mirror, current_size_mirror * sizeof(int));
         indexes_mirror_reflected = realloc(indexes_mirror_reflected, current_size_mirror * sizeof(int));
       }
-      petsc_call(PetscMemcpy(indexes_mirror          +k_mirror, node->index+dof_index(n,0),      milonga.groups * sizeof(int)));
-      petsc_call(PetscMemcpy(indexes_mirror_reflected+k_mirror, node->index+dof_index(n_refl,0), milonga.groups * sizeof(int)));
+      petsc_call(PetscMemcpy(indexes_mirror          +k_mirror, node->index_dof+dof_index(n,0),      milonga.groups * sizeof(int)));
+      petsc_call(PetscMemcpy(indexes_mirror_reflected+k_mirror, node->index_dof+dof_index(n_refl,0), milonga.groups * sizeof(int)));
       k_mirror += milonga.groups;
     }
   }
@@ -731,7 +731,7 @@ int sn_elements_results_fill_flux(void) {
     for (g = 0; g < milonga.groups; g++) {
       milonga.functions.phi[g]->data_value[k] = 0;
       for (n = 0; n < milonga.directions; n++) {
-        VecGetValues(milonga.phi, 1, &wasora_mesh.main_mesh->node[k].index[dof_index(n,g)], &milonga.functions.psi[n][g]->data_value[k]);
+        VecGetValues(milonga.phi, 1, &wasora_mesh.main_mesh->node[k].index_dof[dof_index(n,g)], &milonga.functions.psi[n][g]->data_value[k]);
         milonga.functions.phi[g]->data_value[k] += w[n] * milonga.functions.psi[n][g]->data_value[k];
       }
     }
@@ -771,7 +771,7 @@ int sn_elements_normalize_flux(void) {
     for (i = 0; i < wasora_mesh.main_mesh->n_elements; i++) {
       if (wasora_mesh.main_mesh->element[i].type->dim == wasora_mesh.main_mesh->bulk_dimensions) {
         if ((xs = (xs_t *)wasora_mesh.main_mesh->element[i].physical_entity->material->ext) == NULL) {
-          wasora_push_error_message("physical entity %d needs a material", wasora_mesh.main_mesh->cell[i].element->physical_entity->id);
+          wasora_push_error_message("physical entity '%s' needs a material", wasora_mesh.main_mesh->cell[i].element->physical_entity->name);
           PetscFunctionReturn(WASORA_RUNTIME_ERROR);
         }
 

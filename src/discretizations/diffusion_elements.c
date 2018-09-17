@@ -251,14 +251,14 @@ int diffusion_elements_build_volume_objects(element_t *element) {
       if (nullflux) {
         for (g = 0; g < milonga.groups; g++) {
           // phi = 0
-          MatSetValue(milonga.R, element->node[j]->index[g], element->node[j]->index[g], 1.0, ADD_VALUES);
+          MatSetValue(milonga.R, element->node[j]->index_dof[g], element->node[j]->index_dof[g], 1.0, ADD_VALUES);
         }
       }
     }
   } else {
     
     if (element->physical_entity->material == NULL) {
-      wasora_push_error_message("physical entity %d needs a material", element->physical_entity->id);
+      wasora_push_error_message("physical entity '%s' needs a material", element->physical_entity->name);
       return WASORA_RUNTIME_ERROR;
     }
 
@@ -459,10 +459,10 @@ int diffusion_elements_set_essential_bc(void) {
       if (wasora_mesh.main_mesh->element[i].physical_entity == NULL || wasora_mesh.main_mesh->element[i].physical_entity->bc_type_phys == BC_NULL) {
         for (j = 0; j < wasora_mesh.main_mesh->element[i].type->nodes; j++) {
           if (milonga.has_fission) {
-            MatZeroRows(milonga.F, milonga.groups, wasora_mesh.main_mesh->element[i].node[j]->index, 0.0, PETSC_NULL, PETSC_NULL);
+            MatZeroRows(milonga.F, milonga.groups, wasora_mesh.main_mesh->element[i].node[j]->index_dof, 0.0, PETSC_NULL, PETSC_NULL);
           }
-          MatZeroRows(milonga.R, milonga.groups, wasora_mesh.main_mesh->element[i].node[j]->index, 1.0, PETSC_NULL, PETSC_NULL);
-          VecSetValues(milonga.S, milonga.groups, wasora_mesh.main_mesh->element[i].node[j]->index, gzeros, INSERT_VALUES);
+          MatZeroRows(milonga.R, milonga.groups, wasora_mesh.main_mesh->element[i].node[j]->index_dof, 1.0, PETSC_NULL, PETSC_NULL);
+          VecSetValues(milonga.S, milonga.groups, wasora_mesh.main_mesh->element[i].node[j]->index_dof, gzeros, INSERT_VALUES);
         }
       }
     }
@@ -482,7 +482,7 @@ int diffusion_elements_results_fill_flux(void) {
   // rellenamos las funciones de los flujos con lo que dio PETSc
   for (k = 0; k < wasora_mesh.main_mesh->n_nodes; k++) {
     for (g = 0; g < milonga.groups; g++) {
-      VecGetValues(milonga.phi, 1, &wasora_mesh.main_mesh->node[k].index[g], &milonga.functions.phi[g]->data_value[k]);
+      VecGetValues(milonga.phi, 1, &wasora_mesh.main_mesh->node[k].index_dof[g], &milonga.functions.phi[g]->data_value[k]);
     }
   }
   
@@ -518,7 +518,7 @@ int diffusion_elements_normalize_flux(void) {
     for (i = 0; i < wasora_mesh.main_mesh->n_elements; i++) {
       if (wasora_mesh.main_mesh->element[i].type != NULL && wasora_mesh.main_mesh->element[i].type->dim == wasora_mesh.main_mesh->bulk_dimensions && wasora_mesh.main_mesh->element[i].physical_entity != NULL) {
         if ((xs = (xs_t *)wasora_mesh.main_mesh->element[i].physical_entity->material->ext) == NULL) {
-          wasora_push_error_message("physical entity %d needs a material", wasora_mesh.main_mesh->cell[i].element->physical_entity->id);
+          wasora_push_error_message("physical entity '%s' needs a material", wasora_mesh.main_mesh->cell[i].element->physical_entity->name);
           return WASORA_RUNTIME_ERROR;
         }
 
