@@ -24,14 +24,19 @@ cat 2dpwr-table.md
 i=0
 for m in structured unstructured; do
   for s in volumes elements; do
-    i=$(($i+1))
     runmilonga 2dpwr.mil $m $s | tee -a 2dpwr-table.md
 
+    i=$(($i+1))
+    if [ "$m" == "structured" ]; then
+      with="l lw $i"
+    else
+      with="p pt 37+2*$i ps 0.5"
+    fi
     cat << EOF > 2dpwr-$m-$s.gp
 set ticslevel 0
 set view 30,70-10*$i
 unset key
-splot "2dpwr-$m-$s-3.dat" u 1:2:3 w p pt 37+2*$i ps 0.5 palette
+splot "2dpwr-$m-$s-3.dat" u 1:2:3 w $with palette
 EOF
     plot 2dpwr-$m-$s svg
   done
