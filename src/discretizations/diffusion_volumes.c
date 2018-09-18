@@ -293,7 +293,7 @@ int diffusion_volumes_matrices_build(void) {
                 bc_args = cell->neighbor[j].element->physical_entity->bc_args;
               }
             } else {
-              for (physical_entity = wasora_mesh.main_mesh->physical_entities_by_name; physical_entity != NULL; physical_entity = physical_entity->hh.next) {
+              for (physical_entity = wasora_mesh.main_mesh->physical_entities; physical_entity != NULL; physical_entity = physical_entity->hh.next) {
                 if ((physical_entity->struct_bc_direction-1) == j) {
                   bc_type = physical_entity->bc_type_phys;
                   bc_args = physical_entity->bc_args;
