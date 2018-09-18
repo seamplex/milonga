@@ -35,4 +35,4 @@ kdiff = nuSigmaF(0)/((SigmaT(0)-SigmaS(0))+D(0)*(pi/a)^2)
 PRINT_FUNCTION phi1 HEADER
 PRINT TEXT "\# keff       = " %.8f keff
 PRINT TEXT "\# kdiff      = " %.8f kdiff
-PRINT TEXT "\# rel error = " %+.2e (keff-kanalytical)/keff
+PRINT TEXT "\# rel error = " %+.2e (keff-kdiff)/keff

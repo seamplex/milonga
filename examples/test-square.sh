@@ -1,34 +1,64 @@
 #!/bin/bash
-# solve a one-dimensional slab with different schemes
+# solve a two-dimensional square
 
 . locateruntest.sh
 
-runmilonga square.mil structured   --volumes  > square-struct-vol.dat
-mv square_out.msh square-struct-vol.msh
-mv square.vtk square-struct-vol.vtk
-# callgmsh square-struct-vol.msh
+rm -f square-*.dat square.gp square.svg square-*.png square-*.geo square.html
 
-runmilonga square.mil structured   --elements > square-struct-ele.dat
-mv square_out.msh square-struct-ele.msh
-mv square.vtk square-struct-ele.vtk
-# callgmsh square-struct-ele.msh
+runmilonga square.mil --volumes | tee square-fvm.dat
+mv square_phi.msh square-fvm.msh
+mv square_phi.vtk square-fvm.vtk
 
-runmilonga square.mil unstructured --volumes  > square-unstruct-vol.dat
-mv square_out.msh square-unstruct-vol.msh
-mv square.vtk square-unstruct-vol.vtk
-# callgmsh square-unstruct-vol.msh
+runmilonga square.mil --elements | tee square-fem.dat
+mv square_phi.msh square-fem.msh
+mv square_phi.vtk square-fem.vtk
 
-runmilonga square.mil unstructured --elements > square-unstruct-ele.dat
-mv square_out.msh square-unstruct-ele.msh
-mv square.vtk square-unstruct-ele.vtk
-# callgmsh square-unstruct-ele.msh
+cat << EOF > square.gp
+set title "Two square solutions a-la-milonga"
+set ticslevel 0
+splot "square-fvm.dat", "square-fem.dat"
+EOF
+plot square svg
 
-# plot "set title 'five square solutions'; \
-#       set ticslevel 0; \
-#       splot 'square-struct-vol.dat'   w lp pt 2 palette, \
-#             'square-struct-ele.dat'   w lp pt 4 palette,\
-#             'square-unstruct-vol.dat' w p pt 5 palette,\
-#             'square-unstruct-ele.dat' w p pt 6 palette,\
-#             (pi/2)**2*sin(pi*x/100)*sin(pi*y/100) w l palette"
+if [ ! -z "`which gmsh`" ]; then
+  for i in fvm fem; do
+    cat << EOF > square-$i.geo
+Merge "square-$i.msh";
+General.SmallAxes = 0;
+Print "square-$i.png";
+Exit;
+EOF
+    gmsh square-$i.geo
+    convert -trim square-$i.png square-$i.png
+  done
+fi
+
+cat << EOF > square.md
+% FEM vs. FVM
+
+A bare square solved with [milonga](https://www.seamplex.com):
+
+![Flux map computed with finite volumes](square-fvm.png)
+
+![Flux map computed with finite elements](square-fem.png)
+
+![Both solutions as $\phi(x,y)$](square.svg)
+
+# Terminal mimic
+
+Here is the input and the commandline used to run the case:
+
+~~~
+$ cat square.mil
+`cat square.mil`
+$ milonga square.mil
+~~~
+
+
+EOF
+if [ ! -z "`which pandoc`" ]; then
+  pandoc -s square.md -o square.html
+  xdg-open square.html
+fi
 
 exit 0

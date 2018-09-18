@@ -12,8 +12,8 @@ EXTRA_DIST = src/version.sh locateruntest.sh examples \
 
 TESTS = examples/test-slab.sh \
         examples/test-square.sh \
-        examples/test-2dpwr.sh \
-        examples/test-3dshapes.sh
+        examples/test-2dpwr.sh
+#         examples/test-3dshapes.sh
 #         examples/test-3dpwr-struct.sh
 
 all-local:

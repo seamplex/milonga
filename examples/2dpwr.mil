@@ -50,13 +50,24 @@ power = 17700
 # finally ask milonga to solve the eigenvalue problem
 MILONGA_STEP
 
-# report the keff
-PRINT SEP " " TEXT "keff = " %.10f keff  " ( $1 $2, lc = " %g lc ", " unknowns TEXT "x" unknowns ", " %.2f time_cpu_ini time_cpu_build time_cpu_solve " secs )"
+# compute location of maximum thermal flux
+VAR phi_max x_max y_max
+MESH_FIND_MAX FUNCTION phi2 MAX phi_max X_MAX x_max Y_MAX y_max
+
+# write a row of a gfm table
+PRINT SEP " | " {
+ TEXT $1
+ TEXT $2
+ %g    unknowns
+ %.5f keff
+ %.1f  phi_max
+ %.2f  x_max
+       y_max
+ %.2f  time_cpu_total
+ %.1f  memory_usage_global/1e6
+}
 
 # give some information in a markdown-formatted text file
-# convert it to other useful formats with pandoc:
-# $ pandoc 2dpwr.txt -o 2dpwr.pdf
-# $ pandoc 2dpwr.txt -o 2dpwr.html
 MILONGA_DEBUG FILE_PATH 2dpwr-$1-$2-$3.txt
 
 # gmsh & vtk postprocessing (in background)
@@ -66,17 +77,12 @@ MESH_POST FILE_PATH 2dpwr-$1-$2-$3.vtk phi1 phi2 pow
 # SHELL "gmsh 2dpwr-$1-$2-$3.msh &"
 
 # and gnuplot with the power
-PRINT_FUNCTION FILE_PATH 2dpwr-$1-$2-$3.dat pow phi2 phi1
-# SHELL "if [ ! -z `which gnuplot` ]; then gnuplot -p -e \"splot '2dpwr-$1-$2-$3.dat' u 1:2:3 palette\"; fi &"
+PRINT_FUNCTION FILE_PATH 2dpwr-$1-$2-$3.dat pow phi1 phi2
 
 # dump the matrices in sng format, convert them to png with
 # 
 # $ sng *.sng
 #MILONGA_DEBUG FILE_PATH 2dpwr-$1-$2-$3 MATRICES_SNG MATRICES_SNG_STRUCT
-
-VAR phi_max x_max y_max
-MESH_FIND_MAX FUNCTION phi2 MAX phi_max X_MAX x_max Y_MAX y_max
-PRINT SEP " " TEXT "        max thermal flux " %.1f phi_max TEXT "located at ( x =" %.2f x_max TEXT ", y =" y_max TEXT ")"
 
 # -----8<----- milonga's solution ends here -----8<-----
 

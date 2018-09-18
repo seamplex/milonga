@@ -35,6 +35,6 @@ kdiff = nuSigmaF(0)/((SigmaT(0)-SigmaS(0))+D(0)*(pi/a)^2)
 
 # write the results into the standard output
 PRINT_FUNCTION phi1 HEADER
-PRINT TEXT "\# keff       = " %.8f keff
-PRINT TEXT "\# analytical = " %.8f kdiff
+PRINT TEXT "\# keff      = " %.8f keff
+PRINT TEXT "\# kdiff     = " %.8f kdiff
 PRINT TEXT "\# rel error = " %+.2e (keff-kdiff)/keff

@@ -15,11 +15,17 @@ runmilonga slab.mil structured   --elements > slab-struct-ele2.dat
 runmilonga slab.mil unstructured --volumes  > slab-unstruct-vol2.dat
 runmilonga slab.mil unstructured --elements > slab-unstruct-ele2.dat
 
-plot "set title 'five slab solutions'; \
-      plot 'slab-struct-vol.dat'   w p pt 2 lt 1, \
-           'slab-struct-ele.dat'   w p pt 4 lt 2,\
-           'slab-unstruct-vol.dat' w p pt 5 lt 3,\
-           'slab-unstruct-ele.dat' w p pt 6 lt 4,\
-           pi/2*sin(pi*x/(100)) w l lt 7"
-
+cat << EOF > slab.gp
+set title "Five slab solutions a-la-milonga"
+set key above
+set grid
+a = 2*10.371065
+set xrange [0:a]
+plot 'slab-struct-vol.dat'   w p pt 2 lt 1,\
+     'slab-struct-ele.dat'   w p pt 4 lt 2,\
+     'slab-unstruct-vol.dat' w p pt 5 lt 3,\
+     'slab-unstruct-ele.dat' w p pt 6 lt 4,\
+     pi/2*sin(pi*x/a) w l lt 7
+EOF
+plot slab pdf show
 exit 0

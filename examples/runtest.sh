@@ -24,15 +24,19 @@ function runmilonga {
 
 # calls gnuplot with the provided command if it is installed
 function plot {
+ if [ ! -z "$2" ]; then
+   format=$2
+ else
+   format=svg
+ fi
+ rm -f $1.$format
+#  if [ "x`which pyxplot`" != "x" ]; then
+#    echo "set terminal pdf; set output \"$1.$format\"" | pyxplot - $1.gp
  if [ "x`which gnuplot`" != "x" ]; then
-  if [ "x`uname | cut -c-6`" = "xCYGWIN" ]; then
-   if [ "x`ps -e | grep X | wc -l`" = "x0" ]; then
-    XWin.exe -multiwindow -clipboard -silent-dup-error > /dev/null &
-    sleep 2
-   fi
-   export DISPLAY=:0.0
-  fi
-  gnuplot -p -e "$1"
+   gnuplot -e "set terminal $format; set output \"$1.$format\"" $1.gp
+ fi
+ if [[ ! -z "$3" ]] && [[ -e $1.$format ]]; then
+   xdg-open $1.$format
  fi
 }
 

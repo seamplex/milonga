@@ -9,30 +9,59 @@ checkm4
 
 # TODO: fix this!
 if [ ! -e 2dpwr.geo.m4 ]; then
- cded=1
- cd examples
- milongabin="../milonga"
- testdir="./"
+  cded=1
+  cd examples
+  milongabin="../milonga"
+  testdir="./"
 fi
 
-runmilonga 2dpwr.mil structured    volumes
-# callgmsh 2dpwr-structured-volumes-3.msh
+cat << EOF > 2dpwr-table.md
+| Grid | Scheme | Matrix size | \$k_\\text{eff}\$ | \$\\max \\phi_2\$ | \$x\$ | \$y\$ | CPU [s] | Memory [Mb] |
+| -----| ------ | ----------- | ----------------- | ----------------- | ----- | ----- | ------- | ----------- |
+EOF
 
-runmilonga 2dpwr.mil structured    elements
-# callgmsh 2dpwr-structured-elements-3.msh
+cat 2dpwr-table.md
+i=0
+for m in structured unstructured; do
+  for s in volumes elements; do
+    i=$(($i+1))
+    runmilonga 2dpwr.mil $m $s | tee -a 2dpwr-table.md
 
-runmilonga 2dpwr.mil unstructured  volumes
-# callgmsh 2dpwr-unstructured-volumes-3.msh
+    cat << EOF > 2dpwr-$m-$s.gp
+set ticslevel 0
+set view 30,70-10*$i
+unset key
+splot "2dpwr-$m-$s-3.dat" u 1:2:3 w p pt 37+2*$i ps 0.5 palette
+EOF
+    plot 2dpwr-$m-$s svg
+  done
+done
 
-runmilonga 2dpwr.mil unstructured  elements
-# callgmsh 2dpwr-unstructured-elements-3.msh
+cat << EOF > 2dpwr.md
+% IAEA 2D PWR Benchmark
 
-plot "set title 'five 2D PWR solutions'; \
-      set ticslevel 0; \
-      splot '2dpwr-structured-volumes-3.dat'   u 1:2:5 w lp pt 2 palette, \
-            '2dpwr-structured-elements-3.dat'  u 1:2:5 w lp pt 3 palette,\
-            '2dpwr-unstructured-volumes-3.dat' u 1:2:5 w p pt 5 palette,\
-            '2dpwr-unstructured-elements-3.dat'u 1:2:5 w p pt 6 palette"
+# Multiplication factor and maximum flux
+
+EOF
+cat 2dpwr-table.md >> 2dpwr.md
+
+for m in structured unstructured; do
+  for s in volumes elements; do
+  cat << EOF >> 2dpwr.md
+  
+
+## Power in $m $s
+
+![](2dpwr-$m-$s.svg)
+
+EOF
+  done
+done
+
+if [ ! -z "`which pandoc`" ]; then
+  pandoc --number-sections -s 2dpwr.md -o 2dpwr.html
+  xdg-open 2dpwr.html
+fi
 
 if [ ! -z "$cded" ]; then
  cd ..
