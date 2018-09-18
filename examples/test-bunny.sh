@@ -1,16 +1,16 @@
 #!/bin/bash
-# solve a one-dimensional slab with different schemes
+# solves the critical stanford bunny
 
 . locateruntest.sh
 
 checkgmsh
 
-for i in cube cylinder sphere bunny; do
- runmilonga 3dshape.mil $i | tee $i.dat
+for i in cube cylinder sphere torus bunny; do
+ runmilonga 3dshape.mil $i > $i.dat
 done
 
-cat << EOF > bunny_phi.geo
-Merge "bunny_phi.msh";
+cat << EOF > bunny-base.msh
+Merge "bunny_out.msh";
 General.Clip0A = 0;
 General.Clip0B = +1;
 General.ClipWholeElements = 1;
@@ -25,6 +25,6 @@ Mesh.SurfaceEdges = 0;
 Mesh.VolumeEdges = 0;
 EOF
 
-callgmsh bunny_phi.geo
+callgmsh bunny-base.msh
 
 exit 0

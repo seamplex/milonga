@@ -38,9 +38,9 @@ cat << EOF > square.md
 
 A bare square solved with [milonga](https://www.seamplex.com):
 
-![Flux map computed with finite volumes](square-fvm.png)
+![The flux distribution computed with finite volumes is given at the grid cells.](square-fvm.png)
 
-![Flux map computed with finite elements](square-fem.png)
+![The flux distribution computed with finite elements is fiven at the grid nodes.](square-fem.png)
 
 ![Both solutions as $\phi(x,y)$](square.svg)
 
@@ -49,6 +49,8 @@ A bare square solved with [milonga](https://www.seamplex.com):
 Here is the input and the commandline used to run the case:
 
 ~~~
+$ milonga
+`milonga`
 $ cat square.mil
 `cat square.mil`
 $ milonga square.mil

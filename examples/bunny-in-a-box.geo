@@ -14,18 +14,7 @@ Physical Volume("fuel") = {2};
 Physical Volume("vacuum") = {3};
 
 lc = 20;
-p2() = PointsOf{ Volume{2}; };
-p3() = PointsOf{ Volume{3}; };
-Characteristic Length { p2() } = lc;
-Characteristic Length { p3() } = lc;
 Mesh.CharacteristicLengthMin = 0.5 * lc;
 Mesh.CharacteristicLengthMax = 2.0 * lc;
 
 Mesh.Algorithm = 6;
-Mesh.Algorithm3D = 2;
-
-
-// remember to scale the resulting mesh to fit the critical volume!
-// $ cp bunny-in-a-box.msh bunny_orig.msh
-// $ milonga bunnyscale.mil
-// $ mv bunnynew.msh bunny-in-a-box.msh

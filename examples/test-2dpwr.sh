@@ -34,7 +34,10 @@ for m in structured unstructured; do
     fi
     cat << EOF > 2dpwr-$m-$s.gp
 set ticslevel 0
-set view 30,70-10*$i
+set view 30,175-32*$i
+set xlabel "x"
+set ylabel "y"
+set zlabel "power"
 unset key
 splot "2dpwr-$m-$s-3.dat" u 1:2:3 w $with palette
 EOF
