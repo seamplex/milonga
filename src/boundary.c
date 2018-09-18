@@ -33,7 +33,7 @@ int milonga_read_boundaries(void) {
   // barremos los physical entities y mapeamos cadenas a valores enteros
   // si alguna physical entity se llama "mirror" o "robin" ya le ponemos ese tipo de CC
   // por default, ponemos "vacuum" (solver-dependent!)
-  LL_FOREACH(wasora_mesh.physical_entities, physical_entity) {
+  for (physical_entity = wasora_mesh.main_mesh->physical_entities_by_name; physical_entity != NULL; physical_entity = physical_entity->hh.next) {
     if (physical_entity->material == NULL) {
       if (physical_entity->bc_strings != NULL) {
         string = physical_entity->bc_strings->string;

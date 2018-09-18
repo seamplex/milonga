@@ -84,9 +84,7 @@ struct {
 
   
   int problem_size;
-  
-//  mesh_t *mesh;         // la malla del problema
-  
+    
 // las matrices del problema en formato de PETSc
   Mat F;
   Mat R;
