@@ -194,14 +194,14 @@ int diffusion_elements_matrices_build(void) {
       // pero aca miramos solo las de neumann y de robin porque las de dirichlet van
       // una vez que ensamblamos las matrizotas
       
-      if (wasora_mesh.main_mesh->element[i].physical_entity != NULL) {
-        if (wasora_mesh.main_mesh->element[i].physical_entity->bc_type_phys == BC_MIRROR) {
+      if (wasora_mesh.main_mesh->element[i].physical_entity == NULL ||
+          wasora_mesh.main_mesh->element[i].physical_entity->bcs == NULL ||
+          wasora_mesh.main_mesh->element[i].physical_entity->bcs->type_phys == BC_VACUUM ||
+          wasora_mesh.main_mesh->element[i].physical_entity->bcs->type_phys == BC_UNDEFINED) {
+          wasora_call(diffusion_elements_build_robin_objects(&wasora_mesh.main_mesh->element[i]));
+      } else if (wasora_mesh.main_mesh->element[i].physical_entity->bcs->type_phys == BC_MIRROR) {
           // TODO: que se puedan poner corrientes no nulas (no debe haber o fision o fuentes)
           ; // no hay que hacer naranja!
-        } else if (wasora_mesh.main_mesh->element[i].physical_entity->bc_type_phys == BC_VACUUM ||
-                   wasora_mesh.main_mesh->element[i].physical_entity->bc_type_phys == BC_UNDEFINED) {
-          wasora_call(diffusion_elements_build_robin_objects(&wasora_mesh.main_mesh->element[i], wasora_mesh.main_mesh->element[i].physical_entity->bc_args));
-        }
       }
     }
   }
@@ -371,7 +371,7 @@ int diffusion_elements_build_volume_objects(element_t *element) {
 
 #undef  __FUNCT__
 #define __FUNCT__ "diffusion_elements_build_robin_objects"
-int diffusion_elements_build_robin_objects(element_t *element, expr_t *bc_a) {
+int diffusion_elements_build_robin_objects(element_t *element) {
   int v;
   double w_gauss;
   double a;
@@ -385,14 +385,14 @@ int diffusion_elements_build_robin_objects(element_t *element, expr_t *bc_a) {
   for (v = 0; v < element->type->gauss[GAUSS_POINTS_CANONICAL].V; v++) {
     w_gauss = mesh_compute_fem_objects_at_gauss(wasora_mesh.main_mesh, element, v);    
     // por default ponemos a = 1/2
-    if ((a = fabs(wasora_evaluate_expression(bc_a))) == 0) {
+    if (element->physical_entity == NULL ||
+        element->physical_entity->bcs == NULL ||
+        element->physical_entity->bcs->expr == NULL ||
+        (a = fabs(wasora_evaluate_expression(element->physical_entity->bcs->expr))) == 0) {
       a = 0.5;
     }
     gsl_blas_dgemm(CblasTrans, CblasNoTrans, w_gauss * a, wasora_mesh.main_mesh->fem.H, wasora_mesh.main_mesh->fem.H, 1, Ni);
   }
-  
-//  printf("element %d\n", element->id);
-//  fino_print_gsl_matrix(Ni, stdout);
 
   MatSetValues(milonga.R, L, wasora_mesh.main_mesh->fem.l, L, wasora_mesh.main_mesh->fem.l, gsl_matrix_ptr(Ni, 0, 0), ADD_VALUES);
   
@@ -456,7 +456,9 @@ int diffusion_elements_set_essential_bc(void) {
 
   for (i = 0; i < wasora_mesh.main_mesh->n_elements; i++) {
     if (wasora_mesh.main_mesh->element[i].type != NULL && wasora_mesh.main_mesh->element[i].type->dim == wasora_mesh.main_mesh->bulk_dimensions-1) {
-      if (wasora_mesh.main_mesh->element[i].physical_entity == NULL || wasora_mesh.main_mesh->element[i].physical_entity->bc_type_phys == BC_NULL) {
+      if (wasora_mesh.main_mesh->element[i].physical_entity == NULL ||
+          wasora_mesh.main_mesh->element[i].physical_entity->bcs == NULL ||    
+          wasora_mesh.main_mesh->element[i].physical_entity->bcs->type_phys == BC_NULL) {
         for (j = 0; j < wasora_mesh.main_mesh->element[i].type->nodes; j++) {
           if (milonga.has_fission) {
             MatZeroRows(milonga.F, milonga.groups, wasora_mesh.main_mesh->element[i].node[j]->index_dof, 0.0, PETSC_NULL, PETSC_NULL);

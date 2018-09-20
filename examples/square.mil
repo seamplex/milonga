@@ -10,7 +10,7 @@ MESH DIMENSIONS 2 FILE_PATH square.msh
 MATERIAL fuel D 1 nuSigmaF 3e-3 SigmaA 1e-3
 
 # there physical entity named "external" gets the following BC
-PHYSICAL_ENTITY NAME external BC vacuum
+PHYSICAL_ENTITY external BC vacuum
 
 # advance one milonga step (i.e, solve the problem)
 MILONGA_STEP

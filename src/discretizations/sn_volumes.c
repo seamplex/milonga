@@ -231,16 +231,17 @@ int sn_volumes_matrices_build(void) {
               if (wasora_mesh.main_mesh->structured == 0) {
                 if (cell->neighbor[j].element == NULL ||
                     cell->neighbor[j].element->physical_entity == NULL ||
-                    cell->neighbor[j].element->physical_entity->bc_type_phys == BC_VACUUM ||
-                    cell->neighbor[j].element->physical_entity->bc_type_phys == BC_NULL) {
+                    cell->neighbor[j].element->physical_entity->bcs == NULL ||    
+                    cell->neighbor[j].element->physical_entity->bcs->type_phys == BC_VACUUM ||
+                    cell->neighbor[j].element->physical_entity->bcs->type_phys == BC_NULL) {
                   bc_type = BC_VACUUM;
-                } else if (cell->neighbor[j].element->physical_entity->bc_type_phys == BC_MIRROR) {
+                } else if (cell->neighbor[j].element->physical_entity->bcs->type_phys == BC_MIRROR) {
                   bc_type = BC_MIRROR;
                 }
               } else {
                 for (physical_entity = wasora_mesh.main_mesh->physical_entities; physical_entity != NULL; physical_entity = physical_entity->hh.next) {
                   if ((physical_entity->struct_bc_direction-1) == j) {
-                    bc_type = physical_entity->bc_type_phys;
+                    bc_type = physical_entity->bcs->type_phys;
                   }
                 }
               }

@@ -32,7 +32,7 @@ extern int diffusion_elements_problem_free(void);
 
 extern int diffusion_elements_allocate_elemental_objects(void);
 extern int diffusion_elements_build_volume_objects(element_t *);
-extern int diffusion_elements_build_robin_objects(element_t *, expr_t *);
+extern int diffusion_elements_build_robin_objects(element_t *);
 extern int diffusion_elements_set_essential_bc(void);
 extern int diffusion_elements_free_elemental_objects(void);
 extern void diffusion_elements_compute_H(void);

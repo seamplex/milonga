@@ -23,8 +23,8 @@ PHYSICAL_ENTITY NAME fuel MATERIAL fuel
 
 # set null flux at both boundaries so we can
 # compare the numerical keff with the analytical one
-PHYSICAL_ENTITY NAME left  BC null
-PHYSICAL_ENTITY NAME right BC null
+PHYSICAL_ENTITY left  BC null
+PHYSICAL_ENTITY right BC null
 
 # advance one milonga step (i.e, solve the problem)
 MILONGA_STEP

@@ -16,9 +16,9 @@ MESH_MAIN $1  # which mesh we use is selected from the commandline
 
 MATERIAL fuel SigmaT 0.54628  SigmaS 0.464338  nuSigmaF 1.70*0.054628 D 1/(3*SigmaT(x))
 
-PHYSICAL_ENTITY MESH $1 NAME fuel  MATERIAL fuel
-PHYSICAL_ENTITY MESH $1 NAME left  BC null
-PHYSICAL_ENTITY MESH $1 NAME right BC null
+PHYSICAL_ENTITY fuel  MESH $1 MATERIAL fuel
+PHYSICAL_ENTITY left  MESH $1 BC null
+PHYSICAL_ENTITY right MESH $1 BC null
 
 MILONGA_STEP
 

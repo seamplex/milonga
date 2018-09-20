@@ -28,40 +28,47 @@
 int milonga_read_boundaries(void) {
 
   physical_entity_t *physical_entity;
-  char *string;
+  bc_t *bc;
   
   // barremos los physical entities y mapeamos cadenas a valores enteros
   // si alguna physical entity se llama "mirror" o "robin" ya le ponemos ese tipo de CC
-  // por default, ponemos "vacuum" (solver-dependent!)
+  // por default, ponemos "vacuum" (discretization-dependent!)
   for (physical_entity = wasora_mesh.main_mesh->physical_entities; physical_entity != NULL; physical_entity = physical_entity->hh.next) {
-    if (physical_entity->material == NULL) {
-      if (physical_entity->bc_strings != NULL) {
-        string = physical_entity->bc_strings->string;
-      } else {
-        string = physical_entity->name;
-      }
     
-      if (strcasecmp(string, "null") == 0 || strcasecmp(string, "dirichlet") == 0) {
-        physical_entity->bc_type_phys = BC_NULL;
+//    LL_FOREACH(physical_entity->bcs, bc) {
+    if ((bc = physical_entity->bcs) != NULL) {
+    
+      if (physical_entity->material != NULL) {
+        wasora_push_error_message("both MATERIAL and BC given for physical entity '%s", physical_entity->name);
+        return WASORA_PARSER_ERROR;
+      }
 
-      } else if (strcasecmp(string, "vacuum") == 0 || strcasecmp(string, "robin") == 0) {
-        physical_entity->bc_type_phys = BC_VACUUM;
+      if (strcasecmp(bc->string, "null") == 0 || strcasecmp(bc->string, "dirichlet") == 0) {
+        bc->type_phys = BC_NULL;
 
-      } else if (strcasecmp(string, "mirror") == 0 || strcasecmp(string, "neumann") == 0) {
-        physical_entity->bc_type_phys = BC_MIRROR;
+      } else if (strcasecmp(bc->string, "vacuum") == 0 || strcasecmp(bc->string, "robin") == 0) {
+        bc->type_phys = BC_VACUUM;
+
+      } else if (strcasecmp(bc->string, "mirror") == 0 || strcasecmp(bc->string, "neumann") == 0) {
+        bc->type_phys = BC_MIRROR;
+        
+        if (bc->next != NULL) {
+          bc->expr = calloc(1, sizeof(expr_t));
+          wasora_parse_expression(bc->next->string, bc->expr);
+        }
 
       } else {
-        if (physical_entity->bc_type_phys == BC_UNDEFINED) {
+        if (bc->type_phys == BC_UNDEFINED) {
           if (milonga.implicit_bc_none) {
-            wasora_push_error_message("unknown boundary condition '%s' for physical entity '%s' (IMPLICIT_BC is set to NONE)", physical_entity->bc_type_string, physical_entity->name);
+            wasora_push_error_message("unknown boundary condition '%s' for physical entity '%s' (IMPLICIT_BC is set to NONE)", bc->string, physical_entity->name);
             return WASORA_RUNTIME_ERROR;
           } else {
-            physical_entity->bc_type_phys = BC_VACUUM;   // default is vacuum
+            bc->type_phys = BC_VACUUM;   // default is vacuum
           }
         }
       }
     }
-   }
+  }
   
   return WASORA_RUNTIME_OK;
 }

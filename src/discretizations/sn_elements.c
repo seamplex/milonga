@@ -520,11 +520,11 @@ int sn_elements_set_essential_bc(void) {
   for (i = 0; i < wasora_mesh.main_mesh->n_elements; i++) {
     if (wasora_mesh.main_mesh->element[i].type->dim == milonga.dimensions-1) {
       surface_element = &wasora_mesh.main_mesh->element[i];
-      if (surface_element->physical_entity == NULL || surface_element->physical_entity->bc_type_phys == BC_NULL
-                                                   || surface_element->physical_entity->bc_type_phys == BC_UNDEFINED) {
+      if (surface_element->physical_entity == NULL || surface_element->physical_entity->bcs == NULL ||
+          surface_element->physical_entity->bcs->type_phys == BC_NULL || surface_element->physical_entity->bcs->type_phys == BC_UNDEFINED) {
         bc_type = BC_VACUUM;
       } else {
-        bc_type = surface_element->physical_entity->bc_type_phys;
+        bc_type = surface_element->physical_entity->bcs->type_phys;
       }
         
       sn_elements_compute_outward_normal(surface_element, outward_normal);

@@ -26,7 +26,7 @@ MATERIAL U235a SigmaT 0.32640 SigmaS 0.248064 SigmaA 0.013056 nuSigmaF 2.7*0.065
 
 # link physical entities in the mesh to materials and boundary conditions
 MATERIAL U235a PHYSICAL_ENTITY fuel
-PHYSICAL_ENTITY NAME external BC vacuum
+PHYSICAL_ENTITY external BC vacuum
 
 # sn_alpha = 1.0
 

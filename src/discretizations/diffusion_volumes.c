@@ -283,25 +283,28 @@ int diffusion_volumes_matrices_build(void) {
             expr_t *bc_args = NULL;
               
             if (wasora_mesh.main_mesh->structured == 0) {
-              if (cell->neighbor[j].element == NULL ||
-                  cell->neighbor[j].element->physical_entity == NULL ||
-                  cell->neighbor[j].element->physical_entity->bc_type_phys == BC_NULL) {
-                bc_type = BC_NULL;
-                bc_args = NULL;
-              } else  {
-                bc_type = cell->neighbor[j].element->physical_entity->bc_type_phys;
-                bc_args = cell->neighbor[j].element->physical_entity->bc_args;
+              if (cell->neighbor[j].element != NULL ||
+                  cell->neighbor[j].element->physical_entity != NULL ||
+                  cell->neighbor[j].element->physical_entity->bcs != NULL) {
+                bc_type = cell->neighbor[j].element->physical_entity->bcs->type_phys;
+                bc_args = cell->neighbor[j].element->physical_entity->bcs->expr;
               }
             } else {
               for (physical_entity = wasora_mesh.main_mesh->physical_entities; physical_entity != NULL; physical_entity = physical_entity->hh.next) {
                 if ((physical_entity->struct_bc_direction-1) == j) {
-                  bc_type = physical_entity->bc_type_phys;
-                  bc_args = physical_entity->bc_args;
+                  if (physical_entity->bcs != NULL) {
+                    bc_type = physical_entity->bcs->type_phys;
+                    bc_args = physical_entity->bcs->expr;
+                  } else {
+                    bc_type = BC_UNDEFINED;
+                    bc_args = NULL;
+                  }
                 }
               }
             }
             
             // default boundary condition
+            // TODO: chequear con IMPLICIT_BC
             if (bc_type == BC_UNDEFINED) {
               bc_type = BC_VACUUM;
             }

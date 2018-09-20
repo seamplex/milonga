@@ -11,5 +11,5 @@ INCLUDE 2dpwr_materials.mil
 
 # define boundary conditions as requested by the problem, applied
 # to appropriate physical entities defined in the geometry file
-PHYSICAL_ENTITY NAME external  BC vacuum  0.4692
-PHYSICAL_ENTITY NAME mirror    BC mirror
+PHYSICAL_ENTITY external BC vacuum  0.4692
+PHYSICAL_ENTITY mirror   BC mirror

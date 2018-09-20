@@ -30,8 +30,8 @@ MATERIAL fuel       D 1.03453E+00    SigmaA 5.59352E-03   nuSigmaF 6.68462E-03  
 MATERIAL reflector  D 1.02370E+00    SigmaA 7.60914E-05   SigmaS 3.60013E-01
 
 # set boundary conditions
-PHYSICAL_ENTITY NAME internal    BC mirror
-PHYSICAL_ENTITY NAME external    BC vacuum
+PHYSICAL_ENTITY internal BC mirror
+PHYSICAL_ENTITY external BC vacuum
 
 # solve problem
 MILONGA_STEP

@@ -1,7 +1,7 @@
 /*------------ -------------- -------- --- ----- ---   --       -            -
  *  milonga's parsing routines
  *
- *  Copyright (C) 2010--2015 jeremy theler
+ *  Copyright (C) 2010--2018 jeremy theler
  *
  *  This file is part of milonga.
  *

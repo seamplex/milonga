@@ -303,6 +303,7 @@ int plugin_init_after_parser(void) {
 
   // en volumes somos cell centered (si no nos piedieron explicitamente otra cosa)
   if (milonga.scheme == scheme_volumes) {
+    wasora_mesh.need_cells = 1;
     LL_FOREACH (wasora_mesh.posts, mesh_post) {
       LL_FOREACH(mesh_post->mesh_post_dists, mesh_post_dist) {
         if (mesh_post_dist->centering == centering_default) {
