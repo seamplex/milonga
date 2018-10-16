@@ -159,6 +159,7 @@ Mesh.Light = 0;
 General.SmallAxes = 0;
 
 // meshing options
-Mesh.Algorithm= 5;      // delaunay triangulation
+Mesh.Algorithm= 6;      // delaunay triangulation
 Mesh.RecombineAll = 1;  // recombine triangles to obtain quads
+Mesh.Optimize = 1;
 
