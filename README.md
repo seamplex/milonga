@@ -8,10 +8,12 @@
 
  a. the diffusion approximation, or
  b. the discrete ordinates $S_N$ method
+ 
 over unstructured grids (although simple structured grids can also be used) based on either
 
  i. a finite-volumes, or
  ii. a finite-elements
+
 discretization scheme. It works on top of the [wasora](http://www.seamplex.com/wasora) framework, which provides means to parse and understand a high-level plain-text input file containing algebraic expressions, data for function interpolation, differential equations and output instructions amongst other facilities. Therefore, any mathematical computation which can be done by wasora---i.e. parametric calculations, multidimensional optimization, function interpolation and integration, etc.---can be combined with the facilities that milonga provides to solve the neutron diffusion equation.
 
 Milonga’s main features are:
