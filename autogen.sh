@@ -39,7 +39,9 @@ am="src/Makefile.am"
 echo -n "building $am... "
 cat << EOF > $am
 include \$(SLEPC_DIR)/lib/slepc/conf/slepc_variables
-undefine DESTDIR  # this variable is set by petsc somewhere and we need it empty to make install
+# this variable is set by petsc somewhere and we need it empty to make install
+# apparently undefine DESTDIR is supported by GNU Make >= 3.82
+unexport DESTDIR  
 
 AUTOMAKE_OPTIONS = subdir-objects
 ACLOCAL_AMFLAGS = \$(ACLOCAL_FLAGS)
