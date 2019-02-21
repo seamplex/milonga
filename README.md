@@ -75,7 +75,7 @@ sudo apt-get install libgsl-dev libsundials-serial-dev libreadline-dev petsc-dev
 
 If your distribution does not have a bundled version of [PETSc](http://www.mcs.anl.gov/petsc/) or [SLEPc](http://www.grycap.upv.es/slepc/), then you might need to compile them yourself. Ask for help in the mailing list at <https://www.seamplex.com/lists.html>.
 
-Clone the milonga repository, bootstrap (might take a while as it has to clone and bootstrap [wasora](https://www.seamplex.com/wasora/) first), configure, compile and check:
+Clone the milonga repository, bootstrap (might take a while as it has to clone and bootstrap [wasora](https://www.seamplex.com/wasora/) first), configure, compile, check and install:
 
 ```
 git clone https://bitbucket.org/seamplex/milonga/
@@ -84,8 +84,10 @@ cd milonga
 ./configure
 make
 make check
+sudo make install
 ```
 
+This will result in the `milonga` executable in a system-wide location such as `/usr/local/bin`. If you do not have root access or do not want to install system-wide, just locate the milonga executable and put it in your `PATH`.
 If these instructions are non-sense to you, go directly to the [mailing list](https://www.seamplex.com/lists.html).
 
 # Examples & test suite
