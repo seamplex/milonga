@@ -16,25 +16,42 @@ for i in git m4 autoconf xargs; do
  fi
 done
 
+echo -n "autogen: cleaning... "
 ./autoclean.sh
+echo "ok"
 
+echo -n "autogen: updating wasora, "
 if [ -e ../wasora/.git ]; then
   WASORA_REPO=../wasora/.git
 else 
   WASORA_REPO=https://bitbucket.org/seamplex/wasora.git
 fi
 
-rm -rf wasora
-git clone ${WASORA_REPO} || exit 1
+if [ ! -e wasora ]; then
+  echo -n "cloning... ";
+  git clone ${WASORA_REPO} || exit 1
+else
+  echo -n "pulling... "
+  cd wasora; git checkout -q master; git pull || exit 1; cd ..
+fi
+echo "ok"
 
+if [ -e sha_wasora ]; then
+  echo -n "autogen: checking out... "
+  cd wasora; git checkout -q master; git checkout -q `cat ../sha_wasora`; cd ..
+  echo "ok"
+fi
+
+echo -n "autogen: bootstrapping... "
 m4 wasora/m4/bootstrap.m4 - << EOF | sh -s $1 || exit 1
 plugin=${plugin}
 WASORA_CHECK_VCS
 PLUGIN_VERSION_VCS
 WASORA_README_INSTALL
 EOF
+echo "ok"
 
-# build makefile.am
+echo -n "autogen: building makefile.am... "
 am="src/Makefile.am"
 echo -n "building $am... "
 cat << EOF > $am
@@ -74,9 +91,9 @@ version.\$(OBJEXT): version.h
 version.h: Makefile
 	./version.sh
 EOF
-echo "done"
+echo "ok"
 
-echo "calling autoreconf... "
+echo -n "autogen: autoreconfiguring... "
 autoreconf -i
-echo "done"
+echo "ok"
 
