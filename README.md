@@ -1,10 +1,13 @@
-% milonga: a free nuclear reactor analysis code
+---
+title: milonga, a free nuclear reactor analysis code
+lang: en-US
+...
 
-![milonga](doc/milonga.svg){.img-responsive}\ 
+
+![milonga](doc/milonga.svg){.img-fluid}\ 
 
 
-
-[milonga](http://www.seamplex.com/milonga/) is a free core-level neutronic code that solves the steady-state multigroup neutron transport equation using either
+[Milonga](http://www.seamplex.com/milonga/) is a free core-level neutronic code that solves the steady-state multigroup neutron transport equation using either
 
  a. the diffusion approximation, or
  b. the discrete ordinates $S_N$ method
@@ -52,15 +55,16 @@ These matrices are expected to be sparse, as they are the result of the discreti
 
 Milonga provides also a second glue layer that links the output of the linear/eigen-solver to the input of a post-processing tool (i.e [Gmsh](http://geuz.org/gmsh/) or [ParaView](http://www.paraview.org/)). The effective multiplication factor $k_\text{eff}$ is stored as a wasora variable, and the fluxes and power distribution as point-wise defined multidimensional functions, which can then be added, subtracted, integrated, differentiated, etc. Parametric and optimization runs may be also performed.
  
-![milonga](doc/hat2.png){.img-responsive}\ 
+![milonga](doc/hat2.png){.img-fluid}\ 
 
 
 # Quick start
 
-> It is really worth any amount of time and effort to get away from Windows
-if you are doing computational science.
+:::{.alert .alert-light}
+> “It is really worth any amount of time and effort to get away from Windows if you are doing computational science.”
 >
-> <https://lists.mcs.anl.gov/pipermail/petsc-users/2015-July/026388.html>
+> [<https://lists.mcs.anl.gov/pipermail/petsc-users/2015-July/026388.html>]{.blockquote-footer}
+:::
 
 Open a terminal in a GNU/Linux box (may be a VirtualBox box) and install the following tools:
 
@@ -111,7 +115,7 @@ User iepale has shared a [set of input files](https://bitbucket.org/iepale/examp
 
 ## Slab
 
-```wasora
+```milonga
 # solves a one-dimensional slab either with a
 # structured or unstrucutred mesh with a single file
 #
@@ -141,7 +145,7 @@ MILONGA_STEP
 milonga slab.mil
 ```
 
-![Flux in a one-dimensional slab](doc/slab.png){.img-responsive}
+![Flux in a one-dimensional slab](doc/slab.png){.img-fluid}
 
 
 ## Two-dimensional PWR IAEA benchmark
@@ -161,21 +165,24 @@ keff =  1.0296828170  ( unstructured elements, lc =  3.33333 ,  6204 x 6204 ,  0
 gtheler@tom:~/wasora-suite/milonga/examples$
 ```
     
-![The 2D IAEA PWR benchmark solved with milonga](doc/2dpwr.png){.img-responsive}
+![The 2D IAEA PWR benchmark solved with milonga](doc/2dpwr.png){.img-fluid}
 
 
-<div class="row">
- <div class="col-md-6">
-![Fast flux, unstructured grid, finite volumes](doc/2dpwr-phi1.png){.img-responsive}
- </div>
- <div class="col-md-6">
-![Thermal flux, unstructured grid, finite volumes](doc/2dpwr-phi2.png){.img-responsive}
- </div>
-</div>
+::::::{.row}
+
+:::{.col-md-6}
+![Fast flux, unstructured grid, finite volumes](doc/2dpwr-phi1.png){.img-fluid}
+:::
+
+:::{.col-md-6}
+![Thermal flux, unstructured grid, finite volumes](doc/2dpwr-phi2.png){.img-fluid}
+:::
+
+::::::
 
 ## The Stanford Bunny
 
-```wasora
+```milonga
 # solves a three-dimensional shape with uniform XS
 # the geometry should be given in $1.geo
 # bulk material phyisical group should be named "fuel" and
@@ -242,38 +249,45 @@ $ milonga 3dshape.mil bunny
 #   total  =    2.231   seconds
 ```
 
-![The S$_2$ Stanford Bunny, scalar flux $\phi$](doc/bunny-phi.png){.img-responsive}
+![The S$_2$ Stanford Bunny, scalar flux $\phi$](doc/bunny-phi.png){.img-fluid}
 
 
 
-<div class="row">
- <div class="col-md-3 col-xs-6">
-![Angular flux $\psi_1$](doc/bunny-psi1-thumb.png){.img-responsive}
- </div>
- <div class="col-md-3 col-xs-6">
-![Angular flux $\psi_2$](doc/bunny-psi2-thumb.png){.img-responsive}
- </div>
- <div class="col-md-3 col-xs-6">
-![Angular flux $\psi_3$](doc/bunny-psi3-thumb.png){.img-responsive}
- </div>
- <div class="col-md-3 col-xs-6">
-![Angular flux $\psi_4$](doc/bunny-psi4-thumb.png){.img-responsive}
- </div>
-</div>
-<div class="row">
- <div class="col-md-3 col-xs-6">
-![Angular flux $\psi_5$](doc/bunny-psi5-thumb.png){.img-responsive}
- </div>
- <div class="col-md-3 col-xs-6">
-![Angular flux $\psi_6$](doc/bunny-psi6-thumb.png){.img-responsive}
- </div>
- <div class="col-md-3 col-xs-6">
-![Angular flux $\psi_7$](doc/bunny-psi7-thumb.png){.img-responsive}
- </div>
- <div class="col-md-3 col-xs-6">
-![Angular flux $\psi_8$](doc/bunny-psi8-thumb.png){.img-responsive}
- </div>
-</div>
+::::::::{.row .text-center}
+
+:::{.col-md-3 .col-6}
+![Angular flux $\psi_1$](doc/bunny-psi1-thumb.png){.img-fluid}
+:::
+
+:::{.col-md-3 .col-6}
+![Angular flux $\psi_2$](doc/bunny-psi2-thumb.png){.img-fluid}
+:::
+
+:::{.col-md-3 .col-6}
+![Angular flux $\psi_3$](doc/bunny-psi3-thumb.png){.img-fluid}
+:::
+
+:::{.col-md-3 .col-6}
+![Angular flux $\psi_4$](doc/bunny-psi4-thumb.png){.img-fluid}
+:::
+
+:::{.col-md-3 .col-6}
+![Angular flux $\psi_5$](doc/bunny-psi5-thumb.png){.img-fluid}
+:::
+ 
+:::{.col-md-3 .col-6}
+![Angular flux $\psi_6$](doc/bunny-psi6-thumb.png){.img-fluid}
+:::
+
+:::{.col-md-3 .col-6}
+![Angular flux $\psi_7$](doc/bunny-psi7-thumb.png){.img-fluid}
+:::
+
+:::{.col-md-3 .col-6}
+![Angular flux $\psi_8$](doc/bunny-psi8-thumb.png){.img-fluid}
+:::
+
+::::::::
 
 The angular fluxes $\psi_g$ for $g=1,\dots,8$ from the S$_2$ formulation.
 
