@@ -283,8 +283,8 @@ int diffusion_volumes_matrices_build(void) {
             expr_t *bc_args = NULL;
               
             if (wasora_mesh.main_mesh->structured == 0) {
-              if (cell->neighbor[j].element != NULL ||
-                  cell->neighbor[j].element->physical_entity != NULL ||
+              if (cell->neighbor[j].element != NULL &&
+                  cell->neighbor[j].element->physical_entity != NULL &&
                   cell->neighbor[j].element->physical_entity->bcs != NULL) {
                 bc_type = cell->neighbor[j].element->physical_entity->bcs->type_phys;
                 bc_args = cell->neighbor[j].element->physical_entity->bcs->expr;
