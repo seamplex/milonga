@@ -1,0 +1,33 @@
+MESH FILE_PATH reflected.msh DIMENSIONS 1
+MILONGA_PROBLEM GROUPS 2 
+
+MATERIAL fuel {
+  D1         1.5
+  D2         0.4
+  SigmaS1.2  0.02
+  SigmaA1    0.01
+  SigmaA2    0.08
+  nuSigmaF2  0.135
+}
+
+MATERIAL left_refl {
+  D1         2.0
+  D2         0.3
+  SigmaS1.2  0.04
+  SigmaA1    0.00
+  SigmaA2    0.01
+}
+
+MATERIAL right_refl {
+  D1         2.0
+  D2         0.3
+  SigmaS1.2  0.05
+  SigmaA1    0.00
+  SigmaA2    0.005
+}
+
+MILONGA_STEP 
+
+PRINT %.8f keff
+
+PRINT_FUNCTION phi1 phi2 FILE_PATH reflected.dat

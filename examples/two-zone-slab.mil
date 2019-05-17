@@ -1,0 +1,35 @@
+MESH DIMENSIONS 1 DEGREES 1 FILE_PATH two-zone-slab.msh
+
+MATERIAL A   D 0.5    SigmaA 0.014    nuSigmaF 0.010
+MATERIAL B   D 1.5    SigmaA 0.010    nuSigmaF 0.014
+
+MILONGA_STEP
+
+
+# compute the analytical keff 
+a = 50    # end of zone A measured from x=0
+b = 100   # end of zone B measured from x=0
+
+F1(k) := sqrt(D(0)*(SigmaA(0)-nuSigmaF(0)/k)) * tan(sqrt((1/D(b))*(nuSigmaF(b)/k-SigmaA(b)))*(a-b))
+F2(k) := sqrt(D(b)*(nuSigmaF(b)/k-SigmaA(b))) * tanh(sqrt((1/D(0))*(SigmaA(0)-nuSigmaF(0)/k))*b)
+k = root(F1(k)-F2(k), k, 1, 1.1)
+
+# and the fluxes
+B_A = sqrt((SigmaA(0) - nuSigmaF(0)/k)/D(0))
+fluxA(x) := sinh(B_A*x)
+
+B_B = sqrt((nuSigmaF(b)/k - SigmaA(b))/D(b))
+fluxB(x) := sinh(B_A*b)/sin(B_B*(a-b)) * sin(B_B*(a-x))
+
+# normalization factor
+f = a/(integral(fluxA(x), x, 0, b) + integral(fluxB(x), x, b, a))
+flux(x) := f * if(x < b, fluxA(x), fluxB(x))
+
+# results
+# PRINT %g TEXT "a = " a TEXT "b = " b TEXT "n = " n TEXT "lc = " lc
+PRINT "keff analitycal = " %.8f k
+PRINT "keff numerical   = " %.8f keff
+PRINT "diference        = " %e keff-k
+
+PRINT_FUNCTION flux MIN 0 MAX a STEP a/1000 FILE_PATH two-zone-analytical.dat
+PRINT_FUNCTION phi1 phi1(x)-flux(x)         FILE_PATH two-zone-numerical.dat

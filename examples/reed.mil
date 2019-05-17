@@ -1,0 +1,28 @@
+# solves the reed 1d benchmark
+#
+#     |         |    |         |    |         |
+#  m  | src= 50 | 0  |    0    | 1  |    0    |    v
+#  i  |         |    |         |    |         |    a
+#  r  | tot= 50 | 5  |    0    | 1  |    1    |    c
+#  r  |         |    |         |    |         |    u
+#  o  | scat=0  | 0  |    0    | 0.9|   0.9   |    u
+#  r  |         |    |         |    |         |    m
+#     |         |    |         |    |         |
+#     |    1    | 2  |    3    | 4  |    5    |
+#     |         |    |         |    |         |
+#     +---------+----+---------+----+---------+-------> x
+#    x=0       x=2  x=3       x=5  x=6       x=8   
+
+MESH FILE_PATH reed.msh
+MILONGA_PROBLEM DIMENSIONS 1 GROUPS 1 FORMULATION s4
+sn_alpha = 0.8
+
+MATERIAL source_abs    S 50 SigmaT 50 SigmaS 0
+MATERIAL absorber      S 0  SigmaT 5  SigmaS 0
+MATERIAL void          S 0  SigmaT 0  SigmaS 0
+MATERIAL source_scat   S 1  SigmaT 1  SigmaS 0.9
+MATERIAL reflector     S 0  SigmaT 1  SigmaS 0.9
+
+MILONGA_STEP
+
+PRINT_FUNCTION phi1 HEADER
