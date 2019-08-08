@@ -1,7 +1,7 @@
 /*------------ -------------- -------- --- ----- ---   --       -            -
  *  milonga's diffusion with finite volumes routines
  *
- *  Copyright (C) 2012--2016 jeremy theler
+ *  Copyright (C) 2012--2019 jeremy theler
  *
  *  This file is part of milonga.
  *

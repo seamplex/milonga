@@ -82,7 +82,7 @@ If your distribution does not have a bundled version of [PETSc](http://www.mcs.a
 Clone the milonga repository, bootstrap (might take a while as it has to clone and bootstrap [wasora](https://www.seamplex.com/wasora/) first), configure, compile, check and install:
 
 ```
-git clone https://bitbucket.org/seamplex/milonga/
+git clone https://github.com/seamplex/milonga/
 cd milonga
 ./autogen.sh
 ./configure
@@ -111,7 +111,7 @@ It consists of some cases that work both as examples of usage and as a suite of 
 
 The `make check` command may not show the actual output of the examples but the overall result (i.e. whether the test passed, the test failed or the test was skipped). Expect your screen to be filled up with plots, post-processing views and browsers showing debugging and benchmarking information. Each individual test may be repeated by executing the `test-*.sh` scripts located in the `examples` subdirectory.
 
-User iepale has shared a [set of input files](https://bitbucket.org/iepale/examples) that solve some of the [ANL-7416](http://www.corephysics.com/benchmarks/anl7416_benchmark15.pdf) benchmarks using his [fork of milonga](https://bitbucket.org/iepale/milo-tra) that allows to solve transient solutions. This fork will soon be merged into the [main milonga branch](https://bitbucket.org/seamplex/milonga).
+User iepale has shared a [set of input files](https://bitbucket.org/iepale/examples) that solve some of the [ANL-7416](http://www.corephysics.com/benchmarks/anl7416_benchmark15.pdf) benchmarks using his [fork of milonga](https://bitbucket.org/iepale/milo-tra) that allows to solve transient solutions. This fork will soon be merged into the [main milonga branch](https://github.com/seamplex/milonga).
 
 ## Slab
 
@@ -333,7 +333,7 @@ See the directory `examples` for the test suite and other examples.
 See the contents of directory `doc` for full documentation.  
 
 Home page: <http://www.seamplex.com/milonga>  
-Repository: <http://bitbucket.org/seamplex/milonga>
+Repository: <http://github.com/seamplex/milonga>
 Mailing list and bug reports: <wasora@seamplex.com>  
 
 
