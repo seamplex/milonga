@@ -194,10 +194,10 @@ int diffusion_elements_matrices_build(void) {
       // pero aca miramos solo las de neumann y de robin porque las de dirichlet van
       // una vez que ensamblamos las matrizotas
       
-      if (wasora_mesh.main_mesh->element[i].physical_entity == NULL &&
-          wasora_mesh.main_mesh->element[i].physical_entity->bcs == NULL &&
-          (wasora_mesh.main_mesh->element[i].physical_entity->bcs->type_phys == BC_VACUUM ||
-           wasora_mesh.main_mesh->element[i].physical_entity->bcs->type_phys == BC_UNDEFINED)) {
+      if (wasora_mesh.main_mesh->element[i].physical_entity == NULL ||
+          wasora_mesh.main_mesh->element[i].physical_entity->bcs == NULL ||
+          wasora_mesh.main_mesh->element[i].physical_entity->bcs->type_phys == BC_VACUUM ||
+          wasora_mesh.main_mesh->element[i].physical_entity->bcs->type_phys == BC_UNDEFINED) {
           wasora_call(diffusion_elements_build_robin_objects(&wasora_mesh.main_mesh->element[i]));
       } else if (wasora_mesh.main_mesh->element[i].physical_entity->bcs->type_phys == BC_MIRROR) {
           // TODO: que se puedan poner corrientes no nulas (no debe haber o fision o fuentes)
