@@ -12,10 +12,10 @@ lang: en-US
  a. the diffusion approximation, or
  b. the discrete ordinates $S_N$ method
  
-over unstructured grids (although simple structured grids can also be used) based on either
+over unstructured grids (although simple structured grids can also be used) based on either a
 
- i. a finite-volumes, or
- ii. a finite-elements
+ i. finite-volumes, or
+ ii. finite-elements
 
 discretization scheme. It works on top of the [wasora](http://www.seamplex.com/wasora) framework, which provides means to parse and understand a high-level plain-text input file containing algebraic expressions, data for function interpolation, differential equations and output instructions amongst other facilities. Therefore, any mathematical computation which can be done by wasora---i.e. parametric calculations, multidimensional optimization, function interpolation and integration, etc.---can be combined with the facilities that milonga provides to solve the neutron diffusion equation.
 
@@ -74,7 +74,7 @@ sudo apt-get install m4 make autoconf automake gcc g++ git findutils
 and the following libraries
 
 ```
-sudo apt-get install libgsl-dev libsundials-serial-dev libreadline-dev petsc-dev slepc-dev
+sudo apt-get install libgsl-dev petsc-dev slepc-dev
 ```
 
 If your distribution does not have a bundled version of [PETSc](http://www.mcs.anl.gov/petsc/) or [SLEPc](http://www.grycap.upv.es/slepc/), then you might need to compile them yourself. Ask for help in the mailing list at <https://www.seamplex.com/lists.html>.
