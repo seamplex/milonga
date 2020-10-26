@@ -293,7 +293,7 @@ The angular fluxes $\psi_g$ for $g=1,\dots,8$ from the S$_2$ formulation.
 
 # Workshop
 
-Check out <https://bitbucket.org/seamplex/2015-workshop> for a “hands-on” tutorial (text and input files) given a workshop held in 2015. The [presentation slides are here](https://www.seamplex.com/docs/2015-milonga-handson.pdf).
+Check out <https://github.com/seamplex/milonga-2015-workshop> for a “hands-on” tutorial (text and input files) given a workshop held in 2015. The [presentation slides are here](https://www.seamplex.com/docs/2015-milonga-handson.pdf).
 
 # Licensing
 
