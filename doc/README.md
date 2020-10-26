@@ -2,11 +2,11 @@ Documentation, publications and references related to milonga
 =============================================================
 
 On the design basis of a new core-level neutronic code written from scratch.  
-<http://www.talador.com.ar/jeremy/wasora/milonga/doc/WA-MI-AR-14-11D3-B.pdf>
+<https://seamplex.com/docs/SP-MI-14-AR-5B44-D.pdf>
 
 
 Neutron diffusion on unstructured grids: comparison between finite volumes and finite elements - Monograph 2013   
-<http://www.talador.com.ar/jeremy/wasora/milonga/doc/imef-2013-12-15.pdf>
+<https://seamplex.com/docs/imef-2013-12-15.pdf>
 
 
 Theler G. Geometric Optimization of Nuclear Reactor Cores, Mecanica Computacional Volume XXXII, Number 32, Optimization and Control, 2013.   

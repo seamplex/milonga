@@ -228,7 +228,7 @@ int milonga_debug_open(struct debug_t *debug) {
   petsc_call(PetscViewerASCIIPrintf(debug->viewer, "code version\n"));
   petsc_call(PetscViewerASCIIPrintf(debug->viewer, "------------\n\n"));
 
-  petsc_call(PetscViewerASCIIPrintf(debug->viewer, "[%s](http://www.talador.com.ar/jeremy/wasora/milonga) %s  \n", plugin_name(), plugin_version()));
+  petsc_call(PetscViewerASCIIPrintf(debug->viewer, "[%s](http://www.seamplex.com/milonga) %s  \n", plugin_name(), plugin_version()));
   petsc_call(PetscViewerASCIIPrintf(debug->viewer, "%s  \n\n", plugin_description()));
 
   petsc_call(PetscViewerASCIIPrintf(debug->viewer, "~~~~\n"));
