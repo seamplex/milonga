@@ -3,6 +3,10 @@ title: milonga, a free nuclear reactor analysis code
 lang: en-US
 ...
 
+# MILONGA IS NOW OUTDATED/DEPRECATED/NOT DEVELOPED ANYMORE!
+
+# PLEASE SWITCH TO [FeenoX](https://github.com/seamplex/feenox) ASAP
+
 
 ![milonga](doc/milonga.svg){.img-fluid}\ 
 
