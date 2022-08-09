@@ -5,7 +5,7 @@ lang: en-US
 
 # MILONGA IS NOW OUTDATED/DEPRECATED/NOT DEVELOPED ANYMORE!
 
-# PLEASE SWITCH TO [FeenoX](https://github.com/seamplex/feenox) ASAP
+# PLEASE SWITCH TO [FeenoX](https://seamplex.com/feenox) ASAP
 
 
 ![milonga](doc/milonga.svg){.img-fluid}\ 
